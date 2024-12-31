@@ -14,7 +14,7 @@
 		"@internationalized/date": "^3.6.0",
 		"@koale/useworker": "^4.1.0",
 		"@nextui-org/button": "^2.2.7",
-		"@nextui-org/code": "^2.2.4",
+		"@nextui-org/code": "^2.2.5",
 		"@nextui-org/input": "^2.4.6",
 		"@nextui-org/kbd": "^2.2.4",
 		"@nextui-org/link": "^2.2.5",
