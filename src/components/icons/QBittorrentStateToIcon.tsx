@@ -1,0 +1,44 @@
+import type { QBittorrentTorrentState } from '@/types/QBittorrentTorrentState'
+import {
+	IconBinoculars,
+	IconBug,
+	IconChevronsDown,
+	IconChevronsUp,
+	IconCircleChevronsDown,
+	IconCircleChevronsUp,
+	IconCircleDashed,
+	IconClockPause,
+	IconPackage,
+	IconPlayerPause,
+	IconPlayerStopFilled,
+	IconProgressHelp,
+	IconRun,
+	IconTag,
+} from '@tabler/icons-react'
+
+export const QBITTORRENT_STATE_TO_ICON: Record<
+	QBittorrentTorrentState,
+	React.ReactNode
+> = {
+	allocating: <IconRun className="text-gray-500" />,
+	checkingDL: <IconCircleDashed className="text-green-500" />,
+	checkingResumeData: <IconCircleDashed className="text-gray-500" />,
+	checkingUP: <IconCircleDashed className="text-blue-500" />,
+	downloading: <IconChevronsDown className="text-green-500" />,
+	error: <IconBug className="text-red-500" />,
+	forcedDL: <IconCircleChevronsDown className="text-green-500" />,
+	forcedUP: <IconCircleChevronsUp className="text-blue-500" />,
+	metaDL: <IconTag className="text-gray-500" />,
+	missingFiles: <IconBinoculars className="text-red-500" />,
+	moving: <IconPackage className="text-gray-500" />,
+	pausedDL: <IconPlayerPause className="text-green-500" />,
+	pausedUP: <IconPlayerPause className="text-blue-500" />,
+	queuedDL: <IconClockPause className="text-yellow-500" />,
+	queuedUP: <IconClockPause className="text-yellow-500" />,
+	stalledDL: <IconChevronsDown className="text-green-500" opacity={0.4} />,
+	stalledUP: <IconChevronsUp className="text-blue-500" opacity={0.4} />,
+	stoppedDL: <IconPlayerStopFilled className="text-gray-500" opacity={0.4} />,
+	stoppedUP: <IconPlayerStopFilled className="text-purple-500" />,
+	unknown: <IconProgressHelp className="text-gray-500" />,
+	uploading: <IconChevronsUp className="text-blue-500" />,
+}
