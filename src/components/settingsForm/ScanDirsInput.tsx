@@ -7,16 +7,16 @@ import { IconTrash } from '@tabler/icons-react'
 import { useCallback, useState } from 'react'
 
 export function ScanDirsInput({ scan_dirs }: Pick<QBittorrentPreferences, 'scan_dirs'>) {
-	const [scanDirsStringState, setScanDirsStringState] = useState(JSON.stringify(scan_dirs))
+	const [scanDirsStringState/* , setScanDirsStringState */] = useState(JSON.stringify(scan_dirs))
 	const [scanDirsState, setScanDirsState] = useState(Object.entries(scan_dirs || {}))
 
-	const addFolderCallback = useCallback(() => {
-		setScanDirsState((previous) => {
-			previous.push(['', QBittorrentPreferencesScanDirMode.DOWNLOAD_TO_DEFAULT_SAVE_PATH])
-			console.error(previous)
-			return [...previous]
-		})
-	}, [])
+	// const addFolderCallback = useCallback(() => {
+	// 	setScanDirsState((previous) => {
+	// 		previous.push(['', QBittorrentPreferencesScanDirMode.DOWNLOAD_TO_DEFAULT_SAVE_PATH])
+	// 		console.error(previous)
+	// 		return [...previous]
+	// 	})
+	// }, [])
 	const deleteKeyCallback = useCallback((key: string) => {
 		console.error(key)
 		setScanDirsState((previous) => {

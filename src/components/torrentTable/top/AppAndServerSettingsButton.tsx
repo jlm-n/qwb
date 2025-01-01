@@ -2,20 +2,13 @@ import { useSetPreferences } from '@/api/useSetPreferences'
 import { ApplicationSettingsForm } from '@/components/settingsForm/ApplicationSettingsForm'
 import { QBittorrentPreferencesAssembler } from '@/components/settingsForm/QBittorrentPreferencesAssembler'
 import { ServerSettingsForm } from '@/components/settingsForm/ServerPreferencesForm'
-import { usePersistentState } from '@/hooks/usePersistentState'
 import { Button, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, Tab, Tabs, useDisclosure } from '@nextui-org/react'
 import { IconSettings } from '@tabler/icons-react'
 import { memo, useCallback, useRef, useState } from 'react'
 
-export interface AppPreferences {
-	endpointBaseUrl?: string
-	showBottomPanel?: boolean
-}
-
 export const AppAndServerSettingsButton = memo(() => {
 	const { isOpen, onOpen: open, onClose: close } = useDisclosure()
 	const [currentTab, setCurrentTab] = useState<string | number>('appSettings')
-	const [appPreferencesState, setAppPreferencesState] = usePersistentState<AppPreferences>('appSettings', {})
 	const serverSettingsFormRef = useRef<HTMLFormElement>(null)
 
 	const [setServerPreferences, isSetPreferencesLoading] = useSetPreferences()

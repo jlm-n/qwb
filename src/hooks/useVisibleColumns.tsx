@@ -13,7 +13,6 @@ const INITIAL_VISIBLE_COLUMNS: Array<keyof QBittorrentTorrent> = [
 	'total_size',
 	'state',
 	'tracker',
-	'actions',
 ]
 
 export function useVisibleColumns(): [Selection, (value: Selection) => void] {
