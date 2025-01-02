@@ -1,4 +1,5 @@
 import type { ChangeEvent } from 'react'
+import { AppAndServerSettingsButton } from '@/components/torrentTable/top/AppAndServerSettingsButton'
 import { useServerBaseUrl } from '@/hooks/useServerBaseUrl'
 import {
 	Button,
@@ -10,12 +11,14 @@ import {
 	Input,
 } from '@nextui-org/react'
 import { useCallback, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 export function LoginPage() {
 	const [username, setUsername] = useState('')
 	const [password, setPassword] = useState('')
 	const [isLoading, setIsLoading] = useState(false)
 	const [serverBaseUrl] = useServerBaseUrl()
+	const naviate = useNavigate()
 
 	const signIn = useCallback(async () => {
 		setIsLoading(true)
@@ -32,11 +35,11 @@ export function LoginPage() {
 		})
 
 		if (response.status === 200) {
-			window.location.href = '/'
+			naviate('/')
 		}
 
 		setIsLoading(false)
-	}, [username, password, serverBaseUrl])
+	}, [username, password, serverBaseUrl, naviate])
 
 	return (
 		<div className="flex flex-col items-center justify-center h-screen">
@@ -72,7 +75,8 @@ export function LoginPage() {
 						onChange={(e: ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
 					/>
 				</CardBody>
-				<CardFooter>
+				<CardFooter className="gap-3">
+					<AppAndServerSettingsButton appSettingsOnly className="self-start" />
 					<Button
 						fullWidth
 						className="mb-6"

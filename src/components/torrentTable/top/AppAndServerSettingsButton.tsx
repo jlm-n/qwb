@@ -6,7 +6,7 @@ import { Button, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, 
 import { IconSettings } from '@tabler/icons-react'
 import { memo, useCallback, useRef, useState } from 'react'
 
-export const AppAndServerSettingsButton = memo(() => {
+export const AppAndServerSettingsButton = memo(({ className, appSettingsOnly = false }: { className?: string, appSettingsOnly?: boolean }) => {
 	const { isOpen, onOpen: open, onClose: close } = useDisclosure()
 	const [currentTab, setCurrentTab] = useState<string | number>('appSettings')
 	const serverSettingsFormRef = useRef<HTMLFormElement>(null)
@@ -21,7 +21,7 @@ export const AppAndServerSettingsButton = memo(() => {
 
 	return (
 		<>
-			<Button isIconOnly onPress={open}><IconSettings /></Button>
+			<Button isIconOnly className={className} onPress={open}><IconSettings /></Button>
 			<Drawer
 				isOpen={isOpen}
 				onClose={close}
@@ -33,7 +33,7 @@ export const AppAndServerSettingsButton = memo(() => {
 					<DrawerHeader>
 						<Tabs size="lg" selectedKey={currentTab} onSelectionChange={setCurrentTab}>
 							<Tab title="App Settings" key="appSettings" />
-							<Tab title="QBittorrent Settings" key="qbittorrentSettings" />
+							{!appSettingsOnly && <Tab title="QBittorrent Settings" key="qbittorrentSettings" />}
 						</Tabs>
 					</DrawerHeader>
 					<DrawerBody className="w-full">
