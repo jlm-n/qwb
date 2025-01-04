@@ -47,12 +47,14 @@ export const TorrentContextMenu = memo(({
 	isOpen,
 	onClose,
 	position,
+	triggerRef,
 }: {
 	torrentHashes?: string[]
 	torrents?: Map<string, QBittorrentTorrent>
 	isOpen?: boolean
 	onClose?: () => void
 	position?: { x: number, y: number }
+	triggerRef?: React.RefObject<HTMLElement>
 }) => {
 	const [startTorrent, isStartTorrentLoading] = useStartTorrents()
 	const [forceStartTorrent, isForceStartTorrentLoading] = useForceStartTorrents()
@@ -76,9 +78,11 @@ export const TorrentContextMenu = memo(({
 				closeOnSelect={false}
 				onClose={onClose}
 				style={{
-					left: position?.x,
-					top: position?.y,
+					zIndex: '10',
+					translate: (position?.x || 0) - ((triggerRef?.current?.getBoundingClientRect().width || 0) / 2),
 				}}
+				crossOffset={100}
+				triggerRef={triggerRef}
 			>
 				<DropdownTrigger>
 					{onClose

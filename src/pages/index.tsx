@@ -41,6 +41,7 @@ import {
 	useCallback,
 	useEffect,
 	useMemo,
+	useRef,
 	useState,
 } from 'react'
 import { Panel, PanelGroup } from 'react-resizable-panels'
@@ -254,13 +255,21 @@ export default function App() {
 			: (Array.from(selectedTorrents) as string[])
 	}, [items, selectedTorrents])
 
+	const [triggerTarget, setTriggerTarget] = useState<HTMLElement>()
 	const [constextMenuPosition, setContextMenuPosition] = useState<{ x: number, y: number } | undefined>(undefined)
 	const { isOpen, onOpen, onClose } = useDisclosure()
-	const onContextMenuCallback = useCallback((torrentHash: string, x: number, y: number) => {
+	const onContextMenuCallback = useCallback((torrentHash: string, target: HTMLElement, x: number, y: number) => {
+		setTriggerTarget(target)
 		setContextMenuPosition({ x, y })
 		setSelectedTorrents(new Set([torrentHash]))
 		onOpen()
 	}, [setSelectedTorrents, onOpen])
+	const triggerRef = useRef<HTMLElement | null>(null)
+	useEffect(() => {
+		if (triggerTarget) {
+			triggerRef.current = triggerTarget ?? null
+		}
+	}, [triggerTarget])
 
 	return (
 		<>
@@ -344,7 +353,7 @@ export default function App() {
 									aria-roledescription="torrent table row"
 									onContextMenu={(e) => {
 										e.preventDefault()
-										onContextMenuCallback(item.hash, e.clientX, e.clientY)
+										onContextMenuCallback(item.hash, e.currentTarget, e.clientX, e.clientY)
 									}}
 								>
 									{columnKey => (
@@ -373,7 +382,7 @@ export default function App() {
 					</>
 				)}
 			</PanelGroup>
-			<TorrentContextMenu isOpen={isOpen} onClose={onClose} torrentHashes={selectedTorrentHashes} torrents={TORRENTS} position={constextMenuPosition} />
+			<TorrentContextMenu isOpen={isOpen} onClose={onClose} triggerRef={triggerRef} torrentHashes={selectedTorrentHashes} torrents={TORRENTS} position={constextMenuPosition} />
 		</>
 	)
 }

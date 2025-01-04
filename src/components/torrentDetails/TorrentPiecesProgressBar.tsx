@@ -10,6 +10,8 @@ export function TorrentPiecesProgressBar({ torrentHash }: { torrentHash?: string
 	const [pieceStates, setPieceStates] = useState<QBittorrentTorrentPieceStates | undefined>()
 	const [getTorrentPieceStates] = useGetTorrentPieceStates()
 	const [refreshRate] = useTorrentPiecesRefreshRate()
+	const canvasRef = useRef<HTMLCanvasElement>(null)
+	const divRef = useRef<HTMLDivElement>(null)
 
 	const refreshPieceStates = useCallback(async () => {
 		if (!torrentHash) {
@@ -25,8 +27,6 @@ export function TorrentPiecesProgressBar({ torrentHash }: { torrentHash?: string
 		}
 	}, [torrentHash, refreshPieceStates])
 	useInterval(refreshPieceStates, refreshRate)
-
-	const canvasRef = useRef<HTMLCanvasElement>(null)
 
 	useMemo(() => {
 		const canvas = canvasRef.current
@@ -44,7 +44,7 @@ export function TorrentPiecesProgressBar({ torrentHash }: { torrentHash?: string
 		context.lineWidth = 0
 
 		const pieceStateColor: Record<QBittorrentTorrentPieceState, string> = {
-			0: '#ffffff',
+			0: '#ffffff00',
 			1: '#ff0000',
 			2: '#006fee',
 		}
@@ -67,12 +67,14 @@ export function TorrentPiecesProgressBar({ torrentHash }: { torrentHash?: string
 	}, [pieceStates])
 
 	return (
-		<canvas
-			ref={canvasRef}
-			className="w-full rounded border h-4"
-			height={canvasRef.current?.getBoundingClientRect()?.height}
-			width={canvasRef.current?.getBoundingClientRect()?.width}
-			style={{ width: '100%', imageRendering: 'pixelated' }}
-		/>
+		<div ref={divRef} className="w-full rounded border-divider border-2 h-4 overflow-hidden">
+			<canvas
+				ref={canvasRef}
+				className="w-full h-4"
+				height={divRef.current?.getBoundingClientRect()?.height}
+				width={divRef.current?.getBoundingClientRect()?.width}
+				style={{ width: '100%', imageRendering: 'pixelated' }}
+			/>
+		</div>
 	)
 }
