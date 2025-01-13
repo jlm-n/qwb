@@ -31,7 +31,7 @@
 		"@tabler/icons": "^3.28.1",
 		"@tabler/icons-react": "^3.28.1",
 		"clsx": "2.1.1",
-		"framer-motion": "~11.15.0",
+		"framer-motion": "~11.17.0",
 		"lodash.debounce": "^4.0.8",
 		"lodash.throttle": "^4.1.1",
 		"pretty-bytes": "^6.1.1",
