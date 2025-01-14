@@ -81,7 +81,6 @@ export const TorrentContextMenu = memo(({
 					zIndex: '10',
 					translate: (position?.x || 0) - ((triggerRef?.current?.getBoundingClientRect().width || 0) / 2),
 				}}
-				crossOffset={100}
 				triggerRef={triggerRef}
 			>
 				<DropdownTrigger>

@@ -255,21 +255,15 @@ export default function App() {
 			: (Array.from(selectedTorrents) as string[])
 	}, [items, selectedTorrents])
 
-	const [triggerTarget, setTriggerTarget] = useState<HTMLElement>()
+	const triggerRef = useRef<HTMLElement | null>(null)
 	const [constextMenuPosition, setContextMenuPosition] = useState<{ x: number, y: number } | undefined>(undefined)
-	const { isOpen, onOpen, onClose } = useDisclosure()
+	const { isOpen, onOpen: openContextMenu, onClose: closeContextMenu } = useDisclosure()
 	const onContextMenuCallback = useCallback((torrentHash: string, target: HTMLElement, x: number, y: number) => {
-		setTriggerTarget(target)
+		triggerRef.current = target ?? null
 		setContextMenuPosition({ x, y })
 		setSelectedTorrents(new Set([torrentHash]))
-		onOpen()
-	}, [setSelectedTorrents, onOpen])
-	const triggerRef = useRef<HTMLElement | null>(null)
-	useEffect(() => {
-		if (triggerTarget) {
-			triggerRef.current = triggerTarget ?? null
-		}
-	}, [triggerTarget])
+		openContextMenu()
+	}, [setSelectedTorrents, openContextMenu])
 
 	return (
 		<>
@@ -382,7 +376,7 @@ export default function App() {
 					</>
 				)}
 			</PanelGroup>
-			<TorrentContextMenu isOpen={isOpen} onClose={onClose} triggerRef={triggerRef} torrentHashes={selectedTorrentHashes} torrents={TORRENTS} position={constextMenuPosition} />
+			<TorrentContextMenu isOpen={isOpen} onClose={closeContextMenu} triggerRef={triggerRef} torrentHashes={selectedTorrentHashes} torrents={TORRENTS} position={constextMenuPosition} />
 		</>
 	)
 }
