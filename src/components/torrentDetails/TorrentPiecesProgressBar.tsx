@@ -4,7 +4,7 @@ import {
 } from '@/api/useGetTorrentPieceStates'
 import { useInterval } from '@/hooks/useInterval'
 import { useTorrentPiecesRefreshRate } from '@/hooks/useTorrentPiecesRefreshRate'
-import { useCallback, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 export function TorrentPiecesProgressBar({ torrentHash }: { torrentHash?: string }) {
 	const [pieceStates, setPieceStates] = useState<QBittorrentTorrentPieceStates | undefined>()
@@ -21,11 +21,9 @@ export function TorrentPiecesProgressBar({ torrentHash }: { torrentHash?: string
 		setPieceStates(pieceStates)
 	}, [torrentHash, getTorrentPieceStates])
 
-	useMemo(() => {
-		if (torrentHash) {
-			refreshPieceStates()
-		}
-	}, [torrentHash, refreshPieceStates])
+	useEffect(() => {
+		refreshPieceStates()
+	}, [refreshPieceStates])
 	useInterval(refreshPieceStates, refreshRate)
 
 	useMemo(() => {
