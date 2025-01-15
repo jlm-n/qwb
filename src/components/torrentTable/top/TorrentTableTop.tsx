@@ -1,5 +1,6 @@
 import type { QBittorrentTorrent } from '@/types/QBittorrentTorrent'
 import type {
+	SelectedItems,
 	Selection,
 } from '@nextui-org/react'
 import { TorrentAddButton } from '@/components/TorrentAddButton'
@@ -33,15 +34,18 @@ const RowsPerPageSelect = memo(({ rowsPerPage, onRowsPerPageChange }: { rowsPerP
 	<Select
 		key="rows-per-page"
 		classNames={{
-			base: 'w-fit flex items-center text-default-400 text-small',
-			label: 'w-30 text-default-400 text-small',
-			mainWrapper: 'min-w-16 w-20',
-			value: 'text-default-400 text-small',
+			base: 'text-default-400 text-small w-fit min-w-32',
+			value: 'flex gap-1',
 		}}
-		label="Rows per page:"
-		labelPlacement="outside-left"
+		aria-label="Rows per page"
 		selectedKeys={[rowsPerPage]}
 		variant="underlined"
+		renderValue={(items: SelectedItems) => (
+			<>
+				<strong>{items.map(i => i.key).join(',')}</strong>
+				<span>per page</span>
+			</>
+		)}
 		onSelectionChange={onRowsPerPageChange}
 	>
 		<SelectItem key="auto">auto</SelectItem>
@@ -142,7 +146,9 @@ export function TorrentTableTop({
 					<SpeedDisplay speed={serverDownloadSpeed} total={serverDownloadSessionTotal} type="download" />
 					<SpeedDisplay speed={serverUploadSpeed} total={serverUploadSessionTotal} type="upload" />
 				</span>
-				<RowsPerPageSelect rowsPerPage={rowsPerPage} onRowsPerPageChange={onRowsPerPageChange} />
+				<span className="flex gap-2 w-fit">
+					<RowsPerPageSelect rowsPerPage={rowsPerPage} onRowsPerPageChange={onRowsPerPageChange} />
+				</span>
 			</div>
 		</div>
 	)
