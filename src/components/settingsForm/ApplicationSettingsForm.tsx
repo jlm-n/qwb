@@ -1,4 +1,4 @@
-import type { ChangeEvent } from 'react'
+import type { Selection } from '@nextui-org/react'
 import { useServerBaseUrl } from '@/hooks/useServerBaseUrl'
 import { useTorrentFilesRefreshRate } from '@/hooks/useTorrentFilesRefreshRate'
 import { useTorrentListRefreshRate } from '@/hooks/useTorrentListRefreshRate'
@@ -9,6 +9,8 @@ import { useTorrentTrackersRefreshRate } from '@/hooks/useTorrentTrackersRefresh
 import { useVisibleColumns } from '@/hooks/useVisibleColumns'
 import { Input } from '@nextui-org/input'
 import { Chip, Select, SelectItem } from '@nextui-org/react'
+import { useTheme } from '@nextui-org/use-theme'
+import { type ChangeEvent, useCallback } from 'react'
 import { TORRENT_TABLE_COLUMNS } from '../torrentTable/TorrentTableColumns'
 
 export function ApplicationSettingsForm() {
@@ -20,9 +22,33 @@ export function ApplicationSettingsForm() {
 	const [torrentPeersRefreshRate, setTorrentPeersRefreshRate] = useTorrentPeersRefreshRate()
 	const [torrentFilesRefreshRate, setTorrentFilesRefreshState] = useTorrentFilesRefreshRate()
 	const [visibleColumns, setVisibleColumns] = useVisibleColumns()
+	const { theme: currentTheme, setTheme } = useTheme()
+
+	const onThemeChanged = useCallback((newTheme: Selection) => {
+		if (newTheme === 'all') {
+			return
+		}
+		setTheme(newTheme.values().next().value as string)
+	}, [setTheme])
 
 	return (
 		<>
+			<Select
+				label="Theme"
+				items={[
+					{ name: 'Light', uid: 'light' },
+					{ name: 'Dark', uid: 'dark' },
+					{ name: 'Use system theme', uid: 'system' },
+				]}
+				selectedKeys={[currentTheme]}
+				onSelectionChange={onThemeChanged}
+				disallowEmptySelection
+			>
+				{({ name, uid }) => (
+					<SelectItem key={uid} textValue={name}>{name}</SelectItem>
+				)}
+			</Select>
+
 			<Input
 				label="Server URL (refresh to apply)"
 				type="url"
