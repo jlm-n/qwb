@@ -71,7 +71,7 @@ function compareTorrents(
 	return sortDescriptor.direction === 'ascending' ? cmp : -cmp
 }
 
-export function sortAndFilterTorrents(torrents: QBittorrentTorrent[],	searchFilterValue: string,	statusFilterValue: Selection,	trackerFilterValue: Selection,	sortDescriptor: SortDescriptor,	rowsPerPage: number,	page: number): {
+export function sortAndFilterTorrents(torrents: QBittorrentTorrent[], searchFilterValue: string, statusFilterValue: Selection, trackerFilterValue: Selection, sortDescriptor: SortDescriptor, rowsPerPage: number, page: number): {
 	pagedTorrents: QBittorrentTorrent[]
 	filteredTorrentLength: number
 	pages: number

@@ -1,6 +1,8 @@
 import type { QBittorrentTorrentFile } from '@/types/QBittorrentTorrentFile'
 import type {
 	Selection,
+
+	SortDescriptor,
 } from '@nextui-org/react'
 
 import {
@@ -31,7 +33,7 @@ import {
 } from '@nextui-org/react'
 import { IconDeviceFloppy, IconWand } from '@tabler/icons-react'
 import prettyBytes from 'pretty-bytes'
-import { memo, useCallback, useEffect, useRef, useState } from 'react'
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { TorrentProgressCell } from '../torrentTable/cells/TorrentProgressCell'
 import { fileNameNormalize } from '../torrentTable/normalizeTorrentName'
 
@@ -113,10 +115,11 @@ export function TorrentDetailsFiles({
 	const [getTorrentFiles] = useGetTorrentFiles()
 	const [renameFolder, renameFolderLoading] = useRenameFolder()
 	const [renameFile, renameFileLoading] = useRenameFile()
-	const [files, setFiles] = useState<QBittorrentTorrentFile[] | undefined>()
 	const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set([]))
 	const [isRenamePopoverOpen, setIsRenamePopoverOpen] = useState(false)
 	const [refreshRate] = useTorrentFilesRefreshRate()
+	const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({ column: 'index', direction: 'ascending' })
+	const [files, setFiles] = useState<QBittorrentTorrentFile[] | undefined>()
 
 	const refreshFiles = useCallback(async (torrentHash: string) => {
 		const files = await getTorrentFiles(torrentHash)
@@ -181,6 +184,18 @@ export function TorrentDetailsFiles({
 		}
 	}, [torrentHash, oldPath, renameFile, renameFolder, refreshTorrentFiles, setIsRenamePopoverOpen, newName, fullPath])
 
+	const sortedFiles = useMemo(() => {
+		console.error(sortDescriptor)
+		return files?.sort((a, b) => {
+			if (!sortDescriptor?.column) {
+				return 0
+			}
+			const key = sortDescriptor?.column as keyof QBittorrentTorrentFile
+			const cmp = a[key] < b[key] ? -1 : a[key] > b[key] ? 1 : 0
+			return sortDescriptor.direction === 'descending' ? -cmp : cmp
+		})
+	}, [files, sortDescriptor])
+
 	return (
 		<>
 			<Table
@@ -195,17 +210,19 @@ export function TorrentDetailsFiles({
 				selectionBehavior="replace"
 				selectedKeys={selectedKeys}
 				onSelectionChange={setSelectedKeys}
+				sortDescriptor={sortDescriptor}
+				onSortChange={setSortDescriptor}
 				removeWrapper
 			>
 				<TableHeader>
-					<TableColumn width={50}>INDEX</TableColumn>
-					<TableColumn minWidth="100%">NAME</TableColumn>
-					<TableColumn width={100}>SIZE</TableColumn>
-					<TableColumn width={100}>PROGRESS</TableColumn>
-					<TableColumn width={50}>AVAIL.</TableColumn>
-					<TableColumn width={150}>PRIORITY</TableColumn>
+					<TableColumn width={50} allowsSorting key="index">INDEX</TableColumn>
+					<TableColumn minWidth="100%" allowsSorting key="name">NAME</TableColumn>
+					<TableColumn width={100} allowsSorting key="size">SIZE</TableColumn>
+					<TableColumn width={100} allowsSorting key="progress">PROGRESS</TableColumn>
+					<TableColumn width={50} allowsSorting key="availability">AVAIL.</TableColumn>
+					<TableColumn width={150} allowsSorting key="priority">PRIORITY</TableColumn>
 				</TableHeader>
-				<TableBody items={files || []}>
+				<TableBody items={sortedFiles || []}>
 					{({ index, name, size, progress, availability, priority }) => (
 						<TableRow key={index}>
 							<TableCell>{index}</TableCell>
