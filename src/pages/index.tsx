@@ -103,7 +103,7 @@ export default function App() {
 	const [visibleColumns] = useVisibleColumns()
 	const [refreshInterval] = useTorrentListRefreshRate()
 	const [statusFilterValue, setStatusFilter] = useState<Selection>(new Set(['all']))
-	const [rowsPerPage, setRowsPerPage] = usePersistentState('rowsPerPage', 20)
+	const [rowsPerPage, setRowsPerPage] = usePersistentState('rowsPerPage', '20')
 	const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({ column: 'added_on', direction: 'descending' })
 	const [serverState, setServerState] = useState<QBittorrentServerState>({})
 	const [trackers, setTrackers] = useState<Array<string>>([])
@@ -114,6 +114,7 @@ export default function App() {
 	const [showBottomPanel, setShowBottomPanel] = usePersistentState('showBottomPanel', false)
 	const [pages, setPages] = useState(1)
 	const [page, setPage] = useState(1)
+	const torrentTableRef = useRef<HTMLTableElement>(null)
 
 	const headerColumns = useMemo(() => {
 		if (visibleColumns === 'all') {
@@ -129,7 +130,7 @@ export default function App() {
 			// we don't support this value.
 			return
 		}
-		setRowsPerPage(Number(value.values().next().value))
+		setRowsPerPage(String(value.values().next().value))
 		setPage(1)
 	}, [setPage, setRowsPerPage])
 
@@ -149,6 +150,7 @@ export default function App() {
 	const sortAndFilterTorrentsCallback = useCallback(
 		(torrents: QBittorrentTorrent[] = Array.from(TORRENTS.values())) => {
 			startTransition(() => {
+				const tableContainerHeight = ((torrentTableRef.current?.parentNode as HTMLDivElement).clientHeight)
 				const { pagedTorrents, filteredTorrentLength, pages }
 					= sortAndFilterTorrents(
 						torrents,
@@ -156,7 +158,7 @@ export default function App() {
 						statusFilterValue,
 						trackerFilterValue,
 						sortDescriptor,
-						rowsPerPage,
+						rowsPerPage === 'auto' ? Math.floor((tableContainerHeight - 72) / 40) : +rowsPerPage, //  remove the header size and divide by the average row height
 						page,
 					)
 				setFilteredItemsLength(filteredTorrentLength)
@@ -174,6 +176,7 @@ export default function App() {
 			setFilteredItemsLength,
 			setPages,
 			setItems,
+			torrentTableRef,
 		],
 	)
 
@@ -274,6 +277,7 @@ export default function App() {
 				<Panel className={showBottomPanel ? '' : 'h-full'} minSize={30}>
 					<Table
 						isHeaderSticky
+						ref={torrentTableRef}
 						aria-label="Torrent list"
 						classNames={{
 							base: 'h-full p-3',

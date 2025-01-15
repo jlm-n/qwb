@@ -25,14 +25,11 @@ import { TrackersDropdown } from './TrackersDropdown'
 const SpeedDisplay = memo(({ speed, total, type }: { speed: number, total: number, type: 'download' | 'upload' }) => (
 	<span className="flex text-default-400 text-small min-w-15">
 		{type === 'download' ? <IconArrowNarrowDown /> : <IconArrowNarrowUp />}
-		{prettyBytes(speed || 0)}
-		/s (
-		{prettyBytes(total || 0)}
-		)
+		{`${prettyBytes(speed || 0)}/s (${prettyBytes(total || 0)})`}
 	</span>
 ))
 
-const RowsPerPageSelect = memo(({ rowsPerPage, onRowsPerPageChange }: { rowsPerPage: number, onRowsPerPageChange: (rowsPerPage: Selection) => void }) => (
+const RowsPerPageSelect = memo(({ rowsPerPage, onRowsPerPageChange }: { rowsPerPage: string, onRowsPerPageChange: (rowsPerPage: Selection) => void }) => (
 	<Select
 		key="rows-per-page"
 		classNames={{
@@ -43,10 +40,11 @@ const RowsPerPageSelect = memo(({ rowsPerPage, onRowsPerPageChange }: { rowsPerP
 		}}
 		label="Rows per page:"
 		labelPlacement="outside-left"
-		selectedKeys={[rowsPerPage.toString()]}
+		selectedKeys={[rowsPerPage]}
 		variant="underlined"
 		onSelectionChange={onRowsPerPageChange}
 	>
+		<SelectItem key="auto">auto</SelectItem>
 		<SelectItem key="5">5</SelectItem>
 		<SelectItem key="10">10</SelectItem>
 		<SelectItem key="20">20</SelectItem>
@@ -90,7 +88,7 @@ export function TorrentTableTop({
 	onShowBottomPanelChange: (showBottomPanel: boolean) => void
 	onStatusFilterChange: (statusFilter: Selection) => void
 	onTrackerFilterChange: (trackerFilter: Selection) => void
-	rowsPerPage: number
+	rowsPerPage: string
 	searchFilter: string
 	selectedTorrentHashes: string[]
 	serverDownloadSessionTotal: number
@@ -112,7 +110,6 @@ export function TorrentTableTop({
 						torrentHashes={selectedTorrentHashes}
 						torrents={torrents}
 					/>
-
 					<ButtonGroup>
 						<TorrentStatusDropdown
 							statusFilter={statusFilter}
@@ -124,7 +121,6 @@ export function TorrentTableTop({
 							onTrackerFilterChange={onTrackerFilterChange}
 						/>
 					</ButtonGroup>
-
 					<AppAndServerSettingsButton />
 					<ButtonGroup>
 						<ShowBottomPanelButton
