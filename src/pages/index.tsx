@@ -9,9 +9,7 @@ import type {
 	SelectionMode,
 	SortDescriptor,
 } from '@heroui/react'
-import type {
-	KeyboardEvent,
-} from 'react'
+
 import { useGetIncrementalMaindata } from '@/api/useGetMaindata'
 
 import { PanelResizeHandle } from '@/components/PanelResizeHandle'
@@ -234,25 +232,7 @@ export default function App() {
 		return selectedTorrents.values().next().value as string | undefined
 	}, [selectedTorrents])
 
-	const handleKeyEvent = useCallback(
-		(event: KeyboardEvent<HTMLTableElement>) => {
-			const elementDataRole = document.activeElement?.attributes.getNamedItem('data-role')?.value
-			if (elementDataRole !== 'torrent-table-row') {
-				return
-			}
 
-			const isMetaKey = event.code.includes('Meta') || event.code.includes('Control') || event.code.includes('Shift')
-			if (isMetaKey && event.type === 'keydown') {
-				setSelectionMode('multiple')
-				setSelectionBehaviour('toggle')
-			}
-			if (isMetaKey && event.type === 'keyup') {
-				setSelectionMode('single')
-				setSelectionBehaviour('replace')
-			}
-		},
-		[setSelectionMode, setSelectionBehaviour],
-	)
 
 	const selectedTorrentHashes = useMemo(() => {
 		return selectedTorrents === 'all'
@@ -263,12 +243,14 @@ export default function App() {
 	const triggerRef = useRef<HTMLElement | null>(null)
 	const [constextMenuPosition, setContextMenuPosition] = useState<{ x: number, y: number } | undefined>(undefined)
 	const { isOpen, onOpen: openContextMenu, onClose: closeContextMenu } = useDisclosure()
-	const onContextMenuCallback = useCallback((torrentHash: string, target: HTMLElement, x: number, y: number) => {
+	const onContextMenuCallback = (torrentHash: string, target: HTMLElement, x: number, y: number) => {
 		triggerRef.current = target ?? null
 		setContextMenuPosition({ x, y })
-		setSelectedTorrents(new Set([torrentHash]))
+		if (selectedTorrents !== 'all' && !selectedTorrents.has(torrentHash)) {
+			setSelectedTorrents(new Set([torrentHash]))
+		}
 		openContextMenu()
-	}, [setSelectedTorrents, openContextMenu])
+	}
 
 	return (
 		<>
@@ -289,8 +271,8 @@ export default function App() {
 						isVirtualized
 						color="primary"
 						selectedKeys={selectedTorrents}
-						selectionMode={selectionMode}
-						selectionBehavior={selectionBehaviour}
+						selectionMode="multiple"
+						selectionBehavior="replace"
 						sortDescriptor={sortDescriptor}
 						bottomContentPlacement="outside"
 						bottomContent={<TorrentTableBottom selectedTorrents={selectedTorrents} filteredItemsLength={filteredItemsLength} onPageChange={setPage} page={page} pages={pages} />}
@@ -322,8 +304,6 @@ export default function App() {
 						)}
 						onSelectionChange={setSelectedTorrents}
 						onSortChange={setSortDescriptor}
-						onKeyDown={handleKeyEvent}
-						onKeyUp={handleKeyEvent}
 					>
 						<TableHeader columns={headerColumns}>
 							{(column: ColumnOption) => (
