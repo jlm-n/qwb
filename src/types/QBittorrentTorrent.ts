@@ -61,4 +61,5 @@ export interface QBittorrentTorrent {
 
 	// extra props:
 	normalized_name: string
+	normalized_priority: number
 }

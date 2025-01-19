@@ -20,6 +20,7 @@ import { TorrentDetails } from '@/components/torrentDetails/TorrentDetails'
 import { TorrentTableBottom } from '@/components/torrentTable/bottom/TorrentTableBottom'
 import { renderCell } from '@/components/torrentTable/cells/renderCells'
 import { searchNormalize } from '@/components/torrentTable/normalizeTorrentName'
+import { normalizeTorrentPriority } from '@/components/torrentTable/normalizeTorrentPriority'
 import { sortAndFilterTorrents } from '@/components/torrentTable/sortAndFilterTorrents'
 import { TorrentTableTop } from '@/components/torrentTable/top/TorrentTableTop'
 import { TORRENT_TABLE_COLUMNS } from '@/components/torrentTable/TorrentTableColumns'
@@ -59,13 +60,14 @@ async function mergeMaindata(updatedMaindata: QbittorrentMaindata): Promise<{
 
 	for (const hash in r.torrents) {
 		const torrent = r.torrents[hash]
-		const existing = TORRENTS.get(hash) || { name: '' }
+		const existing = TORRENTS.get(hash) || { name: '', priority: undefined }
 
 		TORRENTS.set(hash, {
 			...existing,
 			...torrent,
 			hash,
 			normalized_name: searchNormalize(existing.name || torrent.name || ''),
+			normalized_priority: normalizeTorrentPriority(existing.priority ?? torrent.priority),
 		})
 	}
 

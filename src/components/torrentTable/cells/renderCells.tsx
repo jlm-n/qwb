@@ -20,7 +20,7 @@ export function renderCell(
 	torrentIsNew: boolean,
 ) {
 	switch (columnKey) {
-		case 'priority': return <TorrentPriorityCell priority={cellValue as number} />
+		case 'normalized_priority': return <TorrentPriorityCell priority={cellValue as number} />
 		case 'state': return <TorrentStatusCell isNew={torrentIsNew} state={cellValue as QBittorrentTorrentState} />
 		case 'name': return <TorrentNameCell name={cellValue as string} />
 		case 'dlspeed': return <TorrentBitrateCell bitrate={cellValue as number} />

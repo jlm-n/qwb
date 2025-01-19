@@ -2,7 +2,7 @@ import type { ColumnOption } from '@/types/ColumnOption'
 
 export const TORRENT_TABLE_COLUMNS: ColumnOption[] = [
 	{
-		uid: 'priority',
+		uid: 'normalized_priority',
 		name: 'PRIORITY',
 		description: 'torrent priority in the queue',
 		sortable: true,
