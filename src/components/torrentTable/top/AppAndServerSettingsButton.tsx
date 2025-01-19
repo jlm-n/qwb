@@ -2,7 +2,7 @@ import { useSetPreferences } from '@/api/useSetPreferences'
 import { ApplicationSettingsForm } from '@/components/settingsForm/ApplicationSettingsForm'
 import { QBittorrentPreferencesAssembler } from '@/components/settingsForm/QBittorrentPreferencesAssembler'
 import { ServerSettingsForm } from '@/components/settingsForm/ServerPreferencesForm'
-import { Button, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, Tab, Tabs, useDisclosure } from '@nextui-org/react'
+import { Button, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, Tab, Tabs, useDisclosure } from '@heroui/react'
 import { IconSettings } from '@tabler/icons-react'
 import { memo, useCallback, useRef, useState } from 'react'
 

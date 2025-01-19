@@ -1,4 +1,4 @@
-import { ScrollShadow, Tab, Tabs } from '@nextui-org/react'
+import { ScrollShadow, Tab, Tabs } from '@heroui/react'
 import { memo } from 'react'
 import { TorrentDetailsFiles } from './TorrentDetailsFiles'
 import { TorrentDetailsGeneral } from './TorrentDetailsGeneral'

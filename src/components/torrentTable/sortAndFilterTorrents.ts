@@ -1,5 +1,5 @@
 import type { QBittorrentTorrent } from '@/types/QBittorrentTorrent'
-import type { Selection, SortDescriptor } from '@nextui-org/table'
+import type { Selection, SortDescriptor } from '@heroui/table'
 import type { Key } from 'react'
 import { searchNormalize } from './normalizeTorrentName'
 

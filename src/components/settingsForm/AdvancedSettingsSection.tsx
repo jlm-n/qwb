@@ -1,8 +1,8 @@
-import type { Selection } from '@nextui-org/react'
+import type { Selection } from '@heroui/react'
 import { useGetNetworkAddresses } from '@/api/useGetNetworkAddresses'
 import { useGetNetworkInterfaces } from '@/api/useGetNetworkInterfaces'
 import { type QBittorrentPreferences, QBittorrentPreferencesDiskIOType, QBittorrentPreferencesDiskReadMode, QBittorrentPreferencesDiskWriteMode, QBittorrentPreferencesUploadChockingAlgorithm, QBittorrentPreferencesUploadSlotsBehavior, QBittorrentPreferencesUTPTCPMixedMode } from '@/types/QBittorrentPreferences'
-import { Checkbox, Divider, Input, Link, Select, SelectItem } from '@nextui-org/react'
+import { Checkbox, Divider, Input, Link, Select, SelectItem } from '@heroui/react'
 import { IconExternalLink } from '@tabler/icons-react'
 import { memo, useCallback, useEffect, useState } from 'react'
 

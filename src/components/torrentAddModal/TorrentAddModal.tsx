@@ -7,7 +7,7 @@ import type {
 	ModalProps,
 	Selection,
 	SelectItemProps,
-} from '@nextui-org/react'
+} from '@heroui/react'
 import type {
 	ChangeEvent,
 	FormEvent,
@@ -33,7 +33,7 @@ import {
 	Tab,
 	Tabs,
 	Textarea,
-} from '@nextui-org/react'
+} from '@heroui/react'
 import {
 	memo,
 	useCallback,
@@ -100,9 +100,9 @@ export const TorrentAddModal = memo(({
 				contentLayout:
 					'contentLayout' in data
 						? (data.contentLayout.toString() as
-							| 'Original'
-							| 'Subfolder'
-							| 'NoSubfolder')
+						| 'Original'
+						| 'Subfolder'
+						| 'NoSubfolder')
 						: undefined,
 				cookie: 'cookie' in data ? data.cookie.toString() : undefined,
 				dlLimit:

@@ -8,7 +8,7 @@ import type {
 	SelectionBehavior,
 	SelectionMode,
 	SortDescriptor,
-} from '@nextui-org/react'
+} from '@heroui/react'
 import type {
 	KeyboardEvent,
 } from 'react'
@@ -35,7 +35,7 @@ import {
 	TableHeader,
 	TableRow,
 	useDisclosure,
-} from '@nextui-org/react'
+} from '@heroui/react'
 import {
 	startTransition,
 	useCallback,

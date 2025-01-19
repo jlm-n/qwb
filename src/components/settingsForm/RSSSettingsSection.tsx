@@ -1,5 +1,5 @@
 import type { QBittorrentPreferences } from '@/types/QBittorrentPreferences'
-import { Checkbox, Divider, Input, Textarea } from '@nextui-org/react'
+import { Checkbox, Divider, Input, Textarea } from '@heroui/react'
 import { memo, useState } from 'react'
 
 export const RSSSettingsSection = memo(({

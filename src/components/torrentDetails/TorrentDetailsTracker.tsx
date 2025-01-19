@@ -9,7 +9,7 @@ import {
 	TableColumn,
 	TableHeader,
 	TableRow,
-} from '@nextui-org/react'
+} from '@heroui/react'
 import { useCallback, useMemo, useState } from 'react'
 
 export function TorrentDetailsTracker({

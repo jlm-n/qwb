@@ -1,7 +1,7 @@
 import type { QBittorrentTorrentState } from '@/types/QBittorrentTorrentState'
 
 import { QBittorrentStateIcon } from '@/components/icons/QBittorrentStateIcon'
-import { Badge } from '@nextui-org/react'
+import { Badge } from '@heroui/react'
 import { memo } from 'react'
 
 export const TorrentStatusCell = memo(({

@@ -2,7 +2,7 @@ import type { QBittorrentTorrent } from '@/types/QBittorrentTorrent'
 import type {
 	SelectedItems,
 	Selection,
-} from '@nextui-org/react'
+} from '@heroui/react'
 import { TorrentAddButton } from '@/components/TorrentAddButton'
 import { TorrentContextMenu } from '@/components/TorrentContextMenu'
 import { TorrentStatusDropdown } from '@/components/TorrentStatusDropdown'
@@ -10,7 +10,7 @@ import {
 	ButtonGroup,
 	Select,
 	SelectItem,
-} from '@nextui-org/react'
+} from '@heroui/react'
 import {
 	IconArrowNarrowDown,
 	IconArrowNarrowUp,

@@ -1,4 +1,4 @@
-import { Input } from '@nextui-org/input'
+import { Input } from '@heroui/input'
 import { IconSearch } from '@tabler/icons-react'
 import { memo } from 'react'
 

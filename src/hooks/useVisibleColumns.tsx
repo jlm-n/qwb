@@ -1,5 +1,5 @@
 import type { QBittorrentTorrent } from '@/types/QBittorrentTorrent'
-import type { Selection } from '@nextui-org/react'
+import type { Selection } from '@heroui/react'
 import { usePersistentState } from '@/hooks/usePersistentState'
 import { useCallback, useMemo } from 'react'
 

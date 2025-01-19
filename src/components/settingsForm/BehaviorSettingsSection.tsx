@@ -1,6 +1,6 @@
 import { type QBittorrentPreferences, QBittorrentPreferencesFileLogAgeType } from '@/types/QBittorrentPreferences'
-import { Input } from '@nextui-org/input'
-import { Checkbox, Divider, Select, SelectItem } from '@nextui-org/react'
+import { Input } from '@heroui/input'
+import { Checkbox, Divider, Select, SelectItem } from '@heroui/react'
 import { memo, useState } from 'react'
 
 export const BehaviorSettingsSection = memo(({

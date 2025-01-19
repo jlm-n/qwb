@@ -1,5 +1,5 @@
-import type { Selection } from '@nextui-org/table'
-import { Button, Pagination } from '@nextui-org/react'
+import type { Selection } from '@heroui/table'
+import { Button, Pagination } from '@heroui/react'
 import { memo } from 'react'
 
 export const TorrentTableBottom = memo(({ selectedTorrents, filteredItemsLength, page, pages, onPageChange }: { selectedTorrents: Selection, filteredItemsLength: number, page: number, pages: number, onPageChange: (page: number) => void }) => (

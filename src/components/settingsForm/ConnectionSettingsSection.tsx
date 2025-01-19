@@ -1,5 +1,5 @@
 import { type QBittorrentPreferences, QBittorrentPreferencesBittorrentProtocol } from '@/types/QBittorrentPreferences'
-import { Button, Checkbox, Divider, Input, Link, Select, SelectItem, Textarea } from '@nextui-org/react'
+import { Button, Checkbox, Divider, Input, Link, Select, SelectItem, Textarea } from '@heroui/react'
 import { IconArrowsShuffle, IconExternalLink } from '@tabler/icons-react'
 import { memo, useCallback, useState } from 'react'
 

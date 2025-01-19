@@ -1,8 +1,8 @@
 import type { QBittorrentPreferences } from '@/types/QBittorrentPreferences'
 import { QBittorrentPreferencesScanDirMode } from '@/types/QBittorrentPreferences'
-import { Input } from '@nextui-org/input'
-import { Autocomplete, AutocompleteItem, Button } from '@nextui-org/react'
-import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@nextui-org/table'
+import { Input } from '@heroui/input'
+import { Autocomplete, AutocompleteItem, Button } from '@heroui/react'
+import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@heroui/table'
 import { IconTrash } from '@tabler/icons-react'
 import { useCallback, useState } from 'react'
 

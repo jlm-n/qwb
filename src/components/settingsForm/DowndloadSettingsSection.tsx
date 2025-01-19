@@ -1,7 +1,7 @@
 import type { QBittorrentPreferences } from '@/types/QBittorrentPreferences'
 import { useSendTestEmail } from '@/api/useSendTestEmail'
-import { Input, Textarea } from '@nextui-org/input'
-import { Alert, Button, Checkbox, Divider, Select, SelectItem } from '@nextui-org/react'
+import { Input, Textarea } from '@heroui/input'
+import { Alert, Button, Checkbox, Divider, Select, SelectItem } from '@heroui/react'
 import { memo, useState } from 'react'
 import { ScanDirsInput } from './ScanDirsInput'
 

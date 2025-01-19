@@ -1,4 +1,4 @@
-import { Button } from '@nextui-org/button'
+import { Button } from '@heroui/button'
 import { IconBoxAlignBottomFilled } from '@tabler/icons-react'
 import { memo } from 'react'
 

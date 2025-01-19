@@ -3,7 +3,7 @@ import type {
 	Selection,
 
 	SortDescriptor,
-} from '@nextui-org/react'
+} from '@heroui/react'
 
 import {
 	useGetTorrentFiles,
@@ -30,7 +30,7 @@ import {
 	TableColumn,
 	TableHeader,
 	TableRow,
-} from '@nextui-org/react'
+} from '@heroui/react'
 import { IconDeviceFloppy, IconWand } from '@tabler/icons-react'
 import prettyBytes from 'pretty-bytes'
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'

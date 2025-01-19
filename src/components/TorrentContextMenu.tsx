@@ -16,7 +16,7 @@ import {
 	DropdownSection,
 	DropdownTrigger,
 	Spinner,
-} from '@nextui-org/react'
+} from '@heroui/react'
 import {
 	IconArrowBarToDown,
 	IconArrowBarToUp,

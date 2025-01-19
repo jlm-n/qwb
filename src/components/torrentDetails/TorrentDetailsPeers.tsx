@@ -11,7 +11,7 @@ import {
 	TableColumn,
 	TableHeader,
 	TableRow,
-} from '@nextui-org/react'
+} from '@heroui/react'
 import prettyBytes from 'pretty-bytes'
 import { memo, useCallback, useMemo, useState } from 'react'
 import CountryFlag from 'react-emoji-flag'

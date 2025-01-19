@@ -1,6 +1,6 @@
 import { type QBittorrentPreferences, QBittorrentPreferencesSchedulerDays } from '@/types/QBittorrentPreferences'
+import { Checkbox, Divider, Input, Select, SelectItem, TimeInput } from '@heroui/react'
 import { Time } from '@internationalized/date'
-import { Checkbox, Divider, Input, Select, SelectItem, TimeInput } from '@nextui-org/react'
 import { memo, useCallback, useState } from 'react'
 
 export const SpeedSettingsSection = memo(({

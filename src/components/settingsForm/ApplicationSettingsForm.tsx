@@ -1,4 +1,4 @@
-import type { Selection } from '@nextui-org/react'
+import type { Selection } from '@heroui/react'
 import { useServerBaseUrl } from '@/hooks/useServerBaseUrl'
 import { useTorrentFilesRefreshRate } from '@/hooks/useTorrentFilesRefreshRate'
 import { useTorrentListRefreshRate } from '@/hooks/useTorrentListRefreshRate'
@@ -7,9 +7,9 @@ import { useTorrentPiecesRefreshRate } from '@/hooks/useTorrentPiecesRefreshRate
 import { useTorrentPropertiesRefreshRate } from '@/hooks/useTorrentPropertiesRefreshRate'
 import { useTorrentTrackersRefreshRate } from '@/hooks/useTorrentTrackersRefreshRate'
 import { useVisibleColumns } from '@/hooks/useVisibleColumns'
-import { Input } from '@nextui-org/input'
-import { Chip, Select, SelectItem } from '@nextui-org/react'
-import { useTheme } from '@nextui-org/use-theme'
+import { Input } from '@heroui/input'
+import { Chip, Select, SelectItem } from '@heroui/react'
+import { useTheme } from '@heroui/use-theme'
 import { type ChangeEvent, useCallback } from 'react'
 import { TORRENT_TABLE_COLUMNS } from '../torrentTable/TorrentTableColumns'
 

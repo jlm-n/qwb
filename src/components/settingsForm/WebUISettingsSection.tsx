@@ -1,5 +1,5 @@
 import { type QBittorrentPreferences, QBittorrentPreferencesDYNDNSService } from '@/types/QBittorrentPreferences'
-import { Checkbox, Divider, Input, Link, Select, SelectItem, Textarea } from '@nextui-org/react'
+import { Checkbox, Divider, Input, Link, Select, SelectItem, Textarea } from '@heroui/react'
 import { memo, useState } from 'react'
 
 export const WebUISettingsSection = memo(({

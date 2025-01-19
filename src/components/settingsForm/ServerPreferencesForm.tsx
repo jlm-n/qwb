@@ -1,7 +1,7 @@
 import type { QBittorrentPreferences } from '@/types/QBittorrentPreferences'
 import type { RefObject } from 'react'
 import { useGetPreferences } from '@/api/useGetPreferences'
-import { Spinner, Tab, Tabs } from '@nextui-org/react'
+import { Spinner, Tab, Tabs } from '@heroui/react'
 import { memo, useCallback, useEffect, useState } from 'react'
 import { AdvancedSettingsSection } from './AdvancedSettingsSection'
 import { BehaviorSettingsSection } from './BehaviorSettingsSection'

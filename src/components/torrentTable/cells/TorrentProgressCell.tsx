@@ -1,6 +1,6 @@
 import type { QBittorrentTorrentState } from '@/types/QBittorrentTorrentState'
 
-import { CircularProgress } from '@nextui-org/react'
+import { CircularProgress } from '@heroui/react'
 import { memo } from 'react'
 
 export const TorrentProgressCell = memo(({

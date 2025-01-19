@@ -1,13 +1,13 @@
 import type {
 	Selection,
-} from '@nextui-org/react'
+} from '@heroui/react'
 import {
 	Button,
 	Dropdown,
 	DropdownItem,
 	DropdownMenu,
 	DropdownTrigger,
-} from '@nextui-org/react'
+} from '@heroui/react'
 import { IconCaretDownFilled } from '@tabler/icons-react'
 import { memo } from 'react'
 

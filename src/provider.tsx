@@ -1,5 +1,5 @@
-import { NextUIProvider } from '@nextui-org/system'
-import { useTheme } from '@nextui-org/use-theme'
+import { HeroUIProvider } from '@heroui/system'
+import { useTheme } from '@heroui/use-theme'
 import { useNavigate } from 'react-router-dom'
 
 export function Provider({ children }: { children: React.ReactNode }) {
@@ -7,10 +7,10 @@ export function Provider({ children }: { children: React.ReactNode }) {
 	const { theme } = useTheme()
 
 	return (
-		<NextUIProvider navigate={navigate}>
+		<HeroUIProvider navigate={navigate}>
 			<main className={`${theme} text-foreground bg-background relative flex flex-col h-screen`}>
 				{children}
 			</main>
-		</NextUIProvider>
+		</HeroUIProvider>
 	)
 }

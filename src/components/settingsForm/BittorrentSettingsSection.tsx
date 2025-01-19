@@ -1,6 +1,6 @@
 import { type QBittorrentPreferences, QBittorrentPreferencesEncryptionMode, QBittorrentPreferencesMaxRatioAct } from '@/types/QBittorrentPreferences'
-import { Input, Textarea } from '@nextui-org/input'
-import { Checkbox, Divider, Link, Select, SelectItem } from '@nextui-org/react'
+import { Input, Textarea } from '@heroui/input'
+import { Checkbox, Divider, Link, Select, SelectItem } from '@heroui/react'
 import { IconExternalLink } from '@tabler/icons-react'
 import { memo, useState } from 'react'
 

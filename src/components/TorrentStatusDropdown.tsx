@@ -1,7 +1,7 @@
 import type { QBittorrentTorrentState } from '@/types/QBittorrentTorrentState'
 import type {
 	Selection,
-} from '@nextui-org/react'
+} from '@heroui/react'
 import {
 	Button,
 	Dropdown,
@@ -9,7 +9,7 @@ import {
 	DropdownMenu,
 	DropdownSection,
 	DropdownTrigger,
-} from '@nextui-org/react'
+} from '@heroui/react'
 import { IconCaretDownFilled } from '@tabler/icons-react'
 import { memo } from 'react'
 import { QBittorrentStateIcon } from './icons/QBittorrentStateIcon'
