@@ -78,10 +78,8 @@ export function sortAndFilterTorrents(torrents: QBittorrentTorrent[], searchFilt
 } {
 	const output: Array<QBittorrentTorrent> = []
 	const searchFilter = searchNormalize(searchFilterValue)
-	const statusFilter
-		= statusFilterValue === 'all' ? null : Array.from(statusFilterValue)
-	const trackerFilter
-		= trackerFilterValue === 'all' ? null : Array.from(trackerFilterValue)
+	const statusFilter = statusFilterValue === 'all' ? null : Array.from(statusFilterValue)
+	const trackerFilter = trackerFilterValue === 'all' ? null : Array.from(trackerFilterValue)
 
 	// first we filter on the crieria
 	for (const torrent of torrents) {
