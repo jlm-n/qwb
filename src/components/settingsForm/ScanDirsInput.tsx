@@ -18,7 +18,6 @@ export function ScanDirsInput({ scan_dirs }: Pick<QBittorrentPreferences, 'scan_
 	// 	})
 	// }, [])
 	const deleteKeyCallback = useCallback((key: string) => {
-		console.error(key)
 		setScanDirsState((previous) => {
 			return [...previous.filter(([folderName]) => folderName !== key)]
 		})

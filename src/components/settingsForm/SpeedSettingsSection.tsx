@@ -40,12 +40,10 @@ export const SpeedSettingsSection = memo(({
 	const [scheduleToMinState, setScheduleToMinState] = useState(schedule_to_min)
 
 	const onScheduleFromChangedCallback = useCallback((value: Time | null) => {
-		console.error(value)
 		setScheduleFromHourState(value?.hour)
 		setScheduleFromMinState(value?.minute)
 	}, [])
 	const onScheduleToChangedCallback = useCallback((value: Time | null) => {
-		console.error(value)
 		setScheduleToHourState(value?.hour)
 		setScheduleToMinState(value?.minute)
 	}, [])

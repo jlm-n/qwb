@@ -36,7 +36,6 @@ function appendFiles(files: FileList | undefined, formData: FormData) {
 	}
 
 	for (const file of files) {
-		console.error('torrents', file, file.name)
 		formData.append('torrents', file, file.name)
 	}
 }

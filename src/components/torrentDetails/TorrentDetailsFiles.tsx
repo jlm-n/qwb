@@ -185,7 +185,6 @@ export function TorrentDetailsFiles({
 	}, [torrentHash, oldPath, renameFile, renameFolder, refreshTorrentFiles, setIsRenamePopoverOpen, newName, fullPath])
 
 	const sortedFiles = useMemo(() => {
-		console.error(sortDescriptor)
 		return files?.sort((a, b) => {
 			if (!sortDescriptor?.column) {
 				return 0
