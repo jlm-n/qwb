@@ -78,7 +78,7 @@ export const TorrentContextMenu = memo(({
 				closeOnSelect={false}
 				onClose={onClose}
 				style={{
-					zIndex: '10',
+					zIndex: '21',
 					translate: (position?.x || 0) - ((triggerRef?.current?.getBoundingClientRect().width || 0) / 2),
 				}}
 				triggerRef={triggerRef}
