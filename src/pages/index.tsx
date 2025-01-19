@@ -5,8 +5,6 @@ import type { QBittorrentTorrent } from '@/types/QBittorrentTorrent'
 
 import type {
 	Selection,
-	SelectionBehavior,
-	SelectionMode,
 	SortDescriptor,
 } from '@heroui/react'
 
@@ -109,8 +107,6 @@ export default function App() {
 	const [trackers, setTrackers] = useState<Array<string>>([])
 	const [trackerFilterValue, setTrackerFilter] = useState<Selection>('all')
 	const [autoRefreshEnabled, setAutoRefreshEnabled] = usePersistentState('autoRefresh', true)
-	const [selectionMode, setSelectionMode] = useState<SelectionMode>('single')
-	const [selectionBehaviour, setSelectionBehaviour] = useState<SelectionBehavior>('replace')
 	const [showBottomPanel, setShowBottomPanel] = usePersistentState('showBottomPanel', false)
 	const [pages, setPages] = useState(1)
 	const [page, setPage] = useState(1)
@@ -231,8 +227,6 @@ export default function App() {
 		}
 		return selectedTorrents.values().next().value as string | undefined
 	}, [selectedTorrents])
-
-
 
 	const selectedTorrentHashes = useMemo(() => {
 		return selectedTorrents === 'all'
