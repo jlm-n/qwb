@@ -5,9 +5,17 @@ import { searchNormalize } from './normalizeTorrentName'
 
 function torrentMatchesName(
 	torrent: QBittorrentTorrent,
-	nameFilter: string | null,
+	nameFilter: string[] | null,
 ) {
-	return !nameFilter || torrent.normalized_name.includes(nameFilter)
+	if (!nameFilter || nameFilter.length === 0) {
+		return true
+	}
+	for (const f of nameFilter) {
+		if (!torrent.normalized_name.includes(f)) {
+			return false
+		}
+	}
+	return true
 }
 
 function torrentMatchesStatus(
@@ -77,7 +85,7 @@ export function sortAndFilterTorrents(torrents: QBittorrentTorrent[], searchFilt
 	pages: number
 } {
 	const output: Array<QBittorrentTorrent> = []
-	const searchFilter = searchNormalize(searchFilterValue)
+	const searchFilter = searchNormalize(searchFilterValue).split('+').filter(v => !!v)
 	const statusFilter = statusFilterValue === 'all' ? null : Array.from(statusFilterValue)
 	const trackerFilter = trackerFilterValue === 'all' ? null : Array.from(trackerFilterValue)
 
