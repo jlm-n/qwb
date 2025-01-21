@@ -10,13 +10,10 @@ import {
 } from '@heroui/react'
 import { IconCaretDownFilled } from '@tabler/icons-react'
 import { memo } from 'react'
+import { TorrentTrackerNameCell } from '../cells/TorrentTrackerNameCell'
 
-export const TrackersDropdown = memo(({
-	trackers,
-	trackerFilter,
-	onTrackerFilterChange,
-}: {
-	trackers: string[]
+export const TrackersDropdown = memo(({ trackers, trackerFilter, onTrackerFilterChange }: {
+	trackers: Record<string, { total: number }>
 	trackerFilter: Selection
 	onTrackerFilterChange: (selection: Selection) => void
 }) => (
@@ -32,8 +29,11 @@ export const TrackersDropdown = memo(({
 			selectionMode="multiple"
 			onSelectionChange={onTrackerFilterChange}
 		>
-			{trackers.map(tracker => (
-				<DropdownItem key={tracker}>{tracker}</DropdownItem>
+			{Object.keys(trackers).sort().map(tracker => (
+				<DropdownItem key={tracker} classNames={{ title: 'space-x-3' }}>
+					<TorrentTrackerNameCell trackerUrl={tracker} />
+					<span>{`${new URL(tracker).hostname} (${trackers[tracker].total})`}</span>
+				</DropdownItem>
 			))}
 		</DropdownMenu>
 	</Dropdown>

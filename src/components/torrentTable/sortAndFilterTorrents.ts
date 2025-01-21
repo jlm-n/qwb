@@ -1,7 +1,7 @@
 import type { QBittorrentTorrent } from '@/types/QBittorrentTorrent'
 import type { Selection, SortDescriptor } from '@heroui/table'
 import type { Key } from 'react'
-import { searchNormalize } from './normalizeTorrentName'
+import { normalizeForSearch } from './normalizeTorrentName'
 
 function torrentMatchesName(
 	torrent: QBittorrentTorrent,
@@ -16,6 +16,20 @@ function torrentMatchesName(
 		}
 	}
 	return true
+}
+
+function torrentMatchesTags(
+	torrent: QBittorrentTorrent,
+	tagFilter: Key[] | null,
+) {
+	return (!tagFilter || tagFilter.some(tag => torrent.normalized_tags.includes(tag as string)))
+}
+
+function torrentMatchesCategory(
+	torrent: QBittorrentTorrent,
+	category: Key[] | null,
+) {
+	return (!category || category.includes(torrent.category))
 }
 
 function torrentMatchesStatus(
@@ -33,12 +47,7 @@ function torrentMatchesTracker(
 	torrent: QBittorrentTorrent,
 	trackerFilter: Key[] | null,
 ) {
-	return (
-		!trackerFilter
-		|| trackerFilter.some(tracker =>
-			torrent.tracker.includes(tracker as string),
-		)
-	)
+	return (!trackerFilter || trackerFilter.some(tracker => torrent.tracker.includes(tracker as string)))
 }
 
 function compareTorrents(
@@ -79,19 +88,37 @@ function compareTorrents(
 	return sortDescriptor.direction === 'ascending' ? cmp : -cmp
 }
 
-export function sortAndFilterTorrents(torrents: QBittorrentTorrent[], searchFilterValue: string, statusFilterValue: Selection, trackerFilterValue: Selection, sortDescriptor: SortDescriptor, rowsPerPage: number, page: number): {
+export function sortAndFilterTorrents(
+	torrents: QBittorrentTorrent[],
+	searchFilterValue: string,
+	statusFilterValue: Selection,
+	trackerFilterValue: Selection,
+	tagFilterValue: Selection,
+	categoryFilterValue: Selection,
+	sortDescriptor: SortDescriptor,
+	rowsPerPage: number,
+	page: number,
+): {
 	pagedTorrents: QBittorrentTorrent[]
 	filteredTorrentLength: number
 	pages: number
 } {
 	const output: Array<QBittorrentTorrent> = []
-	const searchFilter = searchNormalize(searchFilterValue).split('+').filter(v => !!v)
+	const searchFilter = normalizeForSearch(searchFilterValue).split('+').filter(v => !!v)
 	const statusFilter = statusFilterValue === 'all' ? null : Array.from(statusFilterValue)
 	const trackerFilter = trackerFilterValue === 'all' ? null : Array.from(trackerFilterValue)
+	const tagFilter = tagFilterValue === 'all' ? null : Array.from(tagFilterValue)
+	const categoryFilter = categoryFilterValue === 'all' ? null : Array.from(categoryFilterValue)
 
 	// first we filter on the crieria
 	for (const torrent of torrents) {
 		if (!torrentMatchesName(torrent, searchFilter)) {
+			continue
+		}
+		if (!torrentMatchesTags(torrent, tagFilter)) {
+			continue
+		}
+		if (!torrentMatchesCategory(torrent, categoryFilter)) {
 			continue
 		}
 		if (!torrentMatchesStatus(torrent, statusFilter)) {

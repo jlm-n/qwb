@@ -1,9 +1,9 @@
-import type { QbittorrentMaindata } from '@/types/QBittorrentMaindata'
+import type { QBittorrentMaindata } from '@/types/QBittorrentMaindata'
 import { useServerBaseUrl } from '@/hooks/useServerBaseUrl'
 import { useCallback, useState } from 'react'
 
 export function useGetMaindata(): [
-	(rid: number) => Promise<QbittorrentMaindata>,
+	(rid: number) => Promise<QBittorrentMaindata>,
 	boolean,
 	Error | null,
 ] {
@@ -38,7 +38,7 @@ export function useGetMaindata(): [
 }
 
 export function useGetIncrementalMaindata(): [
-	() => Promise<QbittorrentMaindata>,
+	() => Promise<QBittorrentMaindata>,
 	boolean,
 	Error | null,
 	number,

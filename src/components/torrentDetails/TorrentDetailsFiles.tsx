@@ -35,7 +35,7 @@ import { IconDeviceFloppy, IconWand } from '@tabler/icons-react'
 import prettyBytes from 'pretty-bytes'
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { TorrentProgressCell } from '../torrentTable/cells/TorrentProgressCell'
-import { fileNameNormalize } from '../torrentTable/normalizeTorrentName'
+import { normalizeFileName } from '../torrentTable/normalizeTorrentName'
 
 const PRIORITY_TO_STRING: Record<QBittorrentFilePriority, string> = {
 	[QBittorrentFilePriority.DO_NOT_DOWNLOAD]: 'Do not download',
@@ -243,7 +243,7 @@ export function TorrentDetailsFiles({
 						size="sm"
 						variant="bordered"
 						value={newName}
-						endContent={<Button variant="light" isIconOnly size="sm" title="Normalize name" radius="sm" className="m-auto -mr-1" onPress={() => setNewName(fileNameNormalize(newName))}><IconWand width={16} /></Button>}
+						endContent={<Button variant="light" isIconOnly size="sm" title="Normalize name" radius="sm" className="m-auto -mr-1" onPress={() => setNewName(normalizeFileName(newName))}><IconWand width={16} /></Button>}
 						onValueChange={setNewName}
 					/>
 					<Button isLoading={renameFolderLoading || renameFileLoading} title="Save changes" isIconOnly radius="sm" onPress={onSaveButtonPressed}><IconDeviceFloppy /></Button>

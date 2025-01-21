@@ -1,5 +1,5 @@
 import type { ColumnOption } from '@/types/ColumnOption'
-import type { QbittorrentMaindata } from '@/types/QBittorrentMaindata'
+import type { QBittorrentMaindata } from '@/types/QBittorrentMaindata'
 import type { QBittorrentServerState } from '@/types/QBittorrentServerState'
 import type { QBittorrentTorrent } from '@/types/QBittorrentTorrent'
 
@@ -15,7 +15,7 @@ import { TorrentContextMenu } from '@/components/TorrentContextMenu'
 import { TorrentDetails } from '@/components/torrentDetails/TorrentDetails'
 import { TorrentTableBottom } from '@/components/torrentTable/bottom/TorrentTableBottom'
 import { renderCell } from '@/components/torrentTable/cells/renderCells'
-import { searchNormalize } from '@/components/torrentTable/normalizeTorrentName'
+import { normalizeForSearch } from '@/components/torrentTable/normalizeTorrentName'
 import { normalizeTorrentPriority } from '@/components/torrentTable/normalizeTorrentPriority'
 import { sortAndFilterTorrents } from '@/components/torrentTable/sortAndFilterTorrents'
 import { TorrentTableTop } from '@/components/torrentTable/top/TorrentTableTop'
@@ -45,36 +45,40 @@ import { Panel, PanelGroup } from 'react-resizable-panels'
 import { useNavigate } from 'react-router-dom'
 
 const TORRENTS = new Map<string, QBittorrentTorrent>()
+const SERVER_STATE: QBittorrentServerState = {}
 
-async function mergeMaindata(updatedMaindata: QbittorrentMaindata): Promise<{
-	rid: number
+async function mergeMaindata(r: QBittorrentMaindata): Promise<{
 	serverState: QBittorrentServerState
 	torrents: QBittorrentTorrent[]
-	trackers: Record<string, string[]>
+	trackers: Record<string, { total: number }>
+	categories: Record<string, { total: number }>
+	tags: Record<string, { total: number }>
 }> {
-	const r = updatedMaindata
-
+	// Process torrents & update cache
 	for (const hash in r.torrents) {
 		const torrent = r.torrents[hash]
-		const existing = TORRENTS.get(hash) || { name: '', priority: undefined }
+		const existing = TORRENTS.get(hash) || { name: '', priority: undefined, tags: '' }
 
 		TORRENTS.set(hash, {
 			...existing,
 			...torrent,
 			hash,
-			normalized_name: searchNormalize(existing.name || torrent.name || ''),
+			// extra computed fields
+			normalized_name: normalizeForSearch(existing.name || torrent.name || ''),
 			normalized_priority: normalizeTorrentPriority(existing.priority ?? torrent.priority),
+			normalized_tags: (existing.tags || torrent.tags || '').split(',').map(t => t.trim()),
 		})
 	}
 
+	// Delete removed torrents
 	for (const hash of r.torrents_removed || []) {
 		TORRENTS.delete(hash)
 	}
 
+	// Fix the torrent tracker information
 	for (const tracker in r.trackers) {
 		for (const torrentHash of r.trackers[tracker]) {
 			const existing = TORRENTS.get(torrentHash)
-
 			if (!existing) {
 				continue
 			}
@@ -86,26 +90,58 @@ async function mergeMaindata(updatedMaindata: QbittorrentMaindata): Promise<{
 		}
 	}
 
+	// Compute tracker, tags & categories stats
+	const torrents = Array.from(TORRENTS.values())
+	const trackers: Record<string, { total: number }> = {}
+	const categories: Record<string, { total: number }> = {}
+	const tags: Record<string, { total: number }> = {}
+	for (const torrent of torrents) {
+		if (torrent.tracker) {
+			if (!trackers[torrent.tracker]) {
+				trackers[torrent.tracker] = { total: 0 }
+			}
+			trackers[torrent.tracker].total += 1
+		}
+		for (const tag of torrent.normalized_tags) {
+			if (!tags[tag]) {
+				tags[tag] = { total: 0 }
+			}
+			tags[tag].total += 1
+		}
+		if (torrent.category) {
+			if (!categories[torrent.category]) {
+				categories[torrent.category] = { total: 0 }
+			}
+			categories[torrent.category].total += 1
+		}
+	}
+
 	return {
-		rid: r.rid,
-		serverState: r.server_state,
-		torrents: Array.from(TORRENTS.values()),
-		trackers: r.trackers,
+		serverState: Object.assign(SERVER_STATE, r.server_state || {}),
+		torrents,
+		trackers,
+		categories,
+		tags,
 	}
 }
 
 export default function App() {
 	const navigate = useNavigate()
-	const [filterValue, setFilterValue] = useState('')
+
+	const [trackers, setTrackers] = useState<Record<string, { total: number }>>({})
+	const [trackerFilter, setTrackerFilter] = useState<Selection>('all')
+	const [categories, setCategories] = useState<Record<string, { total: number }>>({})
+	const [categoryFilter, setCategoryFilter] = useState<Selection>('all')
+	const [tags, setTags] = useState<Record<string, { total: number }>>({})
+	const [tagFilter, setTagFilter] = useState<Selection>('all')
+	const [statusFilter, setStatusFilter] = useState<Selection>(new Set(['all']))
+	const [searchFilter, setSearchFilter] = useState('')
 	const [selectedTorrents, setSelectedTorrents] = useState<Selection>(new Set())
 	const [visibleColumns] = useVisibleColumns()
 	const [refreshInterval] = useTorrentListRefreshRate()
-	const [statusFilterValue, setStatusFilter] = useState<Selection>(new Set(['all']))
 	const [rowsPerPage, setRowsPerPage] = usePersistentState('rowsPerPage', '20')
 	const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({ column: 'added_on', direction: 'descending' })
 	const [serverState, setServerState] = useState<QBittorrentServerState>({})
-	const [trackers, setTrackers] = useState<Array<string>>([])
-	const [trackerFilterValue, setTrackerFilter] = useState<Selection>('all')
 	const [autoRefreshEnabled, setAutoRefreshEnabled] = usePersistentState('autoRefresh', true)
 	const [showBottomPanel, setShowBottomPanel] = usePersistentState('showBottomPanel', false)
 	const [pages, setPages] = useState(1)
@@ -132,10 +168,10 @@ export default function App() {
 
 	const onSearchChange = useCallback((value?: string) => {
 		if (value) {
-			setFilterValue(value)
+			setSearchFilter(value)
 		}
 		else {
-			setFilterValue('')
+			setSearchFilter('')
 		}
 		setPage(1)
 	}, [])
@@ -150,9 +186,11 @@ export default function App() {
 				const { pagedTorrents, filteredTorrentLength, pages }
 					= sortAndFilterTorrents(
 						torrents,
-						filterValue,
-						statusFilterValue,
-						trackerFilterValue,
+						searchFilter,
+						statusFilter,
+						trackerFilter,
+						tagFilter,
+						categoryFilter,
 						sortDescriptor,
 						rowsPerPage === 'auto' ? Math.floor((tableContainerHeight - 72) / 40) : +rowsPerPage, //  remove the header size and divide by the average row height
 						page,
@@ -163,9 +201,11 @@ export default function App() {
 			})
 		},
 		[
-			filterValue,
-			statusFilterValue,
-			trackerFilterValue,
+			searchFilter,
+			statusFilter,
+			trackerFilter,
+			tagFilter,
+			categoryFilter,
 			sortDescriptor,
 			rowsPerPage,
 			page,
@@ -181,14 +221,14 @@ export default function App() {
 		const updatedMaindata = await getIncrementalMaindata()
 		const {
 			torrents,
-			trackers: newTrackers,
+			trackers,
+			categories,
+			tags,
 			serverState,
 		} = await mergeMaindata(updatedMaindata)
-		if (newTrackers) {
-			setTrackers(
-				Object.keys(newTrackers).map(tracker => new URL(tracker).hostname),
-			)
-		}
+		setCategories(categories)
+		setTags(tags)
+		setTrackers(trackers)
 		setServerState(oldServerState => ({ ...oldServerState, ...serverState }))
 		sortAndFilterTorrentsCallback(torrents)
 	}, [getIncrementalMaindata, setTrackers, setServerState, sortAndFilterTorrentsCallback])
@@ -203,9 +243,11 @@ export default function App() {
 		sortAndFilterTorrentsCallback()
 	}, [
 		sortAndFilterTorrentsCallback,
-		filterValue,
-		statusFilterValue,
-		trackerFilterValue,
+		searchFilter,
+		statusFilter,
+		trackerFilter,
+		tagFilter,
+		categoryFilter,
 		sortDescriptor,
 		rowsPerPage,
 		page,
@@ -219,7 +261,7 @@ export default function App() {
 			)
 			return () => clearTimeout(timeout)
 		}
-	}, [getIncrementalMaindataCallback, refreshInterval, autoRefreshEnabled, rid, page, statusFilterValue, filterValue, trackerFilterValue, items])
+	}, [getIncrementalMaindataCallback, refreshInterval, autoRefreshEnabled, rid, page, statusFilter, searchFilter, trackerFilter, items])
 
 	const selectedTorrentHash = useMemo(() => {
 		if (selectedTorrents === 'all' || selectedTorrents.size !== 1) {
@@ -283,16 +325,22 @@ export default function App() {
 								onStatusFilterChange={setStatusFilter}
 								onTrackerFilterChange={setTrackerFilter}
 								rowsPerPage={rowsPerPage}
-								searchFilter={filterValue}
+								searchFilter={searchFilter}
 								selectedTorrentHashes={selectedTorrentHashes}
 								serverDownloadSessionTotal={serverState.dl_info_data || 0}
 								serverDownloadSpeed={serverState.dl_info_speed || 0}
 								serverUploadSessionTotal={serverState.up_info_data || 0}
 								serverUploadSpeed={serverState.up_info_speed || 0}
 								showBottomPanel={showBottomPanel}
-								statusFilter={statusFilterValue}
-								trackerFilter={trackerFilterValue}
+								statusFilter={statusFilter}
 								trackers={trackers}
+								trackerFilter={trackerFilter}
+								categories={categories}
+								categoryFilter={categoryFilter}
+								onCategoryFilterChange={setCategoryFilter}
+								tags={tags}
+								tagFilter={tagFilter}
+								onTagFilterChange={setTagFilter}
 								torrents={TORRENTS}
 							/>
 						)}

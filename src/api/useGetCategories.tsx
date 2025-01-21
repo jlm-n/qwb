@@ -1,13 +1,9 @@
+import type { QBittorrentCategories } from '@/types/QBittorrentCategories'
 import { useServerBaseUrl } from '@/hooks/useServerBaseUrl'
 import { useCallback, useState } from 'react'
 
-export type QbittorrentCategories = Record<
-	string,
-	{ name: string, savePath: string }
->
-
 export function useGetCategories(): [
-	() => Promise<QbittorrentCategories>,
+	() => Promise<QBittorrentCategories>,
 	boolean,
 	Error | null,
 ] {

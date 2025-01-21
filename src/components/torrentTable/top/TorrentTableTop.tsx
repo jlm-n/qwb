@@ -18,7 +18,9 @@ import {
 import prettyBytes from 'pretty-bytes'
 import { memo } from 'react'
 import { AppAndServerSettingsButton } from './AppAndServerSettingsButton'
+import { CategoriesDropdown } from './CategoriesDropdown'
 import { ShowBottomPanelButton } from './ShowBottomPanelButton'
+import { TagsDropdown } from './TagsDropdown'
 import { TorrentRefreshButtons } from './TorrentRefreshButtons'
 import { TorrentSearchInput } from './TorrentSearchInput'
 import { TrackersDropdown } from './TrackersDropdown'
@@ -70,6 +72,8 @@ export function TorrentTableTop({
 	onShowBottomPanelChange,
 	onStatusFilterChange,
 	onTrackerFilterChange,
+	onTagFilterChange,
+	onCategoryFilterChange,
 	rowsPerPage,
 	searchFilter,
 	selectedTorrentHashes,
@@ -80,7 +84,11 @@ export function TorrentTableTop({
 	showBottomPanel,
 	statusFilter,
 	trackerFilter,
+	tagFilter,
+	categoryFilter,
 	trackers,
+	categories,
+	tags,
 	torrents,
 }: {
 	autoRefreshEnabled: boolean
@@ -92,6 +100,8 @@ export function TorrentTableTop({
 	onShowBottomPanelChange: (showBottomPanel: boolean) => void
 	onStatusFilterChange: (statusFilter: Selection) => void
 	onTrackerFilterChange: (trackerFilter: Selection) => void
+	onTagFilterChange: (tagFilter: Selection) => void
+	onCategoryFilterChange: (categoryFilter: Selection) => void
 	rowsPerPage: string
 	searchFilter: string
 	selectedTorrentHashes: string[]
@@ -102,7 +112,11 @@ export function TorrentTableTop({
 	showBottomPanel: boolean
 	statusFilter: Selection
 	trackerFilter: Selection
-	trackers: string[]
+	tagFilter: Selection
+	categoryFilter: Selection
+	trackers: Record<string, { total: number }>
+	categories: Record<string, { total: number }>
+	tags: Record<string, { total: number }>
 	torrents: Map<string, QBittorrentTorrent>
 }) {
 	return (
@@ -123,6 +137,16 @@ export function TorrentTableTop({
 							trackers={trackers}
 							trackerFilter={trackerFilter}
 							onTrackerFilterChange={onTrackerFilterChange}
+						/>
+						<TagsDropdown
+							tags={tags}
+							tagsFilter={tagFilter}
+							onTagsFilterChange={onTagFilterChange}
+						/>
+						<CategoriesDropdown
+							categories={categories}
+							categoriesFilter={categoryFilter}
+							onCategoriesFilterChange={onCategoryFilterChange}
 						/>
 					</ButtonGroup>
 					<AppAndServerSettingsButton />
