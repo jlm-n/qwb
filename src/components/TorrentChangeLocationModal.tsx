@@ -1,4 +1,5 @@
 import { useChangeTorrentLocation } from '@/api/useChangeTorrentLocation'
+import { useGetTorrentFiles } from '@/api/useGetTorrentFiles'
 import {
 	Button,
 	Input,
@@ -9,7 +10,9 @@ import {
 	ModalHeader,
 } from '@heroui/react'
 
-import { useState } from 'react'
+import { IconWand } from '@tabler/icons-react'
+import { useCallback, useEffect, useState } from 'react'
+import { normalizeTorrentPath } from './torrentTable/normalizeTorrentPath'
 
 export function TorrentChangeLocationModal({
 	torrentHashes,
@@ -26,6 +29,20 @@ export function TorrentChangeLocationModal({
 }) {
 	const [changeLocation, isChangeLocationLoading] = useChangeTorrentLocation()
 	const [location, setLocation] = useState<string>(currentLocation)
+
+	useEffect(() => {
+		setLocation(currentLocation)
+	}, [currentLocation, setLocation])
+
+	const [getTorrentFiles, getTorrentFilesLoading] = useGetTorrentFiles()
+	const onNormalizeTorrentPathPressed = useCallback(async () => {
+		if (torrentHashes[0]) {
+			const files = await getTorrentFiles(torrentHashes[0])
+			const path = normalizeTorrentPath(currentName, files)
+
+			setLocation(path)
+		}
+	}, [currentName, torrentHashes, getTorrentFiles])
 
 	return (
 		<Modal isOpen={isOpen} onOpenChange={isOpen => !isOpen && onClose()}>
@@ -50,9 +67,14 @@ export function TorrentChangeLocationModal({
 							/>
 							<Input
 								isRequired
-								defaultValue={currentLocation}
 								label="New location"
-								onChange={e => setLocation(e.target.value)}
+								value={location}
+								endContent={(
+									<Button isLoading={getTorrentFilesLoading} variant="light" isIconOnly size="sm" title="Normalize location" radius="sm" className="m-auto -mr-1" onPress={onNormalizeTorrentPathPressed}>
+										<IconWand width={16} />
+									</Button>
+								)}
+								onValueChange={setLocation}
 							/>
 						</ModalBody>
 						<ModalFooter>
