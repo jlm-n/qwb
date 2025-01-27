@@ -307,7 +307,7 @@ export default function App() {
 						isVirtualized
 						color="primary"
 						selectedKeys={selectedTorrents}
-						selectionMode="multiple"
+						selectionMode="single"
 						selectionBehavior="replace"
 						sortDescriptor={sortDescriptor}
 						bottomContentPlacement="outside"
