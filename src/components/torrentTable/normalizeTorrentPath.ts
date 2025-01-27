@@ -1,4 +1,3 @@
-import type { QBittorrentTorrent } from '@/types/QBittorrentTorrent'
 import type { QBittorrentTorrentFile } from '@/types/QBittorrentTorrentFile'
 import { normalizeFileName } from './normalizeTorrentName'
 
@@ -21,11 +20,12 @@ function trimFileExtension(fileName: string): string {
 	return fileName.replace(/\.[^/.]+$/, '')
 }
 
-export function normalizeTorrentPath(torrentName: string, files: QBittorrentTorrentFile[] | undefined, torrents: QBittorrentTorrent[]): string {
+export function normalizeTorrentPath(torrentName: string, files: QBittorrentTorrentFile[] | undefined): string {
 	const normalizedName = normalizeFileName(torrentName)
 
 	if (machesTvEpisode(normalizedName)) {
-		const tvShowName = normalizedName.match(/(.*)[.\s]+S\d+/i)?.[1]
+		// eslint-disable-next-line regexp/no-super-linear-backtracking, regexp/no-misleading-capturing-group
+		const tvShowName = normalizedName.match(/(.+)[.\s]+S\d+/i)?.[1]
 		if (!tvShowName) {
 			throw new Error(`Could not get tv show name for torrent ${torrentName}`)
 		}
@@ -40,21 +40,17 @@ export function normalizeTorrentPath(torrentName: string, files: QBittorrentTorr
 			throw new Error(`Could not get episode number for torrent ${torrentName}`)
 		}
 
-		console.log({ tvShowName, seasonNumber, episodeNumber })
-
 		if (Number.parseInt(seasonNumber) === 0) {
 			return `/tvshows/${tvShowName}/Specials`
 		}
 		return `/tvshows/${tvShowName}/Season.${Number.parseInt(seasonNumber).toString().padStart(2, '0')}`
 	}
 	else if (machesTvSeason(normalizedName)) {
-		const tvShowName = normalizedName.match(/(.*)[.\s]+S\d+/i)?.[1]
+		// eslint-disable-next-line regexp/no-super-linear-backtracking, regexp/no-misleading-capturing-group
+		const tvShowName = normalizedName.match(/(.+)[.\s]+S\d+/i)?.[1]
 		if (!tvShowName) {
 			throw new Error(`Could not get tv show name for torrent ${torrentName}`)
 		}
-
-		console.log({ tvShowName })
-
 		return `/tvshows/${tvShowName}`
 	}
 	else {

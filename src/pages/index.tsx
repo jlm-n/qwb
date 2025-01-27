@@ -183,7 +183,7 @@ export default function App() {
 		(torrents: QBittorrentTorrent[] = Array.from(TORRENTS.values())) => {
 			startTransition(() => {
 				const tableContainerHeight = ((torrentTableRef.current?.parentNode as HTMLDivElement).clientHeight)
-				const { pagedTorrents, filteredTorrentLength, pages }
+				const { pagedTorrents, totalTorrentsCount: filteredTorrentLength, pagesCount: pages }
 					= sortAndFilterTorrents(
 						torrents,
 						searchFilter,
