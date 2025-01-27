@@ -88,6 +88,11 @@ function compareTorrents(
 	return sortDescriptor.direction === 'ascending' ? cmp : -cmp
 }
 
+interface FilteredTorrentsResult {
+	pagedTorrents: QBittorrentTorrent[]
+	totalTorrentsCount: number
+	pagesCount: number
+}
 export function sortAndFilterTorrents(
 	torrents: QBittorrentTorrent[],
 	searchFilterValue: string,
@@ -98,11 +103,7 @@ export function sortAndFilterTorrents(
 	sortDescriptor: SortDescriptor,
 	rowsPerPage: number,
 	page: number,
-): {
-	pagedTorrents: QBittorrentTorrent[]
-	filteredTorrentLength: number
-	pages: number
-} {
+): FilteredTorrentsResult {
 	const output: Array<QBittorrentTorrent> = []
 	const searchFilter = normalizeForSearch(searchFilterValue).split('+').filter(v => !!v)
 	const statusFilter = statusFilterValue === 'all' ? null : Array.from(statusFilterValue)
@@ -137,7 +138,7 @@ export function sortAndFilterTorrents(
 	return {
 		// then we paginate
 		pagedTorrents: output.slice((page - 1) * rowsPerPage, page * rowsPerPage),
-		filteredTorrentLength,
-		pages: Math.ceil(filteredTorrentLength / rowsPerPage),
+		totalTorrentsCount: filteredTorrentLength,
+		pagesCount: Math.ceil(filteredTorrentLength / rowsPerPage),
 	}
 }

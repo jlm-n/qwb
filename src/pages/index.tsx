@@ -66,7 +66,7 @@ async function mergeMaindata(r: QBittorrentMaindata): Promise<{
 			// extra computed fields
 			normalized_name: normalizeForSearch(existing.name || torrent.name || ''),
 			normalized_priority: normalizeTorrentPriority(existing.priority ?? torrent.priority),
-			normalized_tags: (existing.tags || torrent.tags || '').split(',').map(t => t.trim()),
+			normalized_tags: (existing.tags || torrent.tags || '').split(',').map(t => t.trim()).filter(t => !!t),
 		})
 	}
 
@@ -183,7 +183,7 @@ export default function App() {
 		(torrents: QBittorrentTorrent[] = Array.from(TORRENTS.values())) => {
 			startTransition(() => {
 				const tableContainerHeight = ((torrentTableRef.current?.parentNode as HTMLDivElement).clientHeight)
-				const { pagedTorrents, filteredTorrentLength, pages }
+				const { pagedTorrents, totalTorrentsCount: filteredTorrentLength, pagesCount: pages }
 					= sortAndFilterTorrents(
 						torrents,
 						searchFilter,
@@ -404,7 +404,14 @@ export default function App() {
 					</>
 				)}
 			</PanelGroup>
-			<TorrentContextMenu isOpen={isOpen} onClose={closeContextMenu} triggerRef={triggerRef} torrentHashes={selectedTorrentHashes} torrents={TORRENTS} position={constextMenuPosition} />
+			<TorrentContextMenu
+				isOpen={isOpen}
+				onClose={closeContextMenu}
+				triggerRef={triggerRef}
+				torrentHashes={selectedTorrentHashes}
+				torrents={TORRENTS}
+				position={constextMenuPosition}
+			/>
 		</>
 	)
 }

@@ -70,6 +70,7 @@ export const TorrentContextMenu = memo(({
 	const [increaseTorrentPrio, isIncreaseTorrentPrioLoading] = useIncreaseTorrentPrio()
 	const [decreaseTorrentPrio, isDecreaseTorrentPrioLoading] = useDecreaseTorrentPrio()
 	const selectedTorrents = useMemo(() => torrentHashes.map(hash => torrents?.get(hash)), [torrentHashes, torrents])
+	const selectedTorrent = useMemo(() => selectedTorrents.at(0), [selectedTorrents])
 
 	return (
 		<>
@@ -223,7 +224,7 @@ export const TorrentContextMenu = memo(({
 					</DropdownSection>
 					<DropdownItem
 						key="export"
-						download={`${selectedTorrents.at(0)?.name}.torrent`}
+						download={`${selectedTorrent?.name}.torrent`}
 						href={`/api/v2/torrents/export?hash=${torrentHashes[0]}`}
 						startContent={<IconFileDownload width={16} />}
 					>
@@ -243,14 +244,14 @@ export const TorrentContextMenu = memo(({
 				onClose={() => setDeleteTorrentFilesModalIsOpen(false)}
 			/>
 			<TorrentChangeLocationModal
-				currentLocation={selectedTorrents.at(0)?.save_path ?? ''}
-				currentName={selectedTorrents.at(0)?.name ?? ''}
+				currentLocation={selectedTorrent?.save_path ?? ''}
+				currentName={selectedTorrent?.name ?? ''}
 				isOpen={changeTorrentLocationModalIsOpen}
 				torrentHashes={torrentHashes}
 				onClose={() => setChangeTorrentLocationModalIsOpen(false)}
 			/>
 			<TorrentRenameModal
-				currentName={selectedTorrents.at(0)?.name ?? ''}
+				currentName={selectedTorrent?.name ?? ''}
 				isOpen={renameTorrentModalIsOpen}
 				torrentHash={torrentHashes[0]}
 				onClose={() => setRenameTorrentModalIsOpen(false)}
