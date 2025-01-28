@@ -25,11 +25,11 @@ export const TagsDropdown = memo(({ tags, tagsFilter, onTagsFilterChange }: {
 			aria-label="Tags filter"
 			closeOnSelect={false}
 			selectedKeys={tagsFilter}
-			selectionMode="multiple"
+			selectionMode="single"
 			onSelectionChange={onTagsFilterChange}
 		>
 			{[
-				<DropdownItem showDivider key="">Untagged</DropdownItem>,
+				<DropdownItem showDivider key="all">All</DropdownItem>,
 				...Object.keys(tags).sort().map(tag => (
 					<DropdownItem key={tag}>{`${tag} (${tags[tag].total})`}</DropdownItem>
 				)),

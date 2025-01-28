@@ -22,25 +22,46 @@ function torrentMatchesTags(
 	torrent: QBittorrentTorrent,
 	tagFilter: Key[] | null,
 ) {
-	return (!tagFilter || tagFilter.some(tag => torrent.normalized_tags.includes(tag as string)))
+	if (!tagFilter || tagFilter.includes('all')) {
+		return true
+	}
+	return tagFilter.some(tag => torrent.normalized_tags.includes(tag as string))
 }
 
 function torrentMatchesCategory(
 	torrent: QBittorrentTorrent,
-	category: Key[] | null,
+	categoryFilter: Key[] | null,
 ) {
-	return (!category || category.includes(torrent.category))
+	if (!categoryFilter || categoryFilter.includes('all')) {
+		return true
+	}
+	return categoryFilter.includes(torrent.category)
 }
 
 function torrentMatchesStatus(
 	torrent: QBittorrentTorrent,
 	statusFilter: Key[] | null,
 ) {
-	return (
-		!statusFilter
-		|| statusFilter.includes('all')
-		|| statusFilter.includes(torrent.state)
-	)
+	if (!statusFilter || statusFilter.includes('all')) {
+		return true
+	}
+
+	if (statusFilter.includes('active')) {
+		return [
+			'downloading',
+			'forcedDL',
+			'forcedUP',
+			'metaDL',
+			'uploading',
+			'allocating',
+			'checkingDL',
+			'checkingUP',
+			'checkingResumeData',
+			'metaDL',
+			'moving',
+		].includes(torrent.state)
+	}
+	return (statusFilter.includes(torrent.state))
 }
 
 function torrentMatchesTracker(

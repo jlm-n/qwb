@@ -94,9 +94,7 @@ async function mergeMaindata(r: QBittorrentMaindata): Promise<{
 
 	// Setup initial tags & categories
 	for (const tag of (r.tags || [])) {
-		if (!TAGS[tag]) {
-			TAGS[tag] = { total: 0 }
-		}
+		TAGS[tag] = { total: 0 }
 	}
 	for (const tag of (r.tags_removed || [])) {
 		delete TAGS[tag]
@@ -110,6 +108,8 @@ async function mergeMaindata(r: QBittorrentMaindata): Promise<{
 	// Compute tracker, tags & categories stats
 	const torrents = Array.from(TORRENTS.values())
 	const trackers: Record<string, { total: number }> = {}
+	const tags: Record<string, { total: number }> = {}
+	const categories: Record<string, { total: number }> = {}
 	for (const torrent of torrents) {
 		if (torrent.tracker) {
 			if (!trackers[torrent.tracker]) {
@@ -118,10 +118,16 @@ async function mergeMaindata(r: QBittorrentMaindata): Promise<{
 			trackers[torrent.tracker].total += 1
 		}
 		for (const tag of torrent.normalized_tags) {
-			TAGS[tag].total += 1
+			if (!tags[tag]) {
+				tags[tag] = { total: 0 }
+			}
+			tags[tag].total += 1
 		}
 		if (torrent.category) {
-			CATEGORIES[torrent.category].total += 1
+			if (!categories[torrent.category]) {
+				categories[torrent.category] = { total: 0 }
+			}
+			categories[torrent.category].total += 1
 		}
 	}
 
@@ -129,8 +135,8 @@ async function mergeMaindata(r: QBittorrentMaindata): Promise<{
 		serverState: Object.assign(SERVER_STATE, r.server_state || {}),
 		torrents,
 		trackers,
-		categories: CATEGORIES,
-		tags: TAGS,
+		categories: Object.assign(CATEGORIES, categories),
+		tags: Object.assign(TAGS, tags),
 	}
 }
 
@@ -140,9 +146,9 @@ export default function App() {
 	const [trackers, setTrackers] = useState<Record<string, { total: number }>>({})
 	const [trackerFilter, setTrackerFilter] = useState<Selection>('all')
 	const [categories, setCategories] = useState<Record<string, { total: number }>>({})
-	const [categoryFilter, setCategoryFilter] = useState<Selection>('all')
+	const [categoryFilter, setCategoryFilter] = useState<Selection>(new Set(['all']))
 	const [tags, setTags] = useState<Record<string, { total: number }>>({})
-	const [tagFilter, setTagFilter] = useState<Selection>('all')
+	const [tagFilter, setTagFilter] = useState<Selection>(new Set(['all']))
 	const [statusFilter, setStatusFilter] = useState<Selection>(new Set(['all']))
 	const [searchFilter, setSearchFilter] = useState('')
 	const [selectedTorrents, setSelectedTorrents] = useState<Selection>(new Set())

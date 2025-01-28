@@ -20,3 +20,5 @@ export type QBittorrentTorrentState =
 	| 'stoppedUP'
 	| 'unknown'
 	| 'uploading'
+
+export type QBittorrentTorrentStateOption = QBittorrentTorrentState | 'all' | 'active'

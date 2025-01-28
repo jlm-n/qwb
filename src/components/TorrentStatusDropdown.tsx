@@ -1,4 +1,4 @@
-import type { QBittorrentTorrentState } from '@/types/QBittorrentTorrentState'
+import type { QBittorrentTorrentStateOption } from '@/types/QBittorrentTorrentState'
 import type {
 	Selection,
 } from '@heroui/react'
@@ -14,10 +14,13 @@ import { IconCaretDownFilled } from '@tabler/icons-react'
 import { memo } from 'react'
 import { QBittorrentStateIcon } from './icons/QBittorrentStateIcon'
 
-interface StatusSectionDefinition { label: string, value: QBittorrentTorrentState | 'all', icon: React.ReactNode }
+interface StatusSectionDefinition { label: string, value: QBittorrentTorrentStateOption, icon: React.ReactNode }
 type StatusSection = Array<StatusSectionDefinition>
 const items: Array<StatusSection> = [
-	[{ label: 'All', value: 'all', icon: null }],
+	[
+		{ label: 'All', value: 'all', icon: null },
+		{ label: 'Active', value: 'active', icon: null },
+	],
 	[
 		{ label: 'Allocating', value: 'allocating', icon: <QBittorrentStateIcon state="allocating" /> },
 		{ label: 'Checking Resume Data', value: 'checkingResumeData', icon: <QBittorrentStateIcon state="checkingResumeData" /> },

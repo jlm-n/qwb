@@ -22,15 +22,18 @@ export const CategoriesDropdown = memo(({ categories, categoriesFilter, onCatego
 		</DropdownTrigger>
 		<DropdownMenu
 			disallowEmptySelection
-			aria-label="Tags filter"
+			aria-label="Category filter"
 			closeOnSelect={false}
 			selectedKeys={categoriesFilter}
-			selectionMode="multiple"
+			selectionMode="single"
 			onSelectionChange={onCategoriesFilterChange}
 		>
-			{Object.keys(categories).sort().map(category => (
-				<DropdownItem key={category}>{`${category} (${categories[category].total})`}</DropdownItem>
-			))}
+			{[
+				<DropdownItem showDivider key="all" value="all">All</DropdownItem>,
+				...Object.keys(categories).sort().map(category => (
+					<DropdownItem key={category}>{`${category} (${categories[category].total})`}</DropdownItem>
+				)),
+			]}
 		</DropdownMenu>
 	</Dropdown>
 ))
