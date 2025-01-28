@@ -410,7 +410,7 @@ export default function App() {
 						</TableBody>
 					</Table>
 				</Panel>
-				{showBottomPanel && selectedTorrentHashes?.length === 1 && (
+				{showBottomPanel && (
 					<>
 						<PanelResizeHandle />
 						<Panel minSize={30} defaultSize={30} className="overflow-auto">
