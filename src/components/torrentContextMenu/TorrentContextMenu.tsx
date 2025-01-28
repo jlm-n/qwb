@@ -1,4 +1,5 @@
 import type { QBittorrentTorrent } from '@/types/QBittorrentTorrent'
+
 import { useDecreaseTorrentPrio } from '@/api/useDecreaseTorrentPrio'
 import { useForceStartTorrents } from '@/api/useForceStartTorrent'
 import { useIncreaseTorrentPrio } from '@/api/useIncreaseTorrentPrio'
@@ -30,12 +31,14 @@ import {
 	IconPlayerStop,
 	IconRecycle,
 	IconSpeakerphone,
+	IconTags,
 	IconTrash,
 	IconTrashX,
 	IconTruckDelivery,
 } from '@tabler/icons-react'
 import { memo, useMemo, useState } from 'react'
 import { TorrentChangeLocationModal } from './TorrentChangeLocationModal'
+import { TorrentChangeTagsModal } from './TorrentChangeTagsModal'
 import { TorrentRemoveConfirmationModal } from './TorrentRemoveConfirmationModal'
 import { TorrentRenameModal } from './TorrentRenameModal'
 
@@ -44,6 +47,7 @@ const DEFAULT_TORRENT_HASHES: string[] = []
 export const TorrentContextMenu = memo(({
 	torrentHashes = DEFAULT_TORRENT_HASHES,
 	torrents,
+	tags,
 	isOpen,
 	onClose,
 	position,
@@ -51,6 +55,7 @@ export const TorrentContextMenu = memo(({
 }: {
 	torrentHashes?: string[]
 	torrents?: Map<string, QBittorrentTorrent>
+	tags: string[]
 	isOpen?: boolean
 	onClose?: () => void
 	position?: { x: number, y: number }
@@ -59,16 +64,19 @@ export const TorrentContextMenu = memo(({
 	const [startTorrent, isStartTorrentLoading] = useStartTorrents()
 	const [forceStartTorrent, isForceStartTorrentLoading] = useForceStartTorrents()
 	const [stopTorrent, isStopTorrentLoading] = useStopTorrents()
-	const [deleteTorrentModalIsOpen, setDeleteTorrentModalIsOpen] = useState(false)
-	const [deleteTorrentFilesModalIsOpen, setDeleteTorrentFilesModalIsOpen] = useState(false)
-	const [changeTorrentLocationModalIsOpen, setChangeTorrentLocationModalIsOpen] = useState(false)
-	const [renameTorrentModalIsOpen, setRenameTorrentModalIsOpen] = useState(false)
 	const [recheckTorrents, recheckTorrentsLoading] = useRecheckTorrents()
 	const [reannounceTorrents, reannounceTorrentsLoading] = useReannounceTorrents()
 	const [setTorrentTopPrio, isSetTorrentTopPrioLoading] = useSetTorrentTopPrio()
 	const [setTorrentBottomPrio, isSetTorrentBottomPrioLoading] = useSetTorrentBottomPrio()
 	const [increaseTorrentPrio, isIncreaseTorrentPrioLoading] = useIncreaseTorrentPrio()
 	const [decreaseTorrentPrio, isDecreaseTorrentPrioLoading] = useDecreaseTorrentPrio()
+
+	const [deleteTorrentModalIsOpen, setDeleteTorrentModalIsOpen] = useState(false)
+	const [deleteTorrentFilesModalIsOpen, setDeleteTorrentFilesModalIsOpen] = useState(false)
+	const [changeTorrentLocationModalIsOpen, setChangeTorrentLocationModalIsOpen] = useState(false)
+	const [renameTorrentModalIsOpen, setRenameTorrentModalIsOpen] = useState(false)
+	const [changeTagsModalIsOpen, setChangeTagsModalIsOpen] = useState(false)
+
 	const selectedTorrents = useMemo(() => torrentHashes.map(hash => torrents?.get(hash)), [torrentHashes, torrents])
 	const selectedTorrent = useMemo(() => selectedTorrents.at(0), [selectedTorrents])
 
@@ -156,6 +164,13 @@ export const TorrentContextMenu = memo(({
 							onPress={() => setRenameTorrentModalIsOpen(true)}
 						>
 							Rename
+						</DropdownItem>
+						<DropdownItem
+							key="set-tags"
+							startContent={<IconTags width={16} />}
+							onPress={() => setChangeTagsModalIsOpen(true)}
+						>
+							Set tags
 						</DropdownItem>
 					</DropdownSection>
 					<DropdownSection showDivider>
@@ -255,6 +270,13 @@ export const TorrentContextMenu = memo(({
 				isOpen={renameTorrentModalIsOpen}
 				torrentHash={torrentHashes[0]}
 				onClose={() => setRenameTorrentModalIsOpen(false)}
+			/>
+			<TorrentChangeTagsModal
+				tags={tags}
+				currentTags={selectedTorrent?.normalized_tags ?? []}
+				isOpen={changeTagsModalIsOpen}
+				torrentHashes={torrentHashes}
+				onClose={() => setChangeTagsModalIsOpen(false)}
 			/>
 		</>
 	)

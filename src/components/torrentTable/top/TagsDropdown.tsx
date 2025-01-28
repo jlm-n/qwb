@@ -28,9 +28,12 @@ export const TagsDropdown = memo(({ tags, tagsFilter, onTagsFilterChange }: {
 			selectionMode="multiple"
 			onSelectionChange={onTagsFilterChange}
 		>
-			{Object.keys(tags).sort().map(tag => (
-				<DropdownItem key={tag}>{`${tag} (${tags[tag].total})`}</DropdownItem>
-			))}
+			{[
+				<DropdownItem showDivider key="">Untagged</DropdownItem>,
+				...Object.keys(tags).sort().map(tag => (
+					<DropdownItem key={tag}>{`${tag} (${tags[tag].total})`}</DropdownItem>
+				)),
+			]}
 		</DropdownMenu>
 	</Dropdown>
 ))

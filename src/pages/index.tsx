@@ -11,7 +11,7 @@ import type {
 import { useGetIncrementalMaindata } from '@/api/useGetMaindata'
 
 import { PanelResizeHandle } from '@/components/PanelResizeHandle'
-import { TorrentContextMenu } from '@/components/TorrentContextMenu'
+import { TorrentContextMenu } from '@/components/torrentContextMenu/TorrentContextMenu'
 import { TorrentDetails } from '@/components/torrentDetails/TorrentDetails'
 import { TorrentTableBottom } from '@/components/torrentTable/bottom/TorrentTableBottom'
 import { renderCell } from '@/components/torrentTable/cells/renderCells'
@@ -46,6 +46,8 @@ import { useNavigate } from 'react-router-dom'
 
 const TORRENTS = new Map<string, QBittorrentTorrent>()
 const SERVER_STATE: QBittorrentServerState = {}
+const CATEGORIES: Record<string, { total: number }> = {}
+const TAGS: Record<string, { total: number }> = {}
 
 async function mergeMaindata(r: QBittorrentMaindata): Promise<{
 	serverState: QBittorrentServerState
@@ -90,11 +92,24 @@ async function mergeMaindata(r: QBittorrentMaindata): Promise<{
 		}
 	}
 
+	// Setup initial tags & categories
+	for (const tag of (r.tags || [])) {
+		if (!TAGS[tag]) {
+			TAGS[tag] = { total: 0 }
+		}
+	}
+	for (const tag of (r.tags_removed || [])) {
+		delete TAGS[tag]
+	}
+	for (const category of Object.keys(r.categories || {})) {
+		if (!CATEGORIES[category]) {
+			CATEGORIES[category] = { total: 0 }
+		}
+	}
+
 	// Compute tracker, tags & categories stats
 	const torrents = Array.from(TORRENTS.values())
 	const trackers: Record<string, { total: number }> = {}
-	const categories: Record<string, { total: number }> = {}
-	const tags: Record<string, { total: number }> = {}
 	for (const torrent of torrents) {
 		if (torrent.tracker) {
 			if (!trackers[torrent.tracker]) {
@@ -103,16 +118,10 @@ async function mergeMaindata(r: QBittorrentMaindata): Promise<{
 			trackers[torrent.tracker].total += 1
 		}
 		for (const tag of torrent.normalized_tags) {
-			if (!tags[tag]) {
-				tags[tag] = { total: 0 }
-			}
-			tags[tag].total += 1
+			TAGS[tag].total += 1
 		}
 		if (torrent.category) {
-			if (!categories[torrent.category]) {
-				categories[torrent.category] = { total: 0 }
-			}
-			categories[torrent.category].total += 1
+			CATEGORIES[torrent.category].total += 1
 		}
 	}
 
@@ -120,8 +129,8 @@ async function mergeMaindata(r: QBittorrentMaindata): Promise<{
 		serverState: Object.assign(SERVER_STATE, r.server_state || {}),
 		torrents,
 		trackers,
-		categories,
-		tags,
+		categories: CATEGORIES,
+		tags: TAGS,
 	}
 }
 
@@ -410,6 +419,7 @@ export default function App() {
 				triggerRef={triggerRef}
 				torrentHashes={selectedTorrentHashes}
 				torrents={TORRENTS}
+				tags={Object.keys(tags)}
 				position={constextMenuPosition}
 			/>
 		</>

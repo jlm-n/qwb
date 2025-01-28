@@ -12,7 +12,7 @@ import {
 
 import { IconWand } from '@tabler/icons-react'
 import { useCallback, useEffect, useState } from 'react'
-import { normalizeTorrentPath } from './torrentTable/normalizeTorrentPath'
+import { normalizeTorrentPath } from '../torrentTable/normalizeTorrentPath'
 
 export function TorrentChangeLocationModal({
 	torrentHashes,

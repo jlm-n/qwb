@@ -4,7 +4,7 @@ import type {
 	Selection,
 } from '@heroui/react'
 import { TorrentAddButton } from '@/components/TorrentAddButton'
-import { TorrentContextMenu } from '@/components/TorrentContextMenu'
+import { TorrentContextMenu } from '@/components/torrentContextMenu/TorrentContextMenu'
 import { TorrentStatusDropdown } from '@/components/TorrentStatusDropdown'
 import {
 	ButtonGroup,
@@ -127,6 +127,7 @@ export function TorrentTableTop({
 					<TorrentContextMenu
 						torrentHashes={selectedTorrentHashes}
 						torrents={torrents}
+						tags={Object.keys(tags)}
 					/>
 					<ButtonGroup>
 						<TorrentStatusDropdown
