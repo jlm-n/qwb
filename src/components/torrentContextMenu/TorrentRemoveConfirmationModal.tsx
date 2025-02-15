@@ -8,8 +8,9 @@ import {
 	ModalFooter,
 	ModalHeader,
 } from '@heroui/react'
+import { memo } from 'react'
 
-export function TorrentRemoveConfirmationModal({
+export const TorrentRemoveConfirmationModal = memo(({
 	torrentHashes,
 	isOpen,
 	onClose,
@@ -19,7 +20,7 @@ export function TorrentRemoveConfirmationModal({
 	isOpen: boolean
 	withFiles?: boolean
 	onClose: () => void
-}) {
+}) => {
 	const [deleteTorrent, isDeleteTorrentLoading] = useDeleteTorrents()
 
 	return (
@@ -65,4 +66,4 @@ export function TorrentRemoveConfirmationModal({
 			</ModalContent>
 		</Modal>
 	)
-}
+})

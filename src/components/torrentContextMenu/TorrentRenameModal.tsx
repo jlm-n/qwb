@@ -9,9 +9,9 @@ import {
 	ModalHeader,
 } from '@heroui/react'
 
-import { useState } from 'react'
+import { memo, useState } from 'react'
 
-export function TorrentRenameModal({
+export const TorrentRenameModal = memo(({
 	torrentHash,
 	isOpen,
 	onClose,
@@ -21,7 +21,7 @@ export function TorrentRenameModal({
 	isOpen: boolean
 	onClose: () => void
 	currentName: string
-}) {
+}) => {
 	const [rename, isLoading] = useRenameTorrent()
 	const [name, setName] = useState<string>(currentName)
 
@@ -68,4 +68,4 @@ export function TorrentRenameModal({
 			</ModalContent>
 		</Modal>
 	)
-}
+})

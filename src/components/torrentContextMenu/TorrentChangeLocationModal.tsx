@@ -11,10 +11,10 @@ import {
 } from '@heroui/react'
 
 import { IconWand } from '@tabler/icons-react'
-import { useCallback, useEffect, useState } from 'react'
+import { memo, useCallback, useEffect, useState } from 'react'
 import { normalizeTorrentPath } from '../torrentTable/normalizeTorrentPath'
 
-export function TorrentChangeLocationModal({
+export const TorrentChangeLocationModal = memo(({
 	torrentHashes,
 	isOpen,
 	onClose,
@@ -26,7 +26,7 @@ export function TorrentChangeLocationModal({
 	onClose: () => void
 	currentLocation: string
 	currentName: string
-}) {
+}) => {
 	const [changeLocation, isChangeLocationLoading] = useChangeTorrentLocation()
 	const [location, setLocation] = useState<string>(currentLocation)
 
@@ -98,4 +98,4 @@ export function TorrentChangeLocationModal({
 			</ModalContent>
 		</Modal>
 	)
-}
+})
