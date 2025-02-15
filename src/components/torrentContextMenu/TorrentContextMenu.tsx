@@ -273,7 +273,7 @@ export const TorrentContextMenu = memo(({
 			/>
 			<TorrentChangeTagsModal
 				tags={tags}
-				currentTags={selectedTorrent?.normalized_tags ?? []}
+				currentTags={selectedTorrent?.tags}
 				isOpen={changeTagsModalIsOpen}
 				torrentHashes={torrentHashes}
 				onClose={() => setChangeTagsModalIsOpen(false)}

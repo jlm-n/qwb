@@ -14,9 +14,9 @@ import {
 	SelectItem,
 } from '@heroui/react'
 
-import { useCallback, useEffect, useState } from 'react'
+import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 
-export function TorrentChangeTagsModal({
+export const TorrentChangeTagsModal = memo(({
 	torrentHashes,
 	isOpen,
 	onClose,
@@ -26,31 +26,32 @@ export function TorrentChangeTagsModal({
 	torrentHashes: string[]
 	isOpen: boolean
 	onClose: () => void
-	currentTags: string[]
+	currentTags: string | undefined
 	tags: string[]
-}) {
+}) => {
 	const [addTorrentTags, isAddTorrenTagsLoading] = useAddTorrentTags()
 	const [removeTorrentTags, isRemoveTorrentTagsLoading] = useRemoveTorrentTags()
 
+	const currentTagsArray = useMemo(() => (currentTags || '').split(',').filter(Boolean), [currentTags])
 	const [selectedTags, setSelectedTags] = useState<Selection>(new Set(currentTags))
 	useEffect(() => {
 		setSelectedTags(new Set(currentTags))
 	}, [currentTags])
 
 	const saveSelectedTags = useCallback(async () => {
-		if (selectedTags !== 'all' && JSON.stringify(currentTags) !== JSON.stringify(selectedTags)) {
+		if (selectedTags !== 'all' && JSON.stringify(currentTagsArray) !== JSON.stringify(selectedTags)) {
 			const s = Array.from(selectedTags)
-			const toAdd = s.filter(t => !currentTags.includes(t as string)) as string[]
+			const toAdd = s.filter(t => !currentTagsArray.includes(t as string)) as string[]
 			if (toAdd.length > 0) {
 				await addTorrentTags(torrentHashes, toAdd)
 			}
 
-			const toRemove = currentTags.filter(t => !s.includes(t)) as string[]
+			const toRemove = currentTagsArray.filter(t => !s.includes(t)) as string[]
 			if (toRemove.length > 0) {
 				await removeTorrentTags(torrentHashes, toRemove)
 			}
 		}
-	}, [selectedTags, currentTags, addTorrentTags, torrentHashes, removeTorrentTags])
+	}, [selectedTags, currentTagsArray, addTorrentTags, torrentHashes, removeTorrentTags])
 
 	return (
 		<Modal isOpen={isOpen} onOpenChange={isOpen => !isOpen && onClose()}>
@@ -94,4 +95,4 @@ export function TorrentChangeTagsModal({
 			</ModalContent>
 		</Modal>
 	)
-}
+})
