@@ -356,12 +356,11 @@ export default function App() {
 						ref={torrentTableRef}
 						aria-label="Torrent list"
 						classNames={{
-							base: 'grow',
-							wrapper: 'h-full',
+							base: 'flex-1 min-h-0 p-3',
+							wrapper: '!h-full',
 						}}
-						isCompact
 						isStriped
-						// isVirtualized
+						isVirtualized
 						color="primary"
 						selectedKeys={selectedTorrents}
 						selectionMode="single"
