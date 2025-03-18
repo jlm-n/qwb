@@ -1,10 +1,10 @@
 import type { QBittorrentTorrentProperties } from '@/types/QBittorrentTorrentProperties'
 import { useGetTorrentProperties } from '@/api/useGetTorrentProperties'
 import { useInterval } from '@/hooks/useInterval'
-import { useTorrentPropertiesRefreshRate } from '@/hooks/useTorrentPropertiesRefreshRate'
+import { useSettings } from '@/contexts/SettingsContext'
 import { Divider, Link } from '@heroui/react'
 import prettyBytes from 'pretty-bytes'
-import { memo, useCallback, useMemo, useState } from 'react'
+import { memo, useCallback, useEffect, useState } from 'react'
 import { durationToString } from './durationToString'
 import { TorrentPiecesProgressBar } from './TorrentPiecesProgressBar'
 
@@ -15,7 +15,7 @@ export const TorrentDetailsGeneral = memo(({
 }) => {
 	const [torrentProperties, setTorrentProperties] = useState<QBittorrentTorrentProperties | undefined>(undefined)
 	const [getTorrentProperties] = useGetTorrentProperties()
-	const [torrentPropertiesRefreshRate] = useTorrentPropertiesRefreshRate()
+	const { torrentPropertiesRefreshRate } = useSettings()
 
 	const refreshTorrentProperties = useCallback(async () => {
 		if (!torrentHash) {
@@ -25,7 +25,7 @@ export const TorrentDetailsGeneral = memo(({
 		setTorrentProperties(torrentProperties)
 	}, [torrentHash, getTorrentProperties])
 
-	useMemo(() => {
+	useEffect(() => {
 		refreshTorrentProperties()
 	}, [refreshTorrentProperties])
 	useInterval(refreshTorrentProperties, torrentPropertiesRefreshRate)

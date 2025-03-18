@@ -3,13 +3,13 @@ import {
 	useGetTorrentPieceStates,
 } from '@/api/useGetTorrentPieceStates'
 import { useInterval } from '@/hooks/useInterval'
-import { useTorrentPiecesRefreshRate } from '@/hooks/useTorrentPiecesRefreshRate'
+import { useSettings } from '@/contexts/SettingsContext'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 export function TorrentPiecesProgressBar({ torrentHash }: { torrentHash?: string }) {
 	const [pieceStates, setPieceStates] = useState<QBittorrentTorrentPieceStates | undefined>()
 	const [getTorrentPieceStates] = useGetTorrentPieceStates()
-	const [refreshRate] = useTorrentPiecesRefreshRate()
+	const { torrentPiecesRefreshRate } = useSettings()
 	const canvasRef = useRef<HTMLCanvasElement>(null)
 	const divRef = useRef<HTMLDivElement>(null)
 
@@ -24,7 +24,7 @@ export function TorrentPiecesProgressBar({ torrentHash }: { torrentHash?: string
 	useEffect(() => {
 		refreshPieceStates()
 	}, [refreshPieceStates])
-	useInterval(refreshPieceStates, refreshRate)
+	useInterval(refreshPieceStates, torrentPiecesRefreshRate)
 
 	useMemo(() => {
 		const canvas = canvasRef.current

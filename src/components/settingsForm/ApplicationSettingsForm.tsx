@@ -1,34 +1,38 @@
 import type { Selection } from '@heroui/react'
-import { useServerBaseUrl } from '@/hooks/useServerBaseUrl'
-import { useTorrentFilesRefreshRate } from '@/hooks/useTorrentFilesRefreshRate'
-import { useTorrentListRefreshRate } from '@/hooks/useTorrentListRefreshRate'
-import { useTorrentPeersRefreshRate } from '@/hooks/useTorrentPeersRefreshRate'
-import { useTorrentPiecesRefreshRate } from '@/hooks/useTorrentPiecesRefreshRate'
-import { useTorrentPropertiesRefreshRate } from '@/hooks/useTorrentPropertiesRefreshRate'
-import { useTorrentTrackersRefreshRate } from '@/hooks/useTorrentTrackersRefreshRate'
-import { useVisibleColumns } from '@/hooks/useVisibleColumns'
 import { Input } from '@heroui/input'
 import { Chip, Select, SelectItem } from '@heroui/react'
-import { useTheme } from '@heroui/use-theme'
 import { type ChangeEvent, useCallback } from 'react'
 import { TORRENT_TABLE_COLUMNS } from '../torrentTable/TorrentTableColumns'
+import { useSettings } from '@/contexts/SettingsContext'
 
 export function ApplicationSettingsForm() {
-	const [serverBaseUrl, setServerBaseUrl] = useServerBaseUrl()
-	const [torrentListRefreshRate, setTorrentListRefreshRate] = useTorrentListRefreshRate()
-	const [torrentPropertiesRefreshRate, setTorrentPropertiesRefreshRate] = useTorrentPropertiesRefreshRate()
-	const [torrentPiecesRefreshRate, setTorrentPiecesRefreshRate] = useTorrentPiecesRefreshRate()
-	const [torrentTrackersRefreshRate, setTorrentTrackersRefreshRate] = useTorrentTrackersRefreshRate()
-	const [torrentPeersRefreshRate, setTorrentPeersRefreshRate] = useTorrentPeersRefreshRate()
-	const [torrentFilesRefreshRate, setTorrentFilesRefreshState] = useTorrentFilesRefreshRate()
-	const [visibleColumns, setVisibleColumns] = useVisibleColumns()
-	const { theme: currentTheme, setTheme } = useTheme()
+	const {
+		serverBaseUrl,
+		setServerBaseUrl,
+		torrentListRefreshRate,
+		setTorrentListRefreshRate,
+		torrentPropertiesRefreshRate,
+		setTorrentPropertiesRefreshRate,
+		torrentPiecesRefreshRate,
+		setTorrentPiecesRefreshRate,
+		torrentTrackersRefreshRate,
+		setTorrentTrackersRefreshRate,
+		torrentPeersRefreshRate,
+		setTorrentPeersRefreshRate,
+		torrentFilesRefreshRate,
+		setTorrentFilesRefreshRate,
+		visibleColumns,
+		setVisibleColumns,
+		theme,
+		setTheme,
+	} = useSettings()
 
 	const onThemeChanged = useCallback((newTheme: Selection) => {
 		if (newTheme === 'all') {
 			return
 		}
-		setTheme(newTheme.values().next().value as string)
+		const selectedTheme = Array.from(newTheme)[0] as string
+		setTheme(selectedTheme)
 	}, [setTheme])
 
 	return (
@@ -40,7 +44,7 @@ export function ApplicationSettingsForm() {
 					{ name: 'Dark', uid: 'dark' },
 					{ name: 'Use system theme', uid: 'system' },
 				]}
-				selectedKeys={[currentTheme]}
+				selectedKeys={new Set([theme])}
 				onSelectionChange={onThemeChanged}
 				disallowEmptySelection
 			>
@@ -50,13 +54,13 @@ export function ApplicationSettingsForm() {
 			</Select>
 
 			<Input
-				label="Server URL (refresh to apply)"
+				label="Server URL"
 				type="url"
 				value={serverBaseUrl}
 				onChange={(e: ChangeEvent<HTMLInputElement>) => setServerBaseUrl(e.target.value)}
 			/>
 			<Select
-				label="Torrent list visible columns (refresh to apply)"
+				label="Torrent list visible columns"
 				items={TORRENT_TABLE_COLUMNS}
 				selectedKeys={visibleColumns}
 				onSelectionChange={setVisibleColumns}
@@ -65,7 +69,11 @@ export function ApplicationSettingsForm() {
 				disallowEmptySelection
 				renderValue={items => (
 					<div className="flex flex-wrap gap-2">
-						{items.map(item => (
+						{items.sort((a, b) => {
+							const indexA = TORRENT_TABLE_COLUMNS.findIndex(col => col.uid === a.data?.uid)
+							const indexB = TORRENT_TABLE_COLUMNS.findIndex(col => col.uid === b.data?.uid)
+							return indexA - indexB
+						}).map(item => (
 							<Chip key={item.key}>{item.data?.name.toLocaleLowerCase()}</Chip>
 						))}
 					</div>
@@ -82,7 +90,7 @@ export function ApplicationSettingsForm() {
 			</Select>
 
 			<Input
-				label="Torrent list refresh rate (refresh to apply)"
+				label="Torrent list refresh rate"
 				type="number"
 				min={200}
 				value={torrentListRefreshRate.toString()}
@@ -90,7 +98,7 @@ export function ApplicationSettingsForm() {
 				endContent={<p className="text-nowrap">milliseconds</p>}
 			/>
 			<Input
-				label="Torrent properties refresh rate (refresh to apply)"
+				label="Torrent properties refresh rate"
 				type="number"
 				min={200}
 				value={torrentPropertiesRefreshRate.toString()}
@@ -98,7 +106,7 @@ export function ApplicationSettingsForm() {
 				endContent={<p className="text-nowrap">milliseconds</p>}
 			/>
 			<Input
-				label="Torrent pieces refresh rate (refresh to apply)"
+				label="Torrent pieces refresh rate"
 				type="number"
 				min={200}
 				value={torrentPiecesRefreshRate.toString()}
@@ -106,7 +114,7 @@ export function ApplicationSettingsForm() {
 				endContent={<p className="text-nowrap">milliseconds</p>}
 			/>
 			<Input
-				label="Torrent trackers refresh rate (refresh to apply)"
+				label="Torrent trackers refresh rate"
 				type="number"
 				min={200}
 				value={torrentTrackersRefreshRate.toString()}
@@ -114,7 +122,7 @@ export function ApplicationSettingsForm() {
 				endContent={<p className="text-nowrap">milliseconds</p>}
 			/>
 			<Input
-				label="Torrent peers refresh rate (refresh to apply)"
+				label="Torrent peers refresh rate"
 				type="number"
 				min={200}
 				value={torrentPeersRefreshRate.toString()}
@@ -122,11 +130,11 @@ export function ApplicationSettingsForm() {
 				endContent={<p className="text-nowrap">milliseconds</p>}
 			/>
 			<Input
-				label="Torrent files refresh rate (refresh to apply)"
+				label="Torrent files refresh rate"
 				type="number"
 				min={200}
 				value={torrentFilesRefreshRate.toString()}
-				onChange={(e: ChangeEvent<HTMLInputElement>) => setTorrentFilesRefreshState(+e.target.value)}
+				onChange={(e: ChangeEvent<HTMLInputElement>) => setTorrentFilesRefreshRate(+e.target.value)}
 				endContent={<p className="text-nowrap">milliseconds</p>}
 			/>
 		</>

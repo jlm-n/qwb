@@ -6,6 +6,7 @@ import type { QBittorrentTorrent } from '@/types/QBittorrentTorrent'
 import type { Selection, SortDescriptor } from '@heroui/react'
 
 import { useGetIncrementalMaindata } from '@/api/useGetMaindata'
+import { useSettings } from '@/contexts/SettingsContext'
 
 import { PanelResizeHandle } from '@/components/PanelResizeHandle'
 import { TorrentContextMenu } from '@/components/torrentContextMenu/TorrentContextMenu'
@@ -18,8 +19,8 @@ import { sortAndFilterTorrents } from '@/components/torrentTable/sortAndFilterTo
 import { TorrentTableTop } from '@/components/torrentTable/top/TorrentTableTop'
 import { TORRENT_TABLE_COLUMNS } from '@/components/torrentTable/TorrentTableColumns'
 import { usePersistentState } from '@/hooks/usePersistentState'
-import { useTorrentListRefreshRate } from '@/hooks/useTorrentListRefreshRate'
-import { useVisibleColumns } from '@/hooks/useVisibleColumns'
+import { useInterval } from '@/hooks/useInterval'
+
 import {
 	Spinner,
 	Table,
@@ -135,6 +136,10 @@ async function mergeMaindata(r: QBittorrentMaindata): Promise<{
 
 export default function App() {
 	const navigate = useNavigate()
+	const {
+		visibleColumns,
+		torrentListRefreshRate,
+	} = useSettings()
 
 	const [trackers, setTrackers] = useState<Record<string, { total: number }>>({})
 	const [trackerFilter, setTrackerFilter] = useState<Selection>('all')
@@ -145,8 +150,6 @@ export default function App() {
 	const [statusFilter, setStatusFilter] = useState<Selection>(new Set(['all']))
 	const [searchFilter, setSearchFilter] = useState('')
 	const [selectedTorrents, setSelectedTorrents] = useState<Selection>(new Set())
-	const [visibleColumns] = useVisibleColumns()
-	const [refreshInterval] = useTorrentListRefreshRate()
 	const [rowsPerPage, setRowsPerPage] = usePersistentState('rowsPerPage', '20')
 	const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
 		column: 'added_on',
@@ -266,22 +269,10 @@ export default function App() {
 		page,
 	])
 
-	useEffect(() => {
-		if (autoRefreshEnabled) {
-			const timeout = setTimeout(getIncrementalMaindataCallback, refreshInterval)
-			return () => clearTimeout(timeout)
-		}
-	}, [
+	useInterval(
 		getIncrementalMaindataCallback,
-		refreshInterval,
-		autoRefreshEnabled,
-		rid,
-		page,
-		statusFilter,
-		searchFilter,
-		trackerFilter,
-		items,
-	])
+		autoRefreshEnabled ? torrentListRefreshRate : null
+	)
 
 	const selectedTorrentHash = useMemo(() => {
 		if (selectedTorrents === 'all' || selectedTorrents.size !== 1) {

@@ -11,7 +11,8 @@ import {
 import { useRenameFile } from '@/api/useRenameFile'
 import { useRenameFolder } from '@/api/useRenameFolder'
 import { useSetFilePriority } from '@/api/useSetFilePriority'
-import { useTorrentFilesRefreshRate } from '@/hooks/useTorrentFilesRefreshRate'
+import { useSettings } from '@/contexts/SettingsContext'
+
 import { QBittorrentFilePriority } from '@/types/QBittorrentTorrentFile'
 import {
 	BreadcrumbItem,
@@ -117,7 +118,7 @@ export function TorrentDetailsFiles({
 	const [renameFile, renameFileLoading] = useRenameFile()
 	const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set([]))
 	const [isRenamePopoverOpen, setIsRenamePopoverOpen] = useState(false)
-	const [refreshRate] = useTorrentFilesRefreshRate()
+	const { torrentFilesRefreshRate } = useSettings()
 	const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({ column: 'index', direction: 'ascending' })
 	const [files, setFiles] = useState<QBittorrentTorrentFile[] | undefined>()
 
@@ -137,9 +138,9 @@ export function TorrentDetailsFiles({
 		refreshTorrentFiles()
 	}, [refreshTorrentFiles])
 	useEffect(() => {
-		const timeout = setTimeout(refreshTorrentFiles, refreshRate)
+		const timeout = setTimeout(refreshTorrentFiles, torrentFilesRefreshRate)
 		return () => clearTimeout(timeout)
-	}, [refreshFiles, requestCounter, refreshTorrentFiles, refreshRate])
+	}, [refreshFiles, requestCounter, refreshTorrentFiles, torrentFilesRefreshRate])
 
 	const [inputElement, setInputElement] = useState<HTMLInputElement | null>(null)
 	const [popoverTarget, setPopoverTarget] = useState<HTMLElement | null>(null)

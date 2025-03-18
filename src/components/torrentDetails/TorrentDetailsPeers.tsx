@@ -3,7 +3,7 @@ import {
 	useGetTorrentPeers,
 } from '@/api/useGetTorrentPeers'
 import { useInterval } from '@/hooks/useInterval'
-import { useTorrentPeersRefreshRate } from '@/hooks/useTorrentPeersRefreshRate'
+import { useSettings } from '@/contexts/SettingsContext'
 import {
 	Table,
 	TableBody,
@@ -13,7 +13,7 @@ import {
 	TableRow,
 } from '@heroui/react'
 import prettyBytes from 'pretty-bytes'
-import { memo, useCallback, useMemo, useState } from 'react'
+import { memo, useCallback, useEffect, useState } from 'react'
 import CountryFlag from 'react-emoji-flag'
 
 const CountryFlagCell = memo(({ countryCode }: { countryCode: string }) => (
@@ -26,7 +26,7 @@ const CountryFlagCell = memo(({ countryCode }: { countryCode: string }) => (
 export function TorrentDetailsPeers({ torrentHash }: { torrentHash?: string }) {
 	const [getTorrentPeers] = useGetTorrentPeers()
 	const [peers, setPeers] = useState<QBittorrentTorrentPeers | undefined>()
-	const [refreshRate] = useTorrentPeersRefreshRate()
+	const { torrentPeersRefreshRate } = useSettings()
 
 	const refreshPeers = useCallback(async () => {
 		if (!torrentHash) {
@@ -36,10 +36,10 @@ export function TorrentDetailsPeers({ torrentHash }: { torrentHash?: string }) {
 		setPeers(peers)
 	}, [torrentHash, getTorrentPeers, setPeers])
 
-	useMemo(() => {
+	useEffect(() => {
 		refreshPeers()
 	}, [refreshPeers])
-	useInterval(refreshPeers, refreshRate)
+	useInterval(refreshPeers, torrentPeersRefreshRate)
 
 	if (!peers || !peers.peers) {
 		return null

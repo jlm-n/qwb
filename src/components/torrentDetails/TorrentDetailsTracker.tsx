@@ -1,7 +1,7 @@
 import type { QBittorrentTorrentTrackers } from '@/types/QBittorrentTorrentTrackers'
 import { useGetTorrentTrackers } from '@/api/useGetTorrentTrackers'
 import { useInterval } from '@/hooks/useInterval'
-import { useTorrentTrackersRefreshRate } from '@/hooks/useTorrentTrackersRefreshRate'
+import { useSettings } from '@/contexts/SettingsContext'
 import {
 	Table,
 	TableBody,
@@ -10,7 +10,7 @@ import {
 	TableHeader,
 	TableRow,
 } from '@heroui/react'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 export function TorrentDetailsTracker({
 	torrentHash,
@@ -19,7 +19,7 @@ export function TorrentDetailsTracker({
 }) {
 	const [getTorrentTrackers] = useGetTorrentTrackers()
 	const [trackers, setTrackers] = useState<QBittorrentTorrentTrackers>([])
-	const [refreshRate] = useTorrentTrackersRefreshRate()
+	const { torrentTrackersRefreshRate } = useSettings()
 
 	const refreshTrackers = useCallback(async () => {
 		if (!torrentHash) {
@@ -31,10 +31,10 @@ export function TorrentDetailsTracker({
 		}
 	}, [torrentHash, getTorrentTrackers, setTrackers])
 
-	useMemo(() => {
+	useEffect(() => {
 		refreshTrackers()
 	}, [refreshTrackers])
-	useInterval(refreshTrackers, refreshRate)
+	useInterval(refreshTrackers, torrentTrackersRefreshRate)
 
 	return (
 		<Table

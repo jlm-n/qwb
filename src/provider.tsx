@@ -1,10 +1,10 @@
 import { HeroUIProvider } from '@heroui/system'
-import { useTheme } from '@heroui/use-theme'
 import { useNavigate } from 'react-router-dom'
+import { SettingsProvider, useSettings } from '@/contexts/SettingsContext'
 
-export function Provider({ children }: { children: React.ReactNode }) {
+function AppContent({ children }: { children: React.ReactNode }) {
 	const navigate = useNavigate()
-	const { theme } = useTheme()
+	const { theme } = useSettings()
 
 	return (
 		<HeroUIProvider navigate={navigate}>
@@ -12,5 +12,15 @@ export function Provider({ children }: { children: React.ReactNode }) {
 				{children}
 			</main>
 		</HeroUIProvider>
+	)
+}
+
+export function Provider({ children }: { children: React.ReactNode }) {
+	return (
+		<SettingsProvider>
+			<AppContent>
+				{children}
+			</AppContent>
+		</SettingsProvider>
 	)
 }
