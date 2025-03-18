@@ -17,10 +17,7 @@ export const TorrentAddButton = memo(() => {
 			>
 				Add New
 			</Button>
-			<TorrentAddModal
-				isOpen={isOpen}
-				onOpenChange={isOpen => setIsOpen(isOpen)}
-			/>
+			<TorrentAddModal isOpen={isOpen} onOpenChange={(isOpen) => setIsOpen(isOpen)} />
 		</>
 	)
 })

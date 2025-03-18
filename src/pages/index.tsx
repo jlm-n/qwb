@@ -3,10 +3,7 @@ import type { QBittorrentMaindata } from '@/types/QBittorrentMaindata'
 import type { QBittorrentServerState } from '@/types/QBittorrentServerState'
 import type { QBittorrentTorrent } from '@/types/QBittorrentTorrent'
 
-import type {
-	Selection,
-	SortDescriptor,
-} from '@heroui/react'
+import type { Selection, SortDescriptor } from '@heroui/react'
 
 import { useGetIncrementalMaindata } from '@/api/useGetMaindata'
 
@@ -33,14 +30,7 @@ import {
 	TableRow,
 	useDisclosure,
 } from '@heroui/react'
-import {
-	startTransition,
-	useCallback,
-	useEffect,
-	useMemo,
-	useRef,
-	useState,
-} from 'react'
+import { startTransition, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Panel, PanelGroup } from 'react-resizable-panels'
 import { useNavigate } from 'react-router-dom'
 
@@ -68,7 +58,10 @@ async function mergeMaindata(r: QBittorrentMaindata): Promise<{
 			// extra computed fields
 			normalized_name: normalizeForSearch(existing.name || torrent.name || ''),
 			normalized_priority: normalizeTorrentPriority(existing.priority ?? torrent.priority),
-			normalized_tags: (existing.tags || torrent.tags || '').split(',').map(t => t.trim()).filter(t => !!t),
+			normalized_tags: (existing.tags || torrent.tags || '')
+				.split(',')
+				.map((t) => t.trim())
+				.filter((t) => !!t),
 		})
 	}
 
@@ -93,10 +86,10 @@ async function mergeMaindata(r: QBittorrentMaindata): Promise<{
 	}
 
 	// Setup initial tags & categories
-	for (const tag of (r.tags || [])) {
+	for (const tag of r.tags || []) {
 		TAGS[tag] = { total: 0 }
 	}
-	for (const tag of (r.tags_removed || [])) {
+	for (const tag of r.tags_removed || []) {
 		delete TAGS[tag]
 	}
 	for (const category of Object.keys(r.categories || {})) {
@@ -155,7 +148,10 @@ export default function App() {
 	const [visibleColumns] = useVisibleColumns()
 	const [refreshInterval] = useTorrentListRefreshRate()
 	const [rowsPerPage, setRowsPerPage] = usePersistentState('rowsPerPage', '20')
-	const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({ column: 'added_on', direction: 'descending' })
+	const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
+		column: 'added_on',
+		direction: 'descending',
+	})
 	const [serverState, setServerState] = useState<QBittorrentServerState>({})
 	const [autoRefreshEnabled, setAutoRefreshEnabled] = usePersistentState('autoRefresh', true)
 	const [showBottomPanel, setShowBottomPanel] = usePersistentState('showBottomPanel', false)
@@ -167,25 +163,25 @@ export default function App() {
 		if (visibleColumns === 'all') {
 			return TORRENT_TABLE_COLUMNS
 		}
-		return TORRENT_TABLE_COLUMNS.filter(column =>
-			visibleColumns.has(column.uid),
-		)
+		return TORRENT_TABLE_COLUMNS.filter((column) => visibleColumns.has(column.uid))
 	}, [visibleColumns])
 
-	const onRowsPerPageChange = useCallback((value: Selection) => {
-		if (value === 'all') {
-			// we don't support this value.
-			return
-		}
-		setRowsPerPage(String(value.values().next().value))
-		setPage(1)
-	}, [setPage, setRowsPerPage])
+	const onRowsPerPageChange = useCallback(
+		(value: Selection) => {
+			if (value === 'all') {
+				// we don't support this value.
+				return
+			}
+			setRowsPerPage(String(value.values().next().value))
+			setPage(1)
+		},
+		[setPage, setRowsPerPage]
+	)
 
 	const onSearchChange = useCallback((value?: string) => {
 		if (value) {
 			setSearchFilter(value)
-		}
-		else {
+		} else {
 			setSearchFilter('')
 		}
 		setPage(1)
@@ -197,19 +193,25 @@ export default function App() {
 	const sortAndFilterTorrentsCallback = useCallback(
 		(torrents: QBittorrentTorrent[] = Array.from(TORRENTS.values())) => {
 			startTransition(() => {
-				const tableContainerHeight = ((torrentTableRef.current?.parentNode as HTMLDivElement)?.clientHeight)
-				const { pagedTorrents, totalTorrentsCount: filteredTorrentLength, pagesCount: pages }
-					= sortAndFilterTorrents(
-						torrents,
-						searchFilter,
-						statusFilter,
-						trackerFilter,
-						tagFilter,
-						categoryFilter,
-						sortDescriptor,
-						rowsPerPage === 'auto' ? Math.floor((tableContainerHeight - 72) / 40) : +rowsPerPage, //  remove the header size and divide by the average row height
-						page,
-					)
+				const tableContainerHeight = (torrentTableRef.current?.parentNode as HTMLDivElement)
+					?.clientHeight
+				const {
+					pagedTorrents,
+					totalTorrentsCount: filteredTorrentLength,
+					pagesCount: pages,
+				} = sortAndFilterTorrents(
+					torrents,
+					searchFilter,
+					statusFilter,
+					trackerFilter,
+					tagFilter,
+					categoryFilter,
+					sortDescriptor,
+					rowsPerPage === 'auto'
+						? Math.floor((tableContainerHeight - 72) / 40)
+						: +rowsPerPage, //  remove the header size and divide by the average row height
+					page
+				)
 				setFilteredItemsLength(filteredTorrentLength)
 				setPages(pages)
 				setItems(pagedTorrents)
@@ -228,23 +230,19 @@ export default function App() {
 			setPages,
 			setItems,
 			torrentTableRef,
-		],
+		]
 	)
 
-	const [getIncrementalMaindata, isLoading, getIncrementalMaindataError, rid] = useGetIncrementalMaindata()
+	const [getIncrementalMaindata, isLoading, getIncrementalMaindataError, rid] =
+		useGetIncrementalMaindata()
 	const getIncrementalMaindataCallback = useCallback(async () => {
 		const updatedMaindata = await getIncrementalMaindata()
-		const {
-			torrents,
-			trackers,
-			categories,
-			tags,
-			serverState,
-		} = await mergeMaindata(updatedMaindata)
+		const { torrents, trackers, categories, tags, serverState } =
+			await mergeMaindata(updatedMaindata)
 		setCategories(categories)
 		setTags(tags)
 		setTrackers(trackers)
-		setServerState(oldServerState => ({ ...oldServerState, ...serverState }))
+		setServerState((oldServerState) => ({ ...oldServerState, ...serverState }))
 		sortAndFilterTorrentsCallback(torrents)
 	}, [getIncrementalMaindata, setTrackers, setServerState, sortAndFilterTorrentsCallback])
 
@@ -270,13 +268,20 @@ export default function App() {
 
 	useEffect(() => {
 		if (autoRefreshEnabled) {
-			const timeout = setTimeout(
-				getIncrementalMaindataCallback,
-				refreshInterval,
-			)
+			const timeout = setTimeout(getIncrementalMaindataCallback, refreshInterval)
 			return () => clearTimeout(timeout)
 		}
-	}, [getIncrementalMaindataCallback, refreshInterval, autoRefreshEnabled, rid, page, statusFilter, searchFilter, trackerFilter, items])
+	}, [
+		getIncrementalMaindataCallback,
+		refreshInterval,
+		autoRefreshEnabled,
+		rid,
+		page,
+		statusFilter,
+		searchFilter,
+		trackerFilter,
+		items,
+	])
 
 	const selectedTorrentHash = useMemo(() => {
 		if (selectedTorrents === 'all' || selectedTorrents.size !== 1) {
@@ -287,14 +292,21 @@ export default function App() {
 
 	const selectedTorrentHashes = useMemo(() => {
 		return selectedTorrents === 'all'
-			? items.map(item => item.hash)
+			? items.map((item) => item.hash)
 			: (Array.from(selectedTorrents) as string[])
 	}, [items, selectedTorrents])
 
 	const triggerRef = useRef<HTMLElement | null>(null)
-	const [constextMenuPosition, setContextMenuPosition] = useState<{ x: number, y: number } | undefined>(undefined)
+	const [constextMenuPosition, setContextMenuPosition] = useState<
+		{ x: number; y: number } | undefined
+	>(undefined)
 	const { isOpen, onOpen: openContextMenu, onClose: closeContextMenu } = useDisclosure()
-	const onContextMenuCallback = (torrentHash: string, target: HTMLElement, x: number, y: number) => {
+	const onContextMenuCallback = (
+		torrentHash: string,
+		target: HTMLElement,
+		x: number,
+		y: number
+	) => {
 		triggerRef.current = target ?? null
 		setContextMenuPosition({ x, y })
 		if (selectedTorrents !== 'all' && !selectedTorrents.has(torrentHash)) {
@@ -305,11 +317,11 @@ export default function App() {
 
 	return (
 		<>
-			<PanelGroup
-				direction="vertical"
-				className="!min-h-screen !h-screen w-screen"
-			>
-				<Panel className={`flex flex-col p-3 ${showBottomPanel ? '' : 'h-full'}`} minSize={30}>
+			<PanelGroup direction="vertical" className="!min-h-screen !h-screen w-screen">
+				<Panel
+					className={`flex flex-col p-3 ${showBottomPanel ? '' : 'h-full'}`}
+					minSize={30}
+				>
 					<TorrentTableTop
 						autoRefreshEnabled={autoRefreshEnabled}
 						isRefreshing={isLoading}
@@ -363,7 +375,9 @@ export default function App() {
 								<TableColumn
 									key={column.uid}
 									align={
-										['actions', 'state'].includes(column.uid) ? 'center' : 'start'
+										['actions', 'state'].includes(column.uid)
+											? 'center'
+											: 'start'
 									}
 									allowsSorting={'sortable' in column ? column.sortable : false}
 									hideHeader={column.hideHeader}
@@ -379,25 +393,33 @@ export default function App() {
 							items={items}
 							loadingContent={<Spinner />}
 						>
-							{item => (
+							{(item) => (
 								<TableRow
 									key={item.hash}
 									data-role="torrent-table-row"
 									aria-roledescription="torrent table row"
 									onContextMenu={(e) => {
 										e.preventDefault()
-										onContextMenuCallback(item.hash, e.currentTarget, e.clientX, e.clientY)
+										onContextMenuCallback(
+											item.hash,
+											e.currentTarget,
+											e.clientX,
+											e.clientY
+										)
 									}}
 								>
-									{columnKey => (
-										<TableCell data-role="torrent-table-cell" className="text-nowrap">
+									{(columnKey) => (
+										<TableCell
+											data-role="torrent-table-cell"
+											className="text-nowrap"
+										>
 											{renderCell(
 												columnKey as (typeof TORRENT_TABLE_COLUMNS)[number]['uid'],
 												item[columnKey as keyof QBittorrentTorrent],
 												item.state,
 												item.num_complete,
 												item.num_incomplete,
-												item && (!item.tags || !item.tags.includes('seed')),
+												item && (!item.tags || !item.tags.includes('seed'))
 											)}
 										</TableCell>
 									)}
@@ -405,7 +427,13 @@ export default function App() {
 							)}
 						</TableBody>
 					</Table>
-					<TorrentTableBottom selectedTorrents={selectedTorrents} filteredItemsLength={filteredItemsLength} onPageChange={setPage} page={page} pages={pages} />
+					<TorrentTableBottom
+						selectedTorrents={selectedTorrents}
+						filteredItemsLength={filteredItemsLength}
+						onPageChange={setPage}
+						page={page}
+						pages={pages}
+					/>
 				</Panel>
 				{showBottomPanel && (
 					<>

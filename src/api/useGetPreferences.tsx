@@ -14,19 +14,14 @@ export function useGetPreferences(): [
 	const getPreferences = useCallback(async () => {
 		setIsLoading(true)
 		try {
-			const response = await fetch(
-				`${serverBaseUrl}/api/v2/app/preferences`,
-				{
-					method: 'GET',
-					credentials: 'include',
-				},
-			)
+			const response = await fetch(`${serverBaseUrl}/api/v2/app/preferences`, {
+				method: 'GET',
+				credentials: 'include',
+			})
 			return await response.json()
-		}
-		catch (e) {
+		} catch (e) {
 			setError(e as Error)
-		}
-		finally {
+		} finally {
 			setIsLoading(false)
 		}
 	}, [serverBaseUrl, setIsLoading, setError])

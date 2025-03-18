@@ -3,7 +3,11 @@ import { useServerBaseUrl } from '@/hooks/useServerBaseUrl'
 import { useCallback, useState } from 'react'
 
 export function useSetFilePriority(): [
-	(hash: string, fileIds: string[], priority: QBittorrentTorrentFile['priority']) => Promise<void>,
+	(
+		hash: string,
+		fileIds: string[],
+		priority: QBittorrentTorrentFile['priority']
+	) => Promise<void>,
 	boolean,
 	Error | null,
 ] {
@@ -24,15 +28,13 @@ export function useSetFilePriority(): [
 						priority,
 					}),
 				})
-			}
-			catch (e) {
+			} catch (e) {
 				setError(e as Error)
-			}
-			finally {
+			} finally {
 				setIsLoading(false)
 			}
 		},
-		[serverBaseUrl, setIsLoading, setError],
+		[serverBaseUrl, setIsLoading, setError]
 	)
 
 	return [setFilePriority, isLoading, error]

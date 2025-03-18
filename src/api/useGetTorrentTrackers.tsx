@@ -15,26 +15,21 @@ export function useGetTorrentTrackers(): [
 		async (hash: string) => {
 			setIsLoading(true)
 			try {
-				const response = await fetch(
-					`${serverBaseUrl}/api/v2/torrents/trackers`,
-					{
-						method: 'POST',
-						credentials: 'include',
-						body: new URLSearchParams({
-							hash,
-						}),
-					},
-				)
+				const response = await fetch(`${serverBaseUrl}/api/v2/torrents/trackers`, {
+					method: 'POST',
+					credentials: 'include',
+					body: new URLSearchParams({
+						hash,
+					}),
+				})
 				return (await response.json()) as QBittorrentTorrentTrackers
-			}
-			catch (e) {
+			} catch (e) {
 				setError(e as Error)
-			}
-			finally {
+			} finally {
 				setIsLoading(false)
 			}
 		},
-		[serverBaseUrl, setIsLoading, setError],
+		[serverBaseUrl, setIsLoading, setError]
 	)
 
 	return [getTorrentTrackers, isLoading, error]

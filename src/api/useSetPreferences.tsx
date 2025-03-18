@@ -11,28 +11,26 @@ export function useSetPreferences(): [
 	const [error, setError] = useState<Error | null>(null)
 	const [serverBaseUrl] = useServerBaseUrl()
 
-	const setPreferences = useCallback(async (preferences: QBittorrentPreferencesInput) => {
-		setIsLoading(true)
-		try {
-			const response = await fetch(
-				`${serverBaseUrl}/api/v2/app/setPreferences`,
-				{
+	const setPreferences = useCallback(
+		async (preferences: QBittorrentPreferencesInput) => {
+			setIsLoading(true)
+			try {
+				const response = await fetch(`${serverBaseUrl}/api/v2/app/setPreferences`, {
 					method: 'POST',
 					credentials: 'include',
 					body: new URLSearchParams({
 						json: JSON.stringify(preferences),
 					}),
-				},
-			)
-			return await response.json()
-		}
-		catch (e) {
-			setError(e as Error)
-		}
-		finally {
-			setIsLoading(false)
-		}
-	}, [serverBaseUrl, setIsLoading, setError])
+				})
+				return await response.json()
+			} catch (e) {
+				setError(e as Error)
+			} finally {
+				setIsLoading(false)
+			}
+		},
+		[serverBaseUrl, setIsLoading, setError]
+	)
 
 	return [setPreferences, isLoading, error]
 }

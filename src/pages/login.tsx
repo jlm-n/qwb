@@ -1,15 +1,7 @@
 import type { ChangeEvent } from 'react'
 import { AppAndServerSettingsButton } from '@/components/torrentTable/top/AppAndServerSettingsButton'
 import { useServerBaseUrl } from '@/hooks/useServerBaseUrl'
-import {
-	Button,
-	Card,
-	CardBody,
-	CardFooter,
-	CardHeader,
-	Image,
-	Input,
-} from '@heroui/react'
+import { Button, Card, CardBody, CardFooter, CardHeader, Image, Input } from '@heroui/react'
 import { useCallback, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -54,9 +46,7 @@ export function LoginPage() {
 					/>
 					<div className="flex flex-col items-center justify-center">
 						<p className="text-md">Login Required</p>
-						<p className="text-small text-default-500">
-							You must sign it to continue.
-						</p>
+						<p className="text-small text-default-500">You must sign it to continue.</p>
 					</div>
 				</CardHeader>
 				<CardBody className="gap-5">

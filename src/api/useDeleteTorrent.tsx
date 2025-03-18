@@ -22,15 +22,13 @@ export function useDeleteTorrents(): [
 						hashes: hashes.join('|'),
 					}),
 				})
-			}
-			catch (e) {
+			} catch (e) {
 				setError(e as Error)
-			}
-			finally {
+			} finally {
 				setIsLoading(false)
 			}
 		},
-		[serverBaseUrl, setIsLoading, setError],
+		[serverBaseUrl, setIsLoading, setError]
 	)
 
 	return [deleteTorrent, isLoading, error]

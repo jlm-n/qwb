@@ -23,15 +23,13 @@ export function useRenameFolder(): [
 						newPath,
 					}),
 				})
-			}
-			catch (e) {
+			} catch (e) {
 				setError(e as Error)
-			}
-			finally {
+			} finally {
 				setIsLoading(false)
 			}
 		},
-		[serverBaseUrl, setIsLoading, setError],
+		[serverBaseUrl, setIsLoading, setError]
 	)
 
 	return [renameFolder, isLoading, error]

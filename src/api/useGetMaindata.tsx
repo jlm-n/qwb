@@ -15,23 +15,18 @@ export function useGetMaindata(): [
 		async (rid: number) => {
 			setIsLoading(true)
 			try {
-				const response = await fetch(
-					`${serverBaseUrl}/api/v2/sync/maindata?rid=${rid}`,
-					{
-						method: 'GET',
-						credentials: 'include',
-					},
-				)
+				const response = await fetch(`${serverBaseUrl}/api/v2/sync/maindata?rid=${rid}`, {
+					method: 'GET',
+					credentials: 'include',
+				})
 				return await response.json()
-			}
-			catch (e) {
+			} catch (e) {
 				setError(e as Error)
-			}
-			finally {
+			} finally {
 				setIsLoading(false)
 			}
 		},
-		[serverBaseUrl, setIsLoading, setError],
+		[serverBaseUrl, setIsLoading, setError]
 	)
 
 	return [getMaindata, isLoading, error]
@@ -44,8 +39,7 @@ export function useGetIncrementalMaindata(): [
 	number,
 ] {
 	const [rid, setRid] = useState(0)
-	const [getMaindata, isGetMaindataLoading, getMaindataError]
-		= useGetMaindata()
+	const [getMaindata, isGetMaindataLoading, getMaindataError] = useGetMaindata()
 
 	const getIncrementalMaindata = useCallback(async () => {
 		const maindata = await getMaindata(rid)

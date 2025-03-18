@@ -1,11 +1,7 @@
 import { useServerBaseUrl } from '@/hooks/useServerBaseUrl'
 import { useCallback, useState } from 'react'
 
-export function useStartTorrents(): [
-	(hashes: string[]) => Promise<void>,
-	boolean,
-	Error | null,
-] {
+export function useStartTorrents(): [(hashes: string[]) => Promise<void>, boolean, Error | null] {
 	const [isLoading, setIsLoading] = useState(false)
 	const [error, setError] = useState<Error | null>(null)
 	const [serverBaseUrl] = useServerBaseUrl()
@@ -21,15 +17,13 @@ export function useStartTorrents(): [
 						hashes: hashes.join('|'),
 					}),
 				})
-			}
-			catch (e) {
+			} catch (e) {
 				setError(e as Error)
-			}
-			finally {
+			} finally {
 				setIsLoading(false)
 			}
 		},
-		[serverBaseUrl, setIsLoading, setError],
+		[serverBaseUrl, setIsLoading, setError]
 	)
 
 	return [startTorrent, isLoading, error]

@@ -2,7 +2,7 @@ import { useServerBaseUrl } from '@/hooks/useServerBaseUrl'
 import { useCallback, useState } from 'react'
 
 export function useGetNetworkInterfaces(): [
-	() => Promise<Array<{ name: string, value: string }>>,
+	() => Promise<Array<{ name: string; value: string }>>,
 	boolean,
 	Error | null,
 ] {
@@ -13,19 +13,14 @@ export function useGetNetworkInterfaces(): [
 	const getNetworkInterfaces = useCallback(async () => {
 		setIsLoading(true)
 		try {
-			const response = await fetch(
-				`${serverBaseUrl}/api/v2/app/networkInterfaceList`,
-				{
-					method: 'GET',
-					credentials: 'include',
-				},
-			)
+			const response = await fetch(`${serverBaseUrl}/api/v2/app/networkInterfaceList`, {
+				method: 'GET',
+				credentials: 'include',
+			})
 			return await response.json()
-		}
-		catch (e) {
+		} catch (e) {
 			setError(e as Error)
-		}
-		finally {
+		} finally {
 			setIsLoading(false)
 		}
 	}, [serverBaseUrl, setIsLoading, setError])

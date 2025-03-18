@@ -22,15 +22,13 @@ export function useRenameTorrent(): [
 						hash,
 					}),
 				})
-			}
-			catch (e) {
+			} catch (e) {
 				setError(e as Error)
-			}
-			finally {
+			} finally {
 				setIsLoading(false)
 			}
 		},
-		[serverBaseUrl, setIsLoading, setError],
+		[serverBaseUrl, setIsLoading, setError]
 	)
 
 	return [renameTorrent, isLoading, error]

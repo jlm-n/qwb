@@ -1,1 +1,1 @@
-declare module 'react-emoji-flag';
+declare module 'react-emoji-flag'

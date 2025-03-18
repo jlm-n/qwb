@@ -209,7 +209,7 @@ export interface QBittorrentPreferences {
 	web_ui_https_key_path?: string // ✅ For API ≥ v2.0.1: Path to SSL keyfile
 	web_ui_max_auth_fail_count?: number // ✅ Maximum number of authentication failures before WebUI access ban
 	web_ui_port?: number // ✅ WebUI port
-	web_ui_reverse_proxies_list?: string// ✅
+	web_ui_reverse_proxies_list?: string // ✅
 	web_ui_reverse_proxy_enabled?: boolean // ✅
 	web_ui_secure_cookie_enabled?: boolean // ✅ True if WebUI cookie Secure flag is enabled
 	web_ui_session_timeout?: number // ✅ Seconds until WebUI is automatically signed off

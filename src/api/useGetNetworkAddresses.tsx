@@ -10,25 +10,26 @@ export function useGetNetworkAddresses(): [
 	const [error, setError] = useState<Error | null>(null)
 	const [serverBaseUrl] = useServerBaseUrl()
 
-	const getNetworkAddresses = useCallback(async (iface: string) => {
-		setIsLoading(true)
-		try {
-			const response = await fetch(
-				`${serverBaseUrl}/api/v2/app/networkInterfaceAddressList?iface=${iface}`,
-				{
-					method: 'GET',
-					credentials: 'include',
-				},
-			)
-			return await response.json()
-		}
-		catch (e) {
-			setError(e as Error)
-		}
-		finally {
-			setIsLoading(false)
-		}
-	}, [serverBaseUrl, setIsLoading, setError])
+	const getNetworkAddresses = useCallback(
+		async (iface: string) => {
+			setIsLoading(true)
+			try {
+				const response = await fetch(
+					`${serverBaseUrl}/api/v2/app/networkInterfaceAddressList?iface=${iface}`,
+					{
+						method: 'GET',
+						credentials: 'include',
+					}
+				)
+				return await response.json()
+			} catch (e) {
+				setError(e as Error)
+			} finally {
+				setIsLoading(false)
+			}
+		},
+		[serverBaseUrl, setIsLoading, setError]
+	)
 
 	return [getNetworkAddresses, isLoading, error]
 }
