@@ -197,7 +197,7 @@ export default function App() {
 	const sortAndFilterTorrentsCallback = useCallback(
 		(torrents: QBittorrentTorrent[] = Array.from(TORRENTS.values())) => {
 			startTransition(() => {
-				const tableContainerHeight = ((torrentTableRef.current?.parentNode as HTMLDivElement).clientHeight)
+				const tableContainerHeight = ((torrentTableRef.current?.parentNode as HTMLDivElement)?.clientHeight)
 				const { pagedTorrents, totalTorrentsCount: filteredTorrentLength, pagesCount: pages }
 					= sortAndFilterTorrents(
 						torrents,
@@ -309,56 +309,52 @@ export default function App() {
 				direction="vertical"
 				className="!min-h-screen !h-screen w-screen"
 			>
-				<Panel className={showBottomPanel ? '' : 'h-full'} minSize={30}>
+				<Panel className={`flex flex-col p-3 ${showBottomPanel ? '' : 'h-full'}`} minSize={30}>
+					<TorrentTableTop
+						autoRefreshEnabled={autoRefreshEnabled}
+						isRefreshing={isLoading}
+						onAutoRefreshChange={setAutoRefreshEnabled}
+						onIncrementalTorrentRefresh={getIncrementalMaindataCallback}
+						onRowsPerPageChange={onRowsPerPageChange}
+						onSearchFilterChange={onSearchChange}
+						onShowBottomPanelChange={setShowBottomPanel}
+						onStatusFilterChange={setStatusFilter}
+						onTrackerFilterChange={setTrackerFilter}
+						rowsPerPage={rowsPerPage}
+						searchFilter={searchFilter}
+						selectedTorrentHashes={selectedTorrentHashes}
+						serverDownloadSessionTotal={serverState.dl_info_data || 0}
+						serverDownloadSpeed={serverState.dl_info_speed || 0}
+						serverUploadSessionTotal={serverState.up_info_data || 0}
+						serverUploadSpeed={serverState.up_info_speed || 0}
+						showBottomPanel={showBottomPanel}
+						statusFilter={statusFilter}
+						trackers={trackers}
+						trackerFilter={trackerFilter}
+						categories={categories}
+						categoryFilter={categoryFilter}
+						onCategoryFilterChange={setCategoryFilter}
+						tags={tags}
+						tagFilter={tagFilter}
+						onTagFilterChange={setTagFilter}
+						torrents={TORRENTS}
+					/>
 					<Table
 						isHeaderSticky
 						ref={torrentTableRef}
 						aria-label="Torrent list"
 						classNames={{
-							base: 'h-full p-3',
+							base: 'grow',
 							wrapper: 'h-full',
 						}}
+						isCompact
 						isStriped
-						isVirtualized
+						// isVirtualized
 						color="primary"
 						selectedKeys={selectedTorrents}
 						selectionMode="single"
 						selectionBehavior="replace"
 						sortDescriptor={sortDescriptor}
-						bottomContentPlacement="outside"
-						bottomContent={<TorrentTableBottom selectedTorrents={selectedTorrents} filteredItemsLength={filteredItemsLength} onPageChange={setPage} page={page} pages={pages} />}
-						topContentPlacement="outside"
-						topContent={(
-							<TorrentTableTop
-								autoRefreshEnabled={autoRefreshEnabled}
-								isRefreshing={isLoading}
-								onAutoRefreshChange={setAutoRefreshEnabled}
-								onIncrementalTorrentRefresh={getIncrementalMaindataCallback}
-								onRowsPerPageChange={onRowsPerPageChange}
-								onSearchFilterChange={onSearchChange}
-								onShowBottomPanelChange={setShowBottomPanel}
-								onStatusFilterChange={setStatusFilter}
-								onTrackerFilterChange={setTrackerFilter}
-								rowsPerPage={rowsPerPage}
-								searchFilter={searchFilter}
-								selectedTorrentHashes={selectedTorrentHashes}
-								serverDownloadSessionTotal={serverState.dl_info_data || 0}
-								serverDownloadSpeed={serverState.dl_info_speed || 0}
-								serverUploadSessionTotal={serverState.up_info_data || 0}
-								serverUploadSpeed={serverState.up_info_speed || 0}
-								showBottomPanel={showBottomPanel}
-								statusFilter={statusFilter}
-								trackers={trackers}
-								trackerFilter={trackerFilter}
-								categories={categories}
-								categoryFilter={categoryFilter}
-								onCategoryFilterChange={setCategoryFilter}
-								tags={tags}
-								tagFilter={tagFilter}
-								onTagFilterChange={setTagFilter}
-								torrents={TORRENTS}
-							/>
-						)}
 						onSelectionChange={setSelectedTorrents}
 						onSortChange={setSortDescriptor}
 					>
@@ -409,11 +405,12 @@ export default function App() {
 							)}
 						</TableBody>
 					</Table>
+					<TorrentTableBottom selectedTorrents={selectedTorrents} filteredItemsLength={filteredItemsLength} onPageChange={setPage} page={page} pages={pages} />
 				</Panel>
 				{showBottomPanel && (
 					<>
 						<PanelResizeHandle />
-						<Panel minSize={30} defaultSize={30} className="overflow-auto">
+						<Panel minSize={30} defaultSize={30}>
 							<TorrentDetails torrentHash={selectedTorrentHash} />
 						</Panel>
 					</>
