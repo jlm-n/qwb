@@ -2,6 +2,7 @@ import type { QBittorrentTorrent } from '@/types/QBittorrentTorrent'
 import type {
 	SelectedItems,
 	Selection,
+	SelectionMode,
 } from '@heroui/react'
 import { TorrentAddButton } from '@/components/TorrentAddButton'
 import { TorrentContextMenu } from '@/components/torrentContextMenu/TorrentContextMenu'
@@ -10,6 +11,7 @@ import {
 	ButtonGroup,
 	Select,
 	SelectItem,
+	Switch,
 } from '@heroui/react'
 import {
 	IconArrowNarrowDown,
@@ -90,6 +92,8 @@ export function TorrentTableTop({
 	categories,
 	tags,
 	torrents,
+	selectionMode,
+	onSelectionModeChange,
 }: {
 	autoRefreshEnabled: boolean
 	isRefreshing: boolean
@@ -118,6 +122,8 @@ export function TorrentTableTop({
 	categories: Record<string, { total: number }>
 	tags: Record<string, { total: number }>
 	torrents: Map<string, QBittorrentTorrent>
+	selectionMode: SelectionMode
+	onSelectionModeChange: (selectionMode: SelectionMode) => void
 }) {
 	return (
 		<div className="flex flex-col gap-4">
@@ -171,7 +177,14 @@ export function TorrentTableTop({
 					<SpeedDisplay speed={serverDownloadSpeed} total={serverDownloadSessionTotal} type="download" />
 					<SpeedDisplay speed={serverUploadSpeed} total={serverUploadSessionTotal} type="upload" />
 				</span>
-				<span className="flex gap-2 w-fit">
+				<span className="flex gap-2 w-fit items-center">
+					<Switch
+						size="sm"
+						isSelected={selectionMode === 'multiple'}
+						onValueChange={(checked) => onSelectionModeChange(checked ? 'multiple' : 'single')}
+					>
+						Multiple Selection
+					</Switch>
 					<RowsPerPageSelect rowsPerPage={rowsPerPage} onRowsPerPageChange={onRowsPerPageChange} />
 				</span>
 			</div>
