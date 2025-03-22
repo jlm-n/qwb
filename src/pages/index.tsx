@@ -3,7 +3,7 @@ import type { QBittorrentMaindata } from '@/types/QBittorrentMaindata'
 import type { QBittorrentServerState } from '@/types/QBittorrentServerState'
 import type { QBittorrentTorrent } from '@/types/QBittorrentTorrent'
 
-import type { Selection, SortDescriptor } from '@heroui/react'
+import type { Selection, SortDescriptor, SelectionMode } from '@heroui/react'
 
 import { useGetIncrementalMaindata } from '@/api/useGetMaindata'
 import { useSettings } from '@/contexts/SettingsContext'
@@ -71,7 +71,7 @@ async function mergeMaindata(r: QBittorrentMaindata): Promise<{
 		TORRENTS.delete(hash)
 	}
 
-	// Fix the torrent tracker information
+	// Update the torrent tracker information
 	for (const tracker in r.trackers) {
 		for (const torrentHash of r.trackers[tracker]) {
 			const existing = TORRENTS.get(torrentHash)
@@ -160,6 +160,7 @@ export default function App() {
 	const [showBottomPanel, setShowBottomPanel] = usePersistentState('showBottomPanel', false)
 	const [pages, setPages] = useState(1)
 	const [page, setPage] = useState(1)
+	const [selectionMode, setSelectionMode] = usePersistentState<SelectionMode>('selectionMode', 'multiple')
 	const torrentTableRef = useRef<HTMLTableElement>(null)
 
 	const headerColumns = useMemo(() => {
@@ -236,7 +237,7 @@ export default function App() {
 		]
 	)
 
-	const [getIncrementalMaindata, isLoading, getIncrementalMaindataError, rid] =
+	const [getIncrementalMaindata, isLoading, getIncrementalMaindataError] =
 		useGetIncrementalMaindata()
 	const getIncrementalMaindataCallback = useCallback(async () => {
 		const updatedMaindata = await getIncrementalMaindata()
@@ -310,6 +311,8 @@ export default function App() {
 		<>
 			<PanelGroup direction="vertical" className="!min-h-screen !h-screen w-screen">
 				<Panel
+					id="main-panel"
+					order={1}
 					className={`flex flex-col p-3 ${showBottomPanel ? '' : 'h-full'}`}
 					minSize={30}
 				>
@@ -341,6 +344,8 @@ export default function App() {
 						tagFilter={tagFilter}
 						onTagFilterChange={setTagFilter}
 						torrents={TORRENTS}
+						selectionMode={selectionMode}
+						onSelectionModeChange={setSelectionMode}
 					/>
 					<Table
 						isHeaderSticky
@@ -354,8 +359,8 @@ export default function App() {
 						isVirtualized
 						color="primary"
 						selectedKeys={selectedTorrents}
-						selectionMode="single"
-						selectionBehavior="replace"
+						selectionMode={selectionMode}
+						selectionBehavior="toggle"
 						sortDescriptor={sortDescriptor}
 						onSelectionChange={setSelectedTorrents}
 						onSortChange={setSortDescriptor}
@@ -428,7 +433,12 @@ export default function App() {
 				{showBottomPanel && (
 					<>
 						<PanelResizeHandle />
-						<Panel minSize={30} defaultSize={30}>
+						<Panel 
+							id="details-panel"
+							order={2}
+							minSize={30} 
+							defaultSize={30}
+						>
 							<TorrentDetails torrentHash={selectedTorrentHash} />
 						</Panel>
 					</>
