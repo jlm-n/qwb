@@ -9,8 +9,8 @@ export const TorrentDetails = memo(({ torrentHash }: { torrentHash?: string }) =
 	<Tabs
 		aria-label="Tabs"
 		classNames={{
-			tabWrapper: 'h-full relative scroll-auto',
-			base: 'absolute m-4 z-10 bottom-0',
+			tabWrapper: 'h-full relative',
+			base: 'sticky bottom-0 m-4 z-10 bg-background',
 			tabList: 'shadow-lg',
 		}}
 		radius="full"
