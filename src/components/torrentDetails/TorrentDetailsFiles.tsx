@@ -67,7 +67,7 @@ const TorrentPriorityCell = memo(({ torrentHash, fileId, priority }: { torrentHa
 					onSelectionChange={setSelectedKeys}
 				>
 					{Object.entries(PRIORITY_TO_STRING).map(([key, value]) => (
-						<SelectItem value={key} key={key}>{value}</SelectItem>
+						<SelectItem key={key}>{value}</SelectItem>
 					))}
 				</Select>
 				<Button title="Save new priority" isDisabled={!torrentHash} isIconOnly radius="sm" isLoading={isLoading} onPress={onPressCallback}><IconDeviceFloppy /></Button>

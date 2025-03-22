@@ -96,9 +96,9 @@ export const DownloadSettingsSection = memo(({
 				disallowEmptySelection
 				defaultSelectedKeys={torrent_content_layout ? new Set([torrent_content_layout]) : new Set()}
 			>
-				<SelectItem value="Original" key="Original">Original</SelectItem>
-				<SelectItem value="Subfolder" key="Subfolder">Create subfolder</SelectItem>
-				<SelectItem value="NoSubfolder" key="NoSubfolder">Don't create subfolder</SelectItem>
+				<SelectItem key="Original">Original</SelectItem>
+				<SelectItem key="Subfolder">Create subfolder</SelectItem>
+				<SelectItem key="NoSubfolder">Don't create subfolder</SelectItem>
 			</Select>
 			<Checkbox name="add_to_top_of_queue" defaultSelected={add_to_top_of_queue}>Add torrent to top of queue by default</Checkbox>
 			<Checkbox name="add_stopped_enabled" defaultSelected={add_stopped_enabled}>Do not start the download automatically</Checkbox>
@@ -108,9 +108,9 @@ export const DownloadSettingsSection = memo(({
 				disallowEmptySelection
 				defaultSelectedKeys={torrent_stop_condition ? new Set([torrent_stop_condition]) : new Set()}
 			>
-				<SelectItem value="None" key="None">None</SelectItem>
-				<SelectItem value="MetadataReceived" key="MetadataReceived">Metadata received</SelectItem>
-				<SelectItem value="FilesChecked" key="FilesChecked">Files checked</SelectItem>
+				<SelectItem key="None">None</SelectItem>
+				<SelectItem key="MetadataReceived">Metadata received</SelectItem>
+				<SelectItem key="FilesChecked">Files checked</SelectItem>
 			</Select>
 			<Checkbox name="merge_trackers" defaultSelected={merge_trackers}>Merge trackers when duplicates are added</Checkbox>
 			<Checkbox name="auto_delete_mode" defaultSelected={auto_delete_mode === 1}>Delete .torrent files afterward</Checkbox>

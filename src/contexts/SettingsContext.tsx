@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useCallback, type ReactNode } from 'react'
+import { createContext, useContext, type ReactNode } from 'react'
 import { useServerBaseUrl } from '@/hooks/useServerBaseUrl'
 import { useTorrentListRefreshRate } from '@/hooks/useTorrentListRefreshRate'
 import { useTorrentPropertiesRefreshRate } from '@/hooks/useTorrentPropertiesRefreshRate'
