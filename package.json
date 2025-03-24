@@ -47,7 +47,7 @@
 		"use-debounce": "^10.0.4"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "1.5.3",
+		"@biomejs/biome": "1.9.4",
 		"@types/lodash.debounce": "^4.0.9",
 		"@types/lodash.throttle": "^4.1.9",
 		"@types/node": "^22.13.10",
