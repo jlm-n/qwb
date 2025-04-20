@@ -1,11 +1,7 @@
 import { useServerBaseUrl } from '@/hooks/useServerBaseUrl'
 import { useCallback, useState } from 'react'
 
-export function useRenameFolder(): [
-	(hash: string, oldPath: string, newPath: string) => Promise<void>,
-	boolean,
-	Error | null,
-] {
+export function useRenameFolder(): [(hash: string, oldPath: string, newPath: string) => Promise<void>, boolean, Error | null] {
 	const [isLoading, setIsLoading] = useState(false)
 	const [error, setError] = useState<Error | null>(null)
 	const [serverBaseUrl] = useServerBaseUrl()
@@ -29,7 +25,7 @@ export function useRenameFolder(): [
 				setIsLoading(false)
 			}
 		},
-		[serverBaseUrl, setIsLoading, setError]
+		[serverBaseUrl]
 	)
 
 	return [renameFolder, isLoading, error]

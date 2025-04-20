@@ -26,9 +26,7 @@ export type QbittorrentAddTorrentFromMagnetInput = {
 export type QbittorrentAddTorrentFromFileInput = {
 	torrents: FileList // Raw data of torrent file. torrents can be presented multiple times.
 } & QbittorrentAddTorrentCommonInput
-export type QBittorrentAddTorrentsInput =
-	| QbittorrentAddTorrentFromMagnetInput
-	| QbittorrentAddTorrentFromFileInput
+export type QBittorrentAddTorrentsInput = QbittorrentAddTorrentFromMagnetInput | QbittorrentAddTorrentFromFileInput
 
 function appendFiles(files: FileList | undefined, formData: FormData) {
 	if (!files) {
@@ -40,11 +38,7 @@ function appendFiles(files: FileList | undefined, formData: FormData) {
 	}
 }
 
-export function useAddTorrents(): [
-	(input: QBittorrentAddTorrentsInput) => Promise<void>,
-	boolean,
-	Error | null,
-] {
+export function useAddTorrents(): [(input: QBittorrentAddTorrentsInput) => Promise<void>, boolean, Error | null] {
 	const [isLoading, setIsLoading] = useState(false)
 	const [error, setError] = useState<Error | null>(null)
 	const [serverBaseUrl] = useServerBaseUrl()
@@ -82,7 +76,7 @@ export function useAddTorrents(): [
 				setIsLoading(false)
 			}
 		},
-		[serverBaseUrl, setIsLoading, setError]
+		[serverBaseUrl]
 	)
 
 	return [addTorrents, isLoading, error]

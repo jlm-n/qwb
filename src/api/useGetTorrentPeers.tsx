@@ -1,12 +1,8 @@
-import type { QBittorrentTorrentPeers } from '@/types/QBittorrentTorrentPeer'
 import { useServerBaseUrl } from '@/hooks/useServerBaseUrl'
+import type { QBittorrentTorrentPeers } from '@/types/QBittorrentTorrentPeer'
 import { useCallback, useState } from 'react'
 
-export function useGetTorrentPeers(): [
-	(hash: string) => Promise<QBittorrentTorrentPeers | undefined>,
-	boolean,
-	Error | null,
-] {
+export function useGetTorrentPeers(): [(hash: string) => Promise<QBittorrentTorrentPeers | undefined>, boolean, Error | null] {
 	const [isLoading, setIsLoading] = useState(false)
 	const [error, setError] = useState<Error | null>(null)
 	const [serverBaseUrl] = useServerBaseUrl()
@@ -29,7 +25,7 @@ export function useGetTorrentPeers(): [
 				setIsLoading(false)
 			}
 		},
-		[serverBaseUrl, setIsLoading, setError]
+		[serverBaseUrl]
 	)
 
 	return [getTorrentPieceStates, isLoading, error]

@@ -1,4 +1,4 @@
-import type { QBittorrentTorrentState } from './QBittorrentTorrentState'
+import type { QBittorrentTorrentState } from './QBittorrentTorrentState.tsx'
 
 export interface QBittorrentTorrent {
 	added_on: number

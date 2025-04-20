@@ -23,7 +23,7 @@ export function useStopTorrents(): [(hashes: string[]) => Promise<void>, boolean
 				setIsLoading(false)
 			}
 		},
-		[serverBaseUrl, setIsLoading, setError]
+		[serverBaseUrl]
 	)
 
 	return [stopTorrent, isLoading, error]

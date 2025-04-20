@@ -18,7 +18,7 @@ export function useSendTestEmail(): [() => Promise<void>, boolean, Error | null]
 		} finally {
 			setIsLoading(false)
 		}
-	}, [serverBaseUrl, setIsLoading, setError])
+	}, [serverBaseUrl])
 
 	return [sentTestEmail, isLoading, error]
 }

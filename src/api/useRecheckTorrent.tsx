@@ -23,7 +23,7 @@ export function useRecheckTorrents(): [(hashes: string[]) => Promise<void>, bool
 				setIsLoading(false)
 			}
 		},
-		[serverBaseUrl, setIsLoading, setError]
+		[serverBaseUrl]
 	)
 
 	return [recheckTorrents, isLoading, error]

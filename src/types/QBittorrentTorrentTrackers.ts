@@ -8,4 +8,4 @@ export interface QBittorrentTorrentTracker {
 	tier: number
 	url: string
 }
-export type QBittorrentTorrentTrackers = Array<QBittorrentTorrentTracker>
+export type QBittorrentTorrentTrackers = QBittorrentTorrentTracker[]

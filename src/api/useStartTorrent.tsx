@@ -23,7 +23,7 @@ export function useStartTorrents(): [(hashes: string[]) => Promise<void>, boolea
 				setIsLoading(false)
 			}
 		},
-		[serverBaseUrl, setIsLoading, setError]
+		[serverBaseUrl]
 	)
 
 	return [startTorrent, isLoading, error]

@@ -1,12 +1,8 @@
-import type { QBittorrentTorrentFile } from '@/types/QBittorrentTorrentFile'
 import { useServerBaseUrl } from '@/hooks/useServerBaseUrl'
+import type { QBittorrentTorrentFile } from '@/types/QBittorrentTorrentFile'
 import { useCallback, useState } from 'react'
 
-export function useGetTorrentFiles(): [
-	(hash: string) => Promise<QBittorrentTorrentFile[] | undefined>,
-	boolean,
-	Error | null,
-] {
+export function useGetTorrentFiles(): [(hash: string) => Promise<QBittorrentTorrentFile[] | undefined>, boolean, Error | null] {
 	const [isLoading, setIsLoading] = useState(false)
 	const [error, setError] = useState<Error | null>(null)
 	const [serverBaseUrl] = useServerBaseUrl()
@@ -29,7 +25,7 @@ export function useGetTorrentFiles(): [
 				setIsLoading(false)
 			}
 		},
-		[serverBaseUrl, setIsLoading, setError]
+		[serverBaseUrl]
 	)
 
 	return [getTorrentFiles, isLoading, error]

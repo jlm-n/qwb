@@ -1,12 +1,8 @@
-import type { QBittorrentTorrentTrackers } from '@/types/QBittorrentTorrentTrackers'
 import { useServerBaseUrl } from '@/hooks/useServerBaseUrl'
+import type { QBittorrentTorrentTrackers } from '@/types/QBittorrentTorrentTrackers'
 import { useCallback, useState } from 'react'
 
-export function useGetTorrentTrackers(): [
-	(hash: string) => Promise<QBittorrentTorrentTrackers | undefined>,
-	boolean,
-	Error | null,
-] {
+export function useGetTorrentTrackers(): [(hash: string) => Promise<QBittorrentTorrentTrackers | undefined>, boolean, Error | null] {
 	const [isLoading, setIsLoading] = useState(false)
 	const [error, setError] = useState<Error | null>(null)
 	const [serverBaseUrl] = useServerBaseUrl()
@@ -29,7 +25,7 @@ export function useGetTorrentTrackers(): [
 				setIsLoading(false)
 			}
 		},
-		[serverBaseUrl, setIsLoading, setError]
+		[serverBaseUrl]
 	)
 
 	return [getTorrentTrackers, isLoading, error]

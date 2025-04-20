@@ -1,11 +1,7 @@
 import { useServerBaseUrl } from '@/hooks/useServerBaseUrl'
 import { useCallback, useState } from 'react'
 
-export function useGetNetworkInterfaces(): [
-	() => Promise<Array<{ name: string; value: string }>>,
-	boolean,
-	Error | null,
-] {
+export function useGetNetworkInterfaces(): [() => Promise<Array<{ name: string; value: string }>>, boolean, Error | null] {
 	const [isLoading, setIsLoading] = useState(false)
 	const [error, setError] = useState<Error | null>(null)
 	const [serverBaseUrl] = useServerBaseUrl()
@@ -23,7 +19,7 @@ export function useGetNetworkInterfaces(): [
 		} finally {
 			setIsLoading(false)
 		}
-	}, [serverBaseUrl, setIsLoading, setError])
+	}, [serverBaseUrl])
 
 	return [getNetworkInterfaces, isLoading, error]
 }

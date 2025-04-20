@@ -1,9 +1,9 @@
-import type { Selection } from '@heroui/react'
+import { useSettings } from '@/hooks/useSettings'
 import { Input } from '@heroui/input'
+import type { Selection } from '@heroui/react'
 import { Chip, Select, SelectItem } from '@heroui/react'
 import { type ChangeEvent, useCallback } from 'react'
 import { TORRENT_TABLE_COLUMNS } from '../torrentTable/TorrentTableColumns'
-import { useSettings } from '@/contexts/SettingsContext'
 
 export function ApplicationSettingsForm() {
 	const {
@@ -27,13 +27,16 @@ export function ApplicationSettingsForm() {
 		setTheme,
 	} = useSettings()
 
-	const onThemeChanged = useCallback((newTheme: Selection) => {
-		if (newTheme === 'all') {
-			return
-		}
-		const selectedTheme = Array.from(newTheme)[0] as string
-		setTheme(selectedTheme)
-	}, [setTheme])
+	const onThemeChanged = useCallback(
+		(newTheme: Selection) => {
+			if (newTheme === 'all') {
+				return
+			}
+			const selectedTheme = Array.from(newTheme)[0] as string
+			setTheme(selectedTheme)
+		},
+		[setTheme]
+	)
 
 	return (
 		<>
@@ -49,7 +52,9 @@ export function ApplicationSettingsForm() {
 				disallowEmptySelection
 			>
 				{({ name, uid }) => (
-					<SelectItem key={uid} textValue={name}>{name}</SelectItem>
+					<SelectItem key={uid} textValue={name}>
+						{name}
+					</SelectItem>
 				)}
 			</Select>
 
@@ -67,15 +72,21 @@ export function ApplicationSettingsForm() {
 				isMultiline
 				selectionMode="multiple"
 				disallowEmptySelection
-				renderValue={items => (
+				renderValue={(items) => (
 					<div className="flex flex-wrap gap-2">
-						{items.sort((a, b) => {
-							const indexA = TORRENT_TABLE_COLUMNS.findIndex(col => col.uid === a.data?.uid)
-							const indexB = TORRENT_TABLE_COLUMNS.findIndex(col => col.uid === b.data?.uid)
-							return indexA - indexB
-						}).map(item => (
-							<Chip key={item.key}>{item.data?.name.toLocaleLowerCase()}</Chip>
-						))}
+						{items
+							.sort((a, b) => {
+								const indexA = TORRENT_TABLE_COLUMNS.findIndex(
+									(col) => col.uid === a.data?.uid
+								)
+								const indexB = TORRENT_TABLE_COLUMNS.findIndex(
+									(col) => col.uid === b.data?.uid
+								)
+								return indexA - indexB
+							})
+							.map((item) => (
+								<Chip key={item.key}>{item.data?.name.toLocaleLowerCase()}</Chip>
+							))}
 					</div>
 				)}
 			>
@@ -94,7 +105,9 @@ export function ApplicationSettingsForm() {
 				type="number"
 				min={200}
 				value={torrentListRefreshRate.toString()}
-				onChange={(e: ChangeEvent<HTMLInputElement>) => setTorrentListRefreshRate(+e.target.value)}
+				onChange={(e: ChangeEvent<HTMLInputElement>) =>
+					setTorrentListRefreshRate(+e.target.value)
+				}
 				endContent={<p className="text-nowrap">milliseconds</p>}
 			/>
 			<Input
@@ -102,7 +115,9 @@ export function ApplicationSettingsForm() {
 				type="number"
 				min={200}
 				value={torrentPropertiesRefreshRate.toString()}
-				onChange={(e: ChangeEvent<HTMLInputElement>) => setTorrentPropertiesRefreshRate(+e.target.value)}
+				onChange={(e: ChangeEvent<HTMLInputElement>) =>
+					setTorrentPropertiesRefreshRate(+e.target.value)
+				}
 				endContent={<p className="text-nowrap">milliseconds</p>}
 			/>
 			<Input
@@ -110,7 +125,9 @@ export function ApplicationSettingsForm() {
 				type="number"
 				min={200}
 				value={torrentPiecesRefreshRate.toString()}
-				onChange={(e: ChangeEvent<HTMLInputElement>) => setTorrentPiecesRefreshRate(+e.target.value)}
+				onChange={(e: ChangeEvent<HTMLInputElement>) =>
+					setTorrentPiecesRefreshRate(+e.target.value)
+				}
 				endContent={<p className="text-nowrap">milliseconds</p>}
 			/>
 			<Input
@@ -118,7 +135,9 @@ export function ApplicationSettingsForm() {
 				type="number"
 				min={200}
 				value={torrentTrackersRefreshRate.toString()}
-				onChange={(e: ChangeEvent<HTMLInputElement>) => setTorrentTrackersRefreshRate(+e.target.value)}
+				onChange={(e: ChangeEvent<HTMLInputElement>) =>
+					setTorrentTrackersRefreshRate(+e.target.value)
+				}
 				endContent={<p className="text-nowrap">milliseconds</p>}
 			/>
 			<Input
@@ -126,7 +145,9 @@ export function ApplicationSettingsForm() {
 				type="number"
 				min={200}
 				value={torrentPeersRefreshRate.toString()}
-				onChange={(e: ChangeEvent<HTMLInputElement>) => setTorrentPeersRefreshRate(+e.target.value)}
+				onChange={(e: ChangeEvent<HTMLInputElement>) =>
+					setTorrentPeersRefreshRate(+e.target.value)
+				}
 				endContent={<p className="text-nowrap">milliseconds</p>}
 			/>
 			<Input
@@ -134,7 +155,9 @@ export function ApplicationSettingsForm() {
 				type="number"
 				min={200}
 				value={torrentFilesRefreshRate.toString()}
-				onChange={(e: ChangeEvent<HTMLInputElement>) => setTorrentFilesRefreshRate(+e.target.value)}
+				onChange={(e: ChangeEvent<HTMLInputElement>) =>
+					setTorrentFilesRefreshRate(+e.target.value)
+				}
 				endContent={<p className="text-nowrap">milliseconds</p>}
 			/>
 		</>
