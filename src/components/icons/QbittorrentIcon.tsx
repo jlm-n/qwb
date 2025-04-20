@@ -1,11 +1,6 @@
-export function QbittorrentIcon() {
+export function QBittorrentIcon() {
 	return (
-		<svg
-			height="1024"
-			viewBox="0 0 1024 1024"
-			width="1024"
-			xmlns="http://www.w3.org/2000/svg"
-		>
+		<svg height="1024" viewBox="0 0 1024 1024" width="1024" xmlns="http://www.w3.org/2000/svg">
 			<title>qbittorrent-new-light</title>
 			<defs>
 				<linearGradient id="a" x1="34.012%" x2="76.373%" y1="0%" y2="76.805%">

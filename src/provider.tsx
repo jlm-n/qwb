@@ -1,6 +1,7 @@
+import { SettingsProvider } from '@/contexts/SettingsProvider'
+import { useSettings } from '@/hooks/useSettings'
 import { HeroUIProvider } from '@heroui/system'
 import { useNavigate } from 'react-router-dom'
-import { SettingsProvider, useSettings } from '@/contexts/SettingsContext'
 
 function AppContent({ children }: { children: React.ReactNode }) {
 	const navigate = useNavigate()
@@ -8,7 +9,9 @@ function AppContent({ children }: { children: React.ReactNode }) {
 
 	return (
 		<HeroUIProvider navigate={navigate}>
-			<main className={`${theme} text-foreground bg-background relative flex flex-col h-screen`}>
+			<main
+				className={`${theme} text-foreground bg-background relative flex flex-col h-screen`}
+			>
 				{children}
 			</main>
 		</HeroUIProvider>
@@ -18,9 +21,7 @@ function AppContent({ children }: { children: React.ReactNode }) {
 export function Provider({ children }: { children: React.ReactNode }) {
 	return (
 		<SettingsProvider>
-			<AppContent>
-				{children}
-			</AppContent>
+			<AppContent>{children}</AppContent>
 		</SettingsProvider>
 	)
 }

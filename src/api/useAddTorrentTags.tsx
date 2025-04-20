@@ -1,11 +1,7 @@
 import { useServerBaseUrl } from '@/hooks/useServerBaseUrl'
 import { useCallback, useState } from 'react'
 
-export function useAddTorrentTags(): [
-	(hashes: string[], taggs: string[]) => Promise<void>,
-	boolean,
-	Error | null,
-] {
+export function useAddTorrentTags(): [(hashes: string[], taggs: string[]) => Promise<void>, boolean, Error | null] {
 	const [isLoading, setIsLoading] = useState(false)
 	const [error, setError] = useState<Error | null>(null)
 	const [serverBaseUrl] = useServerBaseUrl()
@@ -28,7 +24,7 @@ export function useAddTorrentTags(): [
 				setIsLoading(false)
 			}
 		},
-		[serverBaseUrl, setIsLoading, setError]
+		[serverBaseUrl]
 	)
 
 	return [addTorrentTags, isLoading, error]

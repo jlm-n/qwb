@@ -1,12 +1,8 @@
-import type { QBittorrentPreferences } from '@/types/QBittorrentPreferences'
 import { useServerBaseUrl } from '@/hooks/useServerBaseUrl'
+import type { QBittorrentPreferences } from '@/types/QBittorrentPreferences'
 import { useCallback, useState } from 'react'
 
-export function useGetPreferences(): [
-	() => Promise<QBittorrentPreferences>,
-	boolean,
-	Error | null,
-] {
+export function useGetPreferences(): [() => Promise<QBittorrentPreferences>, boolean, Error | null] {
 	const [isLoading, setIsLoading] = useState(false)
 	const [error, setError] = useState<Error | null>(null)
 	const [serverBaseUrl] = useServerBaseUrl()
@@ -24,7 +20,7 @@ export function useGetPreferences(): [
 		} finally {
 			setIsLoading(false)
 		}
-	}, [serverBaseUrl, setIsLoading, setError])
+	}, [serverBaseUrl])
 
 	return [getPreferences, isLoading, error]
 }

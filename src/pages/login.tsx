@@ -50,31 +50,12 @@ export function LoginPage() {
 					</div>
 				</CardHeader>
 				<CardBody className="gap-5">
-					<Input
-						label="Username"
-						type="username"
-						value={username}
-						labelPlacement="outside"
-						onChange={(e: ChangeEvent<HTMLInputElement>) => setUsername(e.target.value)}
-					/>
-					<Input
-						label="Password"
-						type="password"
-						labelPlacement="outside"
-						value={password}
-						onChange={(e: ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
-					/>
+					<Input label="Username" type="username" value={username} labelPlacement="outside" onChange={(e: ChangeEvent<HTMLInputElement>) => setUsername(e.target.value)} />
+					<Input label="Password" type="password" labelPlacement="outside" value={password} onChange={(e: ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)} />
 				</CardBody>
 				<CardFooter className="gap-3">
-					<AppAndServerSettingsButton appSettingsOnly className="self-start" />
-					<Button
-						fullWidth
-						className="mb-6"
-						color="primary"
-						isLoading={isLoading}
-						variant="shadow"
-						onPress={signIn}
-					>
+					<AppAndServerSettingsButton appSettingsOnly={true} className="self-start" />
+					<Button fullWidth={true} className="mb-6" color="primary" isLoading={isLoading} variant="shadow" onPress={signIn}>
 						Sign In
 					</Button>
 				</CardFooter>

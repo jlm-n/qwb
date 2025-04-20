@@ -1,8 +1,8 @@
-import type { QbittorrentTags } from '@/types/QBittorrentTag'
 import { useServerBaseUrl } from '@/hooks/useServerBaseUrl'
+import type { QBittorrentTags } from '@/types/QBittorrentTags'
 import { useCallback, useState } from 'react'
 
-export function useGetTags(): [() => Promise<QbittorrentTags>, boolean, Error | null] {
+export function useGetTags(): [() => Promise<QBittorrentTags>, boolean, Error | null] {
 	const [isLoading, setIsLoading] = useState(false)
 	const [error, setError] = useState<Error | null>(null)
 	const [serverBaseUrl] = useServerBaseUrl()
@@ -20,7 +20,7 @@ export function useGetTags(): [() => Promise<QbittorrentTags>, boolean, Error | 
 		} finally {
 			setIsLoading(false)
 		}
-	}, [serverBaseUrl, setIsLoading, setError])
+	}, [serverBaseUrl])
 
 	return [getTags, isLoading, error]
 }

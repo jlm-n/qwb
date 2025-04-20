@@ -1,11 +1,7 @@
 import { useServerBaseUrl } from '@/hooks/useServerBaseUrl'
 import { useCallback, useState } from 'react'
 
-export function useSetTorrentTopPrio(): [
-	(hashes: string[]) => Promise<void>,
-	boolean,
-	Error | null,
-] {
+export function useSetTorrentTopPrio(): [(hashes: string[]) => Promise<void>, boolean, Error | null] {
 	const [isLoading, setIsLoading] = useState(false)
 	const [error, setError] = useState<Error | null>(null)
 	const [serverBaseUrl] = useServerBaseUrl()
@@ -27,7 +23,7 @@ export function useSetTorrentTopPrio(): [
 				setIsLoading(false)
 			}
 		},
-		[serverBaseUrl, setIsLoading, setError]
+		[serverBaseUrl]
 	)
 
 	return [setTorrentTopPrio, isLoading, error]

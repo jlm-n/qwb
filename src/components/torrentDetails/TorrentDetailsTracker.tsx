@@ -1,15 +1,8 @@
-import type { QBittorrentTorrentTrackers } from '@/types/QBittorrentTorrentTrackers'
 import { useGetTorrentTrackers } from '@/api/useGetTorrentTrackers'
 import { useInterval } from '@/hooks/useInterval'
-import { useSettings } from '@/contexts/SettingsContext'
-import {
-	Table,
-	TableBody,
-	TableCell,
-	TableColumn,
-	TableHeader,
-	TableRow,
-} from '@heroui/react'
+import { useSettings } from '@/hooks/useSettings'
+import type { QBittorrentTorrentTrackers } from '@/types/QBittorrentTorrentTrackers'
+import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@heroui/react'
 import { useCallback, useEffect, useState } from 'react'
 
 export function TorrentDetailsTracker({
@@ -58,7 +51,7 @@ export function TorrentDetailsTracker({
 				<TableColumn width="30%">MESSAGE</TableColumn>
 			</TableHeader>
 			<TableBody>
-				{trackers.map(tracker => (
+				{trackers.map((tracker) => (
 					<TableRow key={tracker.url}>
 						<TableCell>{tracker.tier}</TableCell>
 						<TableCell>{tracker.url}</TableCell>

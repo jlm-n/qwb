@@ -5,16 +5,12 @@ function getStorageValue<T>(key: string, defaultValue: T) {
 	try {
 		const parsedValue = JSON.parse(saved || '')
 		return parsedValue || defaultValue
-	} catch (e) {
-		// eslint-disable-next-line unused-imports/no-unused-vars
+	} catch (_) {
 		return defaultValue
 	}
 }
 
-export function usePersistentState<T>(
-	key: string,
-	defaultValue: T
-): [T, (value: T) => void, (key: string) => void] {
+export function usePersistentState<T>(key: string, defaultValue: T): [T, (value: T) => void, (key: string) => void] {
 	const [stateValue, setStateValue] = useState<T>(() => {
 		return getStorageValue(key, defaultValue)
 	})
@@ -24,7 +20,7 @@ export function usePersistentState<T>(
 			setStateValue(value)
 			localStorage.setItem(key, JSON.stringify(value))
 		},
-		[key, setStateValue]
+		[key]
 	)
 
 	const unsetValue = useCallback((key: string) => {

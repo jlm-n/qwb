@@ -1,26 +1,14 @@
-import type { QBittorrentTorrentPeers } from '@/types/QBittorrentTorrentPeer'
-import {
-	useGetTorrentPeers,
-} from '@/api/useGetTorrentPeers'
+import { useGetTorrentPeers } from '@/api/useGetTorrentPeers'
 import { useInterval } from '@/hooks/useInterval'
-import { useSettings } from '@/contexts/SettingsContext'
-import {
-	Table,
-	TableBody,
-	TableCell,
-	TableColumn,
-	TableHeader,
-	TableRow,
-} from '@heroui/react'
+import { useSettings } from '@/hooks/useSettings'
+import type { QBittorrentTorrentPeers } from '@/types/QBittorrentTorrentPeer'
+import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@heroui/react'
 import prettyBytes from 'pretty-bytes'
 import { memo, useCallback, useEffect, useState } from 'react'
 import CountryFlag from 'react-emoji-flag'
 
 const CountryFlagCell = memo(({ countryCode }: { countryCode: string }) => (
-	<CountryFlag
-		countryCode={countryCode}
-		className="text-lg"
-	/>
+	<CountryFlag countryCode={countryCode} className="text-lg" />
 ))
 
 export function TorrentDetailsPeers({ torrentHash }: { torrentHash?: string }) {
@@ -80,16 +68,15 @@ export function TorrentDetailsPeers({ torrentHash }: { torrentHash?: string }) {
 						}
 						return (
 							<TableRow key={key}>
-								<TableCell><CountryFlagCell countryCode={peer.country_code} /></TableCell>
+								<TableCell>
+									<CountryFlagCell countryCode={peer.country_code} />
+								</TableCell>
 								<TableCell>{peer.ip}</TableCell>
 								<TableCell>{peer.port}</TableCell>
 								<TableCell>{peer.connection}</TableCell>
 								<TableCell>{peer.flags}</TableCell>
 								<TableCell>{peer.client}</TableCell>
-								<TableCell>
-									{(peer.progress * 100).toFixed(2)}
-									%
-								</TableCell>
+								<TableCell>{(peer.progress * 100).toFixed(2)}%</TableCell>
 								<TableCell>
 									{prettyBytes(peer.dl_speed)}
 									/s
@@ -105,7 +92,7 @@ export function TorrentDetailsPeers({ torrentHash }: { torrentHash?: string }) {
 							</TableRow>
 						)
 					})
-					.filter(peer => !!peer)}
+					.filter((peer) => !!peer)}
 			</TableBody>
 		</Table>
 	)

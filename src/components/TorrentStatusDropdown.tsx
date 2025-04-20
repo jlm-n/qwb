@@ -1,24 +1,18 @@
 import type { QBittorrentTorrentStateOption } from '@/types/QBittorrentTorrentState'
 import type { Selection } from '@heroui/react'
-import {
-	Button,
-	Dropdown,
-	DropdownItem,
-	DropdownMenu,
-	DropdownSection,
-	DropdownTrigger,
-} from '@heroui/react'
+import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownSection, DropdownTrigger } from '@heroui/react'
 import { IconCaretDownFilled } from '@tabler/icons-react'
 import { memo } from 'react'
-import { QBittorrentStateIcon } from './icons/QBittorrentStateIcon'
+import type { ReactNode } from 'react'
+import { QBittorrentStateIcon } from './icons/index.tsx'
 
 interface StatusSectionDefinition {
 	label: string
 	value: QBittorrentTorrentStateOption
-	icon: React.ReactNode
+	icon: ReactNode
 }
-type StatusSection = Array<StatusSectionDefinition>
-const items: Array<StatusSection> = [
+type StatusSection = StatusSectionDefinition[]
+const items: StatusSection[] = [
 	[
 		{ label: 'All', value: 'all', icon: null },
 		{ label: 'Active', value: 'active', icon: null },
@@ -92,21 +86,13 @@ export const TorrentStatusDropdown = memo(
 			<DropdownTrigger className="hidden sm:flex">
 				<Button endContent={<IconCaretDownFilled width={16} />}>Status</Button>
 			</DropdownTrigger>
-			<DropdownMenu
-				disallowEmptySelection
-				aria-label="Torrent status filter"
-				closeOnSelect={false}
-				selectedKeys={statusFilter}
-				selectionMode="single"
-				onSelectionChange={setStatusFilter}
-			>
+			<DropdownMenu disallowEmptySelection={true} aria-label="Torrent status filter" closeOnSelect={false} selectedKeys={statusFilter} selectionMode="single" onSelectionChange={setStatusFilter}>
 				{items.map((section, index) => (
 					<DropdownSection
 						classNames={{
 							base: 'last:mb-0',
 						}}
-						// eslint-disable-next-line react/no-array-index-key
-						key={`section-${index}`}
+						key={`section-${section.map((item) => item.value).join('-')}`}
 						showDivider={index < items.length - 1}
 					>
 						{section.map((item) => (

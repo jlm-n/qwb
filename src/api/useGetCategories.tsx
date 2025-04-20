@@ -1,5 +1,5 @@
-import type { QBittorrentCategories } from '@/types/QBittorrentCategories'
 import { useServerBaseUrl } from '@/hooks/useServerBaseUrl'
+import type { QBittorrentCategories } from '@/types/QBittorrentCategories'
 import { useCallback, useState } from 'react'
 
 export function useGetCategories(): [() => Promise<QBittorrentCategories>, boolean, Error | null] {
@@ -20,7 +20,7 @@ export function useGetCategories(): [() => Promise<QBittorrentCategories>, boole
 		} finally {
 			setIsLoading(false)
 		}
-	}, [serverBaseUrl, setIsLoading, setError])
+	}, [serverBaseUrl])
 
 	return [getCategories, isLoading, error]
 }

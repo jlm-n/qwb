@@ -1,16 +1,8 @@
-import type { QBittorrentTorrentFile } from '@/types/QBittorrentTorrentFile'
 import { useServerBaseUrl } from '@/hooks/useServerBaseUrl'
+import type { QBittorrentTorrentFile } from '@/types/QBittorrentTorrentFile'
 import { useCallback, useState } from 'react'
 
-export function useSetFilePriority(): [
-	(
-		hash: string,
-		fileIds: string[],
-		priority: QBittorrentTorrentFile['priority']
-	) => Promise<void>,
-	boolean,
-	Error | null,
-] {
+export function useSetFilePriority(): [(hash: string, fileIds: string[], priority: QBittorrentTorrentFile['priority']) => Promise<void>, boolean, Error | null] {
 	const [isLoading, setIsLoading] = useState(false)
 	const [error, setError] = useState<Error | null>(null)
 	const [serverBaseUrl] = useServerBaseUrl()
@@ -34,7 +26,7 @@ export function useSetFilePriority(): [
 				setIsLoading(false)
 			}
 		},
-		[serverBaseUrl, setIsLoading, setError]
+		[serverBaseUrl]
 	)
 
 	return [setFilePriority, isLoading, error]

@@ -1,4 +1,4 @@
-import type { QBittorrentTorrent } from './QBittorrentTorrent'
+import type { QBittorrentTorrent } from './QBittorrentTorrent.tsx'
 
 export type ColumnOption =
 	| {

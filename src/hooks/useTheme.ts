@@ -7,4 +7,4 @@ export function useTheme() {
 		theme,
 		setTheme,
 	}
-} 
+}

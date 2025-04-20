@@ -1,6 +1,6 @@
-import type { QBittorrentCategories } from './QBittorrentCategories'
-import type { QBittorrentServerState } from './QBittorrentServerState'
-import type { QBittorrentTorrent } from './QBittorrentTorrent'
+import type { QBittorrentCategories } from './QBittorrentCategories.tsx'
+import type { QBittorrentServerState } from './QBittorrentServerState.tsx'
+import type { QBittorrentTorrent } from './QBittorrentTorrent.tsx'
 
 export interface QBittorrentMaindata {
 	categories?: QBittorrentCategories // Info for categories added since last request

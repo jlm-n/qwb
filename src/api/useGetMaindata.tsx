@@ -1,12 +1,8 @@
-import type { QBittorrentMaindata } from '@/types/QBittorrentMaindata'
 import { useServerBaseUrl } from '@/hooks/useServerBaseUrl'
+import type { QBittorrentMaindata } from '@/types/QBittorrentMaindata'
 import { useCallback, useState } from 'react'
 
-export function useGetMaindata(): [
-	(rid: number) => Promise<QBittorrentMaindata>,
-	boolean,
-	Error | null,
-] {
+export function useGetMaindata(): [(rid: number) => Promise<QBittorrentMaindata>, boolean, Error | null] {
 	const [isLoading, setIsLoading] = useState(false)
 	const [error, setError] = useState<Error | null>(null)
 	const [serverBaseUrl] = useServerBaseUrl()
@@ -26,18 +22,13 @@ export function useGetMaindata(): [
 				setIsLoading(false)
 			}
 		},
-		[serverBaseUrl, setIsLoading, setError]
+		[serverBaseUrl]
 	)
 
 	return [getMaindata, isLoading, error]
 }
 
-export function useGetIncrementalMaindata(): [
-	() => Promise<QBittorrentMaindata>,
-	boolean,
-	Error | null,
-	number,
-] {
+export function useGetIncrementalMaindata(): [() => Promise<QBittorrentMaindata>, boolean, Error | null, number] {
 	const [rid, setRid] = useState(0)
 	const [getMaindata, isGetMaindataLoading, getMaindataError] = useGetMaindata()
 
@@ -51,7 +42,7 @@ export function useGetIncrementalMaindata(): [
 		setRid(maindata.rid)
 
 		return maindata
-	}, [getMaindata, rid, setRid])
+	}, [getMaindata, rid])
 
 	return [getIncrementalMaindata, isGetMaindataLoading, getMaindataError, rid]
 }

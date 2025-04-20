@@ -11,11 +11,13 @@
         "noUnusedVariables": "error"
       },
       "suspicious": {
+        "noReactSpecificProps": "off",
         "noExplicitAny": "error"
       },
       "style": {
         "useConst": "error",
-        "useTemplate": "error"
+        "useTemplate": "error",
+        "useNamingConvention": "off"
       }
     }
   },
@@ -23,13 +25,13 @@
     "enabled": true,
     "indentStyle": "tab",
     "indentWidth": 4,
-    "lineWidth": 100,
+    "lineWidth": 300,
     "ignore": []
   },
   "javascript": {
     "formatter": {
       "quoteStyle": "single",
-      "trailingComma": "es5",
+      "trailingCommas": "es5",
       "semicolons": "asNeeded",
       "indentStyle": "tab"
     }
