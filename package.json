@@ -28,7 +28,7 @@
 		"@heroui/use-theme": "^2.1.6",
 		"@internationalized/date": "^3.7.0",
 		"@react-aria/visually-hidden": "^3.8.21",
-		"@react-stately/data": "^3.12.2",
+		"@react-stately/data": "^3.12.3",
 		"@tabler/icons": "^3.31.0",
 		"@tabler/icons-react": "^3.31.0",
 		"clsx": "^2.1.1",
