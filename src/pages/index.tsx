@@ -14,9 +14,8 @@ import { TorrentTableBottom } from '@/components/torrentTable/bottom/TorrentTabl
 import { renderCell } from '@/components/torrentTable/cells/renderCells'
 import { sortAndFilterTorrents } from '@/components/torrentTable/sortAndFilterTorrents'
 import { TorrentTableTop } from '@/components/torrentTable/top/TorrentTableTop'
-import { useInterval } from '@/hooks/useInterval'
-import { usePersistentState } from '@/hooks/usePersistentState'
 
+import { usePersistentState } from '@/hooks/usePersistentState'
 import { useQBittorrentMaindata } from '@/hooks/useQBittorrentMaindata'
 import { useSettings } from '@/hooks/useSettings'
 import { Spinner, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, useDisclosure } from '@heroui/react'
@@ -119,6 +118,12 @@ export function IndexPage() {
 		setServerState((oldServerState) => ({ ...oldServerState, ...serverState }))
 		sortAndFilterTorrentsCallback(torrents)
 	}, [getIncrementalMaindata, sortAndFilterTorrentsCallback, mergeMaindata])
+	useEffect(() => {
+		if (autoRefreshEnabled) {
+			const interval = setTimeout(getIncrementalMaindataCallback, torrentListRefreshRate)
+			return () => clearTimeout(interval)
+		}
+	}, [autoRefreshEnabled, torrentListRefreshRate, getIncrementalMaindataCallback])
 
 	useEffect(() => {
 		if (getIncrementalMaindataError) {
@@ -129,8 +134,6 @@ export function IndexPage() {
 	useEffect(() => {
 		sortAndFilterTorrentsCallback()
 	}, [sortAndFilterTorrentsCallback])
-
-	useInterval(getIncrementalMaindataCallback, autoRefreshEnabled ? torrentListRefreshRate : null)
 
 	const selectedTorrentHash = useMemo(() => {
 		if (selectedTorrents === 'all' || selectedTorrents.size !== 1) {
