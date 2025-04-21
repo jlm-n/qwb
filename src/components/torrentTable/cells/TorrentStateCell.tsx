@@ -4,22 +4,22 @@ import { QBittorrentStateIcon } from '@/components/icons/QBittorrentStateIcon'
 import { Badge } from '@heroui/react'
 import { memo } from 'react'
 
-export const TorrentStatusCell = memo(({
-	state,
-	isNew,
-}: {
-	state: QBittorrentTorrentState
-	isNew?: boolean
-}) => (
-	<div className="flex justify-center" title={state}>
-		{isNew
-			? (
-					<Badge color="warning" content="" size="sm">
-						<QBittorrentStateIcon state={state} />
-					</Badge>
-				)
-			: (
+export const TorrentStatusCell = memo(
+	({
+		state,
+		isNew,
+	}: {
+		state: QBittorrentTorrentState
+		isNew?: boolean
+	}) => (
+		<div className="flex justify-center" title={state}>
+			{isNew ? (
+				<Badge color="warning" content="" size="sm">
 					<QBittorrentStateIcon state={state} />
-				)}
-	</div>
-))
+				</Badge>
+			) : (
+				<QBittorrentStateIcon state={state} />
+			)}
+		</div>
+	)
+)

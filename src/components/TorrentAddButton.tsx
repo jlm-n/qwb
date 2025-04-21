@@ -8,7 +8,13 @@ export const TorrentAddButton = memo(() => {
 
 	return (
 		<>
-			<Button color="primary" variant="shadow" isDisabled={isOpen} onPress={() => setIsOpen(true)} endContent={<IconPlus width={16} />}>
+			<Button
+				color="primary"
+				variant="shadow"
+				isDisabled={isOpen}
+				onPress={() => setIsOpen(true)}
+				endContent={<IconPlus width={16} />}
+			>
 				Add New
 			</Button>
 			<TorrentAddModal isOpen={isOpen} onOpenChange={(isOpen) => setIsOpen(isOpen)} />

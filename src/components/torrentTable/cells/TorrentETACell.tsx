@@ -37,6 +37,4 @@ function durationToString(duration: number): string {
 	return res.join(' ')
 }
 
-export const TorrentETACell = memo(({ value }: { value: number }) => (
-	durationToString(value)
-))
+export const TorrentETACell = memo(({ value }: { value: number }) => durationToString(value))

@@ -16,13 +16,15 @@ const trackerHostnameToChip: Record<string, React.ReactNode> = {
 	'animetorrents.me': <AnimeTorrentsTrackerChip />,
 }
 
-export const TorrentTrackerNameCell = memo(({
-	trackerUrl,
-}: {
-	trackerUrl?: string
-}) => {
-	const trackerHostname = trackerUrl ? new URL(trackerUrl).hostname : ''
-	const chip = trackerHostnameToChip[trackerHostname]
+export const TorrentTrackerNameCell = memo(
+	({
+		trackerUrl,
+	}: {
+		trackerUrl?: string
+	}) => {
+		const trackerHostname = trackerUrl ? new URL(trackerUrl).hostname : ''
+		const chip = trackerHostnameToChip[trackerHostname]
 
-	return chip || <DefaultTrackerChip trackerHostname={trackerHostname} />
-})
+		return chip || <DefaultTrackerChip trackerHostname={trackerHostname} />
+	}
+)

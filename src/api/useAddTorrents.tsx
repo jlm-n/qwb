@@ -1,7 +1,7 @@
 import { useServerBaseUrl } from '@/hooks/useServerBaseUrl'
 import { useCallback, useState } from 'react'
 
-export interface QbittorrentAddTorrentCommonInput {
+export interface QBittorrentAddTorrentCommonInput {
 	addToTopOfQueue?: boolean // Add torrent to top of queue
 	autoTMM?: boolean // Whether Automatic Torrent Management should be used
 	category?: string // Category for the torrent
@@ -20,13 +20,13 @@ export interface QbittorrentAddTorrentCommonInput {
 	tags?: string[] // Tags for the torrent, split by ','
 	upLimit?: number // Set torrent upload speed limit. Unit in bytes/second
 }
-export type QbittorrentAddTorrentFromMagnetInput = {
+export type QBittorrentAddTorrentFromMagnetInput = {
 	urls: string[] // newline separated list of URLs
-} & QbittorrentAddTorrentCommonInput
-export type QbittorrentAddTorrentFromFileInput = {
+} & QBittorrentAddTorrentCommonInput
+export type QBittorrentAddTorrentFromFileInput = {
 	torrents: FileList // Raw data of torrent file. torrents can be presented multiple times.
-} & QbittorrentAddTorrentCommonInput
-export type QBittorrentAddTorrentsInput = QbittorrentAddTorrentFromMagnetInput | QbittorrentAddTorrentFromFileInput
+} & QBittorrentAddTorrentCommonInput
+export type QBittorrentAddTorrentsInput = QBittorrentAddTorrentFromMagnetInput | QBittorrentAddTorrentFromFileInput
 
 function appendFiles(files: FileList | undefined, formData: FormData) {
 	if (!files) {

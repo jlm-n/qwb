@@ -108,7 +108,13 @@ function computeStats(torrents: QBittorrentTorrent[]): {
 	return { trackers, tags, categories }
 }
 
-function mergeMaindata(TORRENTS: QBittorrentTorrentMap, TAGS: QBittorrentTags, CATEGORIES: QBittorrentCategories, serverState: QBittorrentServerState, maindata: QBittorrentMaindata): ProcessedData {
+function mergeMaindata(
+	TORRENTS: QBittorrentTorrentMap,
+	TAGS: QBittorrentTags,
+	CATEGORIES: QBittorrentCategories,
+	serverState: QBittorrentServerState,
+	maindata: QBittorrentMaindata
+): ProcessedData {
 	// Process torrents and trackers
 	processTorrents(TORRENTS, maindata)
 	processTrackers(TORRENTS, maindata)

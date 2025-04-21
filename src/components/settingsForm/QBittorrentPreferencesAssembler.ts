@@ -111,14 +111,17 @@ export class QBittorrentPreferencesAssembler {
 			lsd: 'lsd' in data,
 			encryption: 'encryption' in data ? +data.encryption.toString() : undefined,
 			anonymous_mode: 'anonymous_mode' in data,
-			max_active_checking_torrents: 'max_active_checking_torrents' in data ? +data.max_active_checking_torrents.toString() : undefined,
+			max_active_checking_torrents:
+				'max_active_checking_torrents' in data ? +data.max_active_checking_torrents.toString() : undefined,
 			queueing_enabled: 'queueing_enabled' in data,
 			max_active_downloads: 'max_active_downloads' in data ? +data.max_active_downloads.toString() : undefined,
 			max_active_uploads: 'max_active_uploads' in data ? +data.max_active_uploads.toString() : undefined,
 			max_active_torrents: 'max_active_torrents' in data ? +data.max_active_torrents.toString() : undefined,
 			dont_count_slow_torrents: 'dont_count_slow_torrents' in data,
-			slow_torrent_dl_rate_threshold: 'slow_torrent_dl_rate_threshold' in data ? +data.slow_torrent_dl_rate_threshold.toString() : undefined,
-			slow_torrent_ul_rate_threshold: 'slow_torrent_ul_rate_threshold' in data ? +data.slow_torrent_ul_rate_threshold.toString() : undefined,
+			slow_torrent_dl_rate_threshold:
+				'slow_torrent_dl_rate_threshold' in data ? +data.slow_torrent_dl_rate_threshold.toString() : undefined,
+			slow_torrent_ul_rate_threshold:
+				'slow_torrent_ul_rate_threshold' in data ? +data.slow_torrent_ul_rate_threshold.toString() : undefined,
 			slow_torrent_inactive_timer: 'slow_torrent_inactive_timer' in data ? +data.slow_torrent_inactive_timer.toString() : undefined,
 			max_ratio_act: 'max_ratio_act' in data ? +data.max_ratio_act.toString() : undefined,
 			max_ratio_enabled: 'max_ratio_enabled' in data,
@@ -172,7 +175,8 @@ export class QBittorrentPreferencesAssembler {
 
 			// Advanced
 			resume_data_storage_type: data.resume_data_storage_type?.toString() as QBittorrentPreferences['resume_data_storage_type'],
-			torrent_content_remove_option: data.torrent_content_remove_option?.toString() as QBittorrentPreferences['torrent_content_remove_option'],
+			torrent_content_remove_option:
+				data.torrent_content_remove_option?.toString() as QBittorrentPreferences['torrent_content_remove_option'],
 			memory_working_set_limit: 'memory_working_set_limit' in data ? +data.memory_working_set_limit?.toString() : undefined,
 			current_network_interface: data.current_network_interface?.toString(),
 			current_interface_address: data.current_interface_address?.toString(),
@@ -196,29 +200,41 @@ export class QBittorrentPreferencesAssembler {
 			checking_memory_use: 'checking_memory_use' in data ? +data.checking_memory_use?.toString() : undefined,
 			disk_queue_size: 'disk_queue_size' in data ? +data.disk_queue_size?.toString() : undefined,
 			disk_io_type: ('disk_io_type' in data ? +data.disk_io_type?.toString() : undefined) as QBittorrentPreferences['disk_io_type'],
-			disk_io_read_mode: ('disk_io_read_mode' in data ? +data.disk_io_read_mode?.toString() : undefined) as QBittorrentPreferences['disk_io_read_mode'],
-			disk_io_write_mode: ('disk_io_write_mode' in data ? +data.disk_io_write_mode?.toString() : undefined) as QBittorrentPreferences['disk_io_write_mode'],
+			disk_io_read_mode: ('disk_io_read_mode' in data
+				? +data.disk_io_read_mode?.toString()
+				: undefined) as QBittorrentPreferences['disk_io_read_mode'],
+			disk_io_write_mode: ('disk_io_write_mode' in data
+				? +data.disk_io_write_mode?.toString()
+				: undefined) as QBittorrentPreferences['disk_io_write_mode'],
 			enable_piece_extent_affinity: 'enable_piece_extent_affinity' in data,
 			enable_upload_suggestions: 'enable_upload_suggestions' in data,
 			send_buffer_watermark: 'send_buffer_watermark' in data ? +data.send_buffer_watermark?.toString() : undefined,
 			send_buffer_low_watermark: 'send_buffer_low_watermark' in data ? +data.send_buffer_low_watermark?.toString() : undefined,
-			send_buffer_watermark_factor: 'send_buffer_watermark_factor' in data ? +data.send_buffer_watermark_factor?.toString() : undefined,
+			send_buffer_watermark_factor:
+				'send_buffer_watermark_factor' in data ? +data.send_buffer_watermark_factor?.toString() : undefined,
 			connection_speed: 'connection_speed' in data ? +data.connection_speed?.toString() : undefined,
 			outgoing_ports_min: 'outgoing_ports_min' in data ? +data.outgoing_ports_min?.toString() : undefined,
 			outgoing_ports_max: 'outgoing_ports_max' in data ? +data.outgoing_ports_max?.toString() : undefined,
 			peer_tos: 'peer_tos' in data ? +data.peer_tos?.toString() : undefined,
-			utp_tcp_mixed_mode: ('utp_tcp_mixed_mode' in data ? +data.utp_tcp_mixed_mode?.toString() : undefined) as QBittorrentPreferences['utp_tcp_mixed_mode'],
+			utp_tcp_mixed_mode: ('utp_tcp_mixed_mode' in data
+				? +data.utp_tcp_mixed_mode?.toString()
+				: undefined) as QBittorrentPreferences['utp_tcp_mixed_mode'],
 			idn_support_enabled: 'idn_support_enabled' in data,
 			enable_multi_connections_from_same_ip: 'enable_multi_connections_from_same_ip' in data,
 			validate_https_tracker_certificate: 'validate_https_tracker_certificate' in data,
 			ssrf_mitigation: 'ssrf_mitigation' in data,
 			block_peers_on_privileged_ports: 'block_peers_on_privileged_ports' in data,
-			upload_slots_behavior: ('upload_slots_behavior' in data ? +data.upload_slots_behavior?.toString() : undefined) as QBittorrentPreferences['upload_slots_behavior'],
-			upload_choking_algorithm: ('upload_choking_algorithm' in data ? +data.upload_choking_algorithm?.toString() : undefined) as QBittorrentPreferences['upload_choking_algorithm'],
+			upload_slots_behavior: ('upload_slots_behavior' in data
+				? +data.upload_slots_behavior?.toString()
+				: undefined) as QBittorrentPreferences['upload_slots_behavior'],
+			upload_choking_algorithm: ('upload_choking_algorithm' in data
+				? +data.upload_choking_algorithm?.toString()
+				: undefined) as QBittorrentPreferences['upload_choking_algorithm'],
 			announce_to_all_trackers: 'announce_to_all_trackers' in data,
 			announce_to_all_tiers: 'announce_to_all_tiers' in data,
 			announce_ip: data.announce_ip?.toString(),
-			max_concurrent_http_announces: 'max_concurrent_http_announces' in data ? +data.max_concurrent_http_announces?.toString() : undefined,
+			max_concurrent_http_announces:
+				'max_concurrent_http_announces' in data ? +data.max_concurrent_http_announces?.toString() : undefined,
 			stop_tracker_timeout: 'stop_tracker_timeout' in data ? +data.stop_tracker_timeout?.toString() : undefined,
 			peer_turnover: 'peer_turnover' in data ? +data.peer_turnover?.toString() : undefined,
 			peer_turnover_cutoff: 'peer_turnover_cutoff' in data ? +data.peer_turnover_cutoff?.toString() : undefined,

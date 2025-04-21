@@ -1,10 +1,7 @@
 import { useGetTorrentPieceStates } from '@/api/useGetTorrentPieceStates'
 import { useInterval } from '@/hooks/useInterval'
 import { useSettings } from '@/hooks/useSettings'
-import type {
-	QBittorrentTorrentPieceState,
-	QBittorrentTorrentPieceStates,
-} from '@/types/QBittorrentTorrentPieceState'
+import type { QBittorrentTorrentPieceState, QBittorrentTorrentPieceStates } from '@/types/QBittorrentTorrentPieceState'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 export function TorrentPiecesProgressBar({ torrentHash }: { torrentHash?: string }) {

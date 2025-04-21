@@ -6,5 +6,8 @@ export function normalizeForSearch(value: string): string {
 }
 
 export function normalizeFileName(value: string): string {
-	return value.replace(/[\s[\]()+.*^$|{}]+/g, '.').replace(/\.+/g, '.').replace(/\.-\./g, '-')
+	return value
+		.replace(/[\s[\]()+.*^$|{}]+/g, '.')
+		.replace(/\.+/g, '.')
+		.replace(/\.-\./g, '-')
 }

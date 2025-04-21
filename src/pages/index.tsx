@@ -85,6 +85,7 @@ export function IndexPage() {
 		(torrents: QBittorrentTorrent[] = Array.from(TORRENTS.values())) => {
 			startTransition(() => {
 				const tableContainerHeight = (torrentTableRef.current?.parentNode as HTMLDivElement)?.clientHeight
+				const autoRowsPerPage = Math.floor((tableContainerHeight - 72) / 40)
 				const {
 					pagedTorrents,
 					totalTorrentsCount: filteredTorrentLength,
@@ -97,7 +98,7 @@ export function IndexPage() {
 					tagFilter,
 					categoryFilter,
 					sortDescriptor,
-					rowsPerPage === 'auto' ? Math.floor((tableContainerHeight - 72) / 40) : +rowsPerPage, //  remove the header size and divide by the average row height
+					rowsPerPage === 'auto' ? autoRowsPerPage : +rowsPerPage, //  remove the header size and divide by the average row height
 					page
 				)
 				setFilteredItemsLength(filteredTorrentLength)
@@ -238,14 +239,27 @@ export function IndexPage() {
 								>
 									{(columnKey) => (
 										<TableCell data-role="torrent-table-cell" className="text-nowrap">
-											{renderCell(columnKey as (typeof TORRENT_TABLE_COLUMNS)[number]['uid'], item[columnKey as keyof QBittorrentTorrent], item.state, item.num_complete, item.num_incomplete, !(item.tags || '').includes('seed'))}
+											{renderCell(
+												columnKey as (typeof TORRENT_TABLE_COLUMNS)[number]['uid'],
+												item[columnKey as keyof QBittorrentTorrent],
+												item.state,
+												item.num_complete,
+												item.num_incomplete,
+												!(item.tags || '').includes('seed')
+											)}
 										</TableCell>
 									)}
 								</TableRow>
 							)}
 						</TableBody>
 					</Table>
-					<TorrentTableBottom selectedTorrents={selectedTorrents} filteredItemsLength={filteredItemsLength} onPageChange={setPage} page={page} pages={pages} />
+					<TorrentTableBottom
+						selectedTorrents={selectedTorrents}
+						filteredItemsLength={filteredItemsLength}
+						onPageChange={setPage}
+						page={page}
+						pages={pages}
+					/>
 				</Panel>
 				{showBottomPanel && (
 					<>
@@ -256,7 +270,15 @@ export function IndexPage() {
 					</>
 				)}
 			</PanelGroup>
-			<TorrentContextMenu isOpen={isOpen} onClose={closeContextMenu} triggerRef={triggerRef} torrentHashes={selectedTorrentHashes} torrents={TORRENTS} tags={Object.keys(tags)} position={constextMenuPosition} />
+			<TorrentContextMenu
+				isOpen={isOpen}
+				onClose={closeContextMenu}
+				triggerRef={triggerRef}
+				torrentHashes={selectedTorrentHashes}
+				torrents={TORRENTS}
+				tags={Object.keys(tags)}
+				position={constextMenuPosition}
+			/>
 		</>
 	)
 }

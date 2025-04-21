@@ -51,7 +51,16 @@ export const TorrentChangeLocationModal = memo(
 									label="New location"
 									value={location}
 									endContent={
-										<Button isLoading={getTorrentFilesLoading} variant="light" isIconOnly size="sm" title="Normalize location" radius="sm" className="m-auto -mr-1" onPress={onNormalizeTorrentPathPressed}>
+										<Button
+											isLoading={getTorrentFilesLoading}
+											variant="light"
+											isIconOnly
+											size="sm"
+											title="Normalize location"
+											radius="sm"
+											className="m-auto -mr-1"
+											onPress={onNormalizeTorrentPathPressed}
+										>
 											<IconWand width={16} />
 										</Button>
 									}

@@ -26,7 +26,11 @@ export const ServerSettingsForm = memo(({ formRef }: { formRef: RefObject<HTMLFo
 	}, [getServerPreferencesCallback])
 
 	if (isGetPreferencesLoading) {
-		return <div className="flex flex-col m-auto"><Spinner /></div>
+		return (
+			<div className="flex flex-col m-auto">
+				<Spinner />
+			</div>
+		)
 	}
 
 	if (getPreferencesError) {
@@ -36,14 +40,30 @@ export const ServerSettingsForm = memo(({ formRef }: { formRef: RefObject<HTMLFo
 	return (
 		<form ref={formRef}>
 			<Tabs destroyInactiveTabPanel={false} classNames={{ base: 'w-full', panel: 'flex flex-col gap-3' }}>
-				<Tab title="Behavior"><BehaviorSettingsSection {...serverPreferencesState} /></Tab>
-				<Tab title="Download"><DownloadSettingsSection {...serverPreferencesState} /></Tab>
-				<Tab title="Connection"><ConnectionSettingsSection {...serverPreferencesState} /></Tab>
-				<Tab title="Speed"><SpeedSettingsSection {...serverPreferencesState} /></Tab>
-				<Tab title="Bittorrent"><BittorrentSettingsSection {...serverPreferencesState} /></Tab>
-				<Tab title="RSS"><RSSSettingsSection {...serverPreferencesState} /></Tab>
-				<Tab title="WebUI"><WebUISettingsSection {...serverPreferencesState} /></Tab>
-				<Tab title="Advanced"><AdvancedSettingsSection {...serverPreferencesState} /></Tab>
+				<Tab title="Behavior">
+					<BehaviorSettingsSection {...serverPreferencesState} />
+				</Tab>
+				<Tab title="Download">
+					<DownloadSettingsSection {...serverPreferencesState} />
+				</Tab>
+				<Tab title="Connection">
+					<ConnectionSettingsSection {...serverPreferencesState} />
+				</Tab>
+				<Tab title="Speed">
+					<SpeedSettingsSection {...serverPreferencesState} />
+				</Tab>
+				<Tab title="Bittorrent">
+					<BittorrentSettingsSection {...serverPreferencesState} />
+				</Tab>
+				<Tab title="RSS">
+					<RSSSettingsSection {...serverPreferencesState} />
+				</Tab>
+				<Tab title="WebUI">
+					<WebUISettingsSection {...serverPreferencesState} />
+				</Tab>
+				<Tab title="Advanced">
+					<AdvancedSettingsSection {...serverPreferencesState} />
+				</Tab>
 			</Tabs>
 		</form>
 	)

@@ -9,11 +9,7 @@ function AppContent({ children }: { children: React.ReactNode }) {
 
 	return (
 		<HeroUIProvider navigate={navigate}>
-			<main
-				className={`${theme} text-foreground bg-background relative flex flex-col h-screen`}
-			>
-				{children}
-			</main>
+			<main className={`${theme} text-foreground bg-background relative flex flex-col h-screen`}>{children}</main>
 		</HeroUIProvider>
 	)
 }

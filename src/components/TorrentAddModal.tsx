@@ -1,9 +1,29 @@
-import type { QbittorrentAddTorrentCommonInput, QbittorrentAddTorrentFromFileInput, QbittorrentAddTorrentFromMagnetInput } from '@/api/useAddTorrents'
+import type {
+	QBittorrentAddTorrentCommonInput,
+	QBittorrentAddTorrentFromFileInput,
+	QBittorrentAddTorrentFromMagnetInput,
+} from '@/api/useAddTorrents'
 import { useAddTorrents } from '@/api/useAddTorrents'
 import { useGetCategories } from '@/api/useGetCategories'
 import { useGetTags } from '@/api/useGetTags'
 import type { ModalProps, SelectItemProps, Selection } from '@heroui/react'
-import { Button, Checkbox, Divider, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, Form, Input, Select, SelectItem, Tab, Tabs, Textarea } from '@heroui/react'
+import {
+	Button,
+	Checkbox,
+	Divider,
+	Drawer,
+	DrawerBody,
+	DrawerContent,
+	DrawerFooter,
+	DrawerHeader,
+	Form,
+	Input,
+	Select,
+	SelectItem,
+	Tab,
+	Tabs,
+	Textarea,
+} from '@heroui/react'
 import type { ChangeEvent, FormEvent } from 'react'
 import { memo, useCallback, useEffect, useState } from 'react'
 
@@ -57,12 +77,12 @@ export const TorrentAddModal = memo(({ isOpen, onOpenChange }: Pick<ModalProps, 
 			const payload = formDataToCommonPayload(selectedTags, data)
 
 			if ('urls' in data) {
-				const p = payload as QbittorrentAddTorrentFromMagnetInput
+				const p = payload as QBittorrentAddTorrentFromMagnetInput
 				p.urls = data.urls.toString().split('\n')
 				await addTorrent(p)
 			}
 			if (selectedFiles && selectedFiles.length > 0) {
-				const p = payload as QbittorrentAddTorrentFromFileInput
+				const p = payload as QBittorrentAddTorrentFromFileInput
 				p.torrents = selectedFiles
 				await addTorrent(p)
 			}
@@ -83,7 +103,14 @@ export const TorrentAddModal = memo(({ isOpen, onOpenChange }: Pick<ModalProps, 
 							<DrawerBody className="w-full">
 								<Tabs>
 									<Tab key="file" title="File">
-										<Input label="Torrent file(s)" type="file" accept="application/x-bittorrent" onChange={handleFileChanged} multiple={true} required={true} />
+										<Input
+											label="Torrent file(s)"
+											type="file"
+											accept="application/x-bittorrent"
+											onChange={handleFileChanged}
+											multiple={true}
+											required={true}
+										/>
 									</Tab>
 									<Tab key="magnet" title="Magnets/URLs">
 										<Textarea name="urls" label="URLs (one per line)" required={true} />
@@ -107,7 +134,15 @@ export const TorrentAddModal = memo(({ isOpen, onOpenChange }: Pick<ModalProps, 
 										<SelectItem {...option} key={option.key} />
 									))}
 								</Select>
-								<Select label="Tags" defaultSelectedKeys={['none']} selectedKeys={selectedTags} onSelectionChange={setSelectedTags} selectionMode="multiple" autoCapitalize="on" isLoading={isLoadingTags}>
+								<Select
+									label="Tags"
+									defaultSelectedKeys={['none']}
+									selectedKeys={selectedTags}
+									onSelectionChange={setSelectedTags}
+									selectionMode="multiple"
+									autoCapitalize="on"
+									isLoading={isLoadingTags}
+								>
 									{tagsOptions.map((option) => (
 										<SelectItem {...option} key={option.key} />
 									))}
@@ -122,10 +157,28 @@ export const TorrentAddModal = memo(({ isOpen, onOpenChange }: Pick<ModalProps, 
 									<SelectItem key="Subfolder">Create subfolder</SelectItem>
 									<SelectItem key="NoSubfolder">Don't create subfolder</SelectItem>
 								</Select>
-								<Input name="downloadSpeedLimit" label="Limit download speed (0 for unlimited)" type="number" defaultValue="0" endContent={<span className="whitespace-nowrap">KiB/s</span>} />
-								<Input name="uploadSpeedLimit" label="Limit upload speed (0 for unlimited)" type="number" defaultValue="0" endContent={<span className="whitespace-nowrap">KiB/s</span>} />
+								<Input
+									name="downloadSpeedLimit"
+									label="Limit download speed (0 for unlimited)"
+									type="number"
+									defaultValue="0"
+									endContent={<span className="whitespace-nowrap">KiB/s</span>}
+								/>
+								<Input
+									name="uploadSpeedLimit"
+									label="Limit upload speed (0 for unlimited)"
+									type="number"
+									defaultValue="0"
+									endContent={<span className="whitespace-nowrap">KiB/s</span>}
+								/>
 								<Input name="ratioLimit" label="Limit share ratio (-1 for unlimited)" type="number" defaultValue="-1" />
-								<Input name="seedingTimeLimit" label="Limit share duration (-1 for unlimited)" type="number" defaultValue="-1" endContent={<span className="whitespace-nowrap">minutes</span>} />
+								<Input
+									name="seedingTimeLimit"
+									label="Limit share duration (-1 for unlimited)"
+									type="number"
+									defaultValue="-1"
+									endContent={<span className="whitespace-nowrap">minutes</span>}
+								/>
 							</DrawerBody>
 							<DrawerFooter>
 								<Button color="danger" variant="light" onPress={onClose}>
@@ -143,13 +196,14 @@ export const TorrentAddModal = memo(({ isOpen, onOpenChange }: Pick<ModalProps, 
 	)
 })
 
-function formDataToCommonPayload(selectedTags: Selection, data: Record<string, FormDataEntryValue>): QbittorrentAddTorrentCommonInput {
+function formDataToCommonPayload(selectedTags: Selection, data: Record<string, FormDataEntryValue>): QBittorrentAddTorrentCommonInput {
 	const tags = Array.from(selectedTags).map((t) => t.toString())
 	return {
 		addToTopOfQueue: 'addToTop' in data,
 		autoTMM: 'automaticManagement' in data,
 		category: 'category' in data ? data.category.toString() : undefined,
-		contentLayout: 'contentLayout' in data ? (data.contentLayout.toString() as QbittorrentAddTorrentCommonInput['contentLayout']) : undefined,
+		contentLayout:
+			'contentLayout' in data ? (data.contentLayout.toString() as QBittorrentAddTorrentCommonInput['contentLayout']) : undefined,
 		cookie: 'cookie' in data ? data.cookie.toString() : undefined,
 		dlLimit: 'downloadSpeedLimit' in data ? Number(data.downloadSpeedLimit) : undefined,
 		firstLastPiecePrio: 'firstLastPiecesFirst' in data,

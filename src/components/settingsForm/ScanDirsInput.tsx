@@ -7,7 +7,7 @@ import { IconTrash } from '@tabler/icons-react'
 import { useCallback, useState } from 'react'
 
 export function ScanDirsInput({ scan_dirs }: Pick<QBittorrentPreferences, 'scan_dirs'>) {
-	const [scanDirsStringState/* , setScanDirsStringState */] = useState(JSON.stringify(scan_dirs))
+	const [scanDirsStringState /* , setScanDirsStringState */] = useState(JSON.stringify(scan_dirs))
 	const [scanDirsState, setScanDirsState] = useState(Object.entries(scan_dirs || {}))
 
 	// const addFolderCallback = useCallback(() => {
@@ -29,7 +29,7 @@ export function ScanDirsInput({ scan_dirs }: Pick<QBittorrentPreferences, 'scan_
 			<Table
 				aria-label="Directories to scan"
 				removeWrapper
-			// bottomContent={<Button size="sm" className="w-fit !rounded" variant="light" onPress={addFolderCallback}>Add folder</Button>}
+				// bottomContent={<Button size="sm" className="w-fit !rounded" variant="light" onPress={addFolderCallback}>Add folder</Button>}
 			>
 				<TableHeader>
 					<TableColumn>Folder</TableColumn>
@@ -39,7 +39,15 @@ export function ScanDirsInput({ scan_dirs }: Pick<QBittorrentPreferences, 'scan_
 				<TableBody>
 					{scanDirsState.map(([key, value], index) => (
 						<TableRow key={key}>
-							<TableCell width="50%"><Input name={`scan_dirs.${index}.location`} isReadOnly aria-label="Folder location" defaultValue={key} variant="bordered" /></TableCell>
+							<TableCell width="50%">
+								<Input
+									name={`scan_dirs.${index}.location`}
+									isReadOnly
+									aria-label="Folder location"
+									defaultValue={key}
+									variant="bordered"
+								/>
+							</TableCell>
 							<TableCell>
 								<Autocomplete
 									readOnly
@@ -52,8 +60,16 @@ export function ScanDirsInput({ scan_dirs }: Pick<QBittorrentPreferences, 'scan_
 									// 	console.error(e)
 									// }}
 									// onValueChange={e => console.error(e)}
-									defaultInputValue={value && !QBittorrentPreferencesScanDirMode[value as QBittorrentPreferencesScanDirMode] ? undefined : value.toString()}
-									defaultSelectedKey={value && QBittorrentPreferencesScanDirMode[value as QBittorrentPreferencesScanDirMode] ? value.toString() : undefined}
+									defaultInputValue={
+										value && !QBittorrentPreferencesScanDirMode[value as QBittorrentPreferencesScanDirMode]
+											? undefined
+											: value.toString()
+									}
+									defaultSelectedKey={
+										value && QBittorrentPreferencesScanDirMode[value as QBittorrentPreferencesScanDirMode]
+											? value.toString()
+											: undefined
+									}
 								>
 									<AutocompleteItem key={QBittorrentPreferencesScanDirMode.DOWNLOAD_TO_MONITORED_FOLDER.toString()}>
 										Monitored folder
@@ -64,7 +80,9 @@ export function ScanDirsInput({ scan_dirs }: Pick<QBittorrentPreferences, 'scan_
 								</Autocomplete>
 							</TableCell>
 							<TableCell>
-								<Button size="sm" isIconOnly isDisabled onPress={() => deleteKeyCallback(key)}><IconTrash width={16} /></Button>
+								<Button size="sm" isIconOnly isDisabled onPress={() => deleteKeyCallback(key)}>
+									<IconTrash width={16} />
+								</Button>
 							</TableCell>
 						</TableRow>
 					))}

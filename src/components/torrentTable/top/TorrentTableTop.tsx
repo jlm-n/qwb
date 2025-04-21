@@ -1,22 +1,10 @@
 import type { QBittorrentTorrent } from '@/types/QBittorrentTorrent'
-import type {
-	SelectedItems,
-	Selection,
-	SelectionMode,
-} from '@heroui/react'
+import type { SelectedItems, Selection, SelectionMode } from '@heroui/react'
 import { TorrentAddButton } from '@/components/TorrentAddButton'
 import { TorrentContextMenu } from '@/components/torrentContextMenu/TorrentContextMenu'
 import { TorrentStatusDropdown } from '@/components/TorrentStatusDropdown'
-import {
-	ButtonGroup,
-	Select,
-	SelectItem,
-	Switch,
-} from '@heroui/react'
-import {
-	IconArrowNarrowDown,
-	IconArrowNarrowUp,
-} from '@tabler/icons-react'
+import { ButtonGroup, Select, SelectItem, Switch } from '@heroui/react'
+import { IconArrowNarrowDown, IconArrowNarrowUp } from '@tabler/icons-react'
 import prettyBytes from 'pretty-bytes'
 import { memo } from 'react'
 import { AppAndServerSettingsButton } from './AppAndServerSettingsButton'
@@ -27,42 +15,44 @@ import { TorrentRefreshButtons } from './TorrentRefreshButtons'
 import { TorrentSearchInput } from './TorrentSearchInput'
 import { TrackersDropdown } from './TrackersDropdown'
 
-const SpeedDisplay = memo(({ speed, total, type }: { speed: number, total: number, type: 'download' | 'upload' }) => (
+const SpeedDisplay = memo(({ speed, total, type }: { speed: number; total: number; type: 'download' | 'upload' }) => (
 	<span className="flex text-default-400 text-small min-w-15">
 		{type === 'download' ? <IconArrowNarrowDown /> : <IconArrowNarrowUp />}
 		{`${prettyBytes(speed || 0)}/s (${prettyBytes(total || 0)})`}
 	</span>
 ))
 
-const RowsPerPageSelect = memo(({ rowsPerPage, onRowsPerPageChange }: { rowsPerPage: string, onRowsPerPageChange: (rowsPerPage: Selection) => void }) => (
-	<Select
-		key="rows-per-page"
-		classNames={{
-			base: 'text-default-400 text-small w-fit min-w-32',
-			value: 'flex gap-1',
-		}}
-		aria-label="Rows per page"
-		selectedKeys={[rowsPerPage]}
-		variant="underlined"
-		renderValue={(items: SelectedItems) => (
-			<>
-				<strong>{items.map(i => i.key).join(',')}</strong>
-				<span>per page</span>
-			</>
-		)}
-		onSelectionChange={onRowsPerPageChange}
-	>
-		<SelectItem key="auto">auto</SelectItem>
-		<SelectItem key="5">5</SelectItem>
-		<SelectItem key="10">10</SelectItem>
-		<SelectItem key="20">20</SelectItem>
-		<SelectItem key="30">30</SelectItem>
-		<SelectItem key="40">40</SelectItem>
-		<SelectItem key="50">50</SelectItem>
-		<SelectItem key="70">70</SelectItem>
-		<SelectItem key="100">100</SelectItem>
-	</Select>
-))
+const RowsPerPageSelect = memo(
+	({ rowsPerPage, onRowsPerPageChange }: { rowsPerPage: string; onRowsPerPageChange: (rowsPerPage: Selection) => void }) => (
+		<Select
+			key="rows-per-page"
+			classNames={{
+				base: 'text-default-400 text-small w-fit min-w-32',
+				value: 'flex gap-1',
+			}}
+			aria-label="Rows per page"
+			selectedKeys={[rowsPerPage]}
+			variant="underlined"
+			renderValue={(items: SelectedItems) => (
+				<>
+					<strong>{items.map((i) => i.key).join(',')}</strong>
+					<span>per page</span>
+				</>
+			)}
+			onSelectionChange={onRowsPerPageChange}
+		>
+			<SelectItem key="auto">auto</SelectItem>
+			<SelectItem key="5">5</SelectItem>
+			<SelectItem key="10">10</SelectItem>
+			<SelectItem key="20">20</SelectItem>
+			<SelectItem key="30">30</SelectItem>
+			<SelectItem key="40">40</SelectItem>
+			<SelectItem key="50">50</SelectItem>
+			<SelectItem key="70">70</SelectItem>
+			<SelectItem key="100">100</SelectItem>
+		</Select>
+	)
+)
 
 export function TorrentTableTop({
 	autoRefreshEnabled,
@@ -130,26 +120,11 @@ export function TorrentTableTop({
 			<div className="flex justify-between gap-3 items-end">
 				<TorrentSearchInput searchFilter={searchFilter} onSearchFilterChange={onSearchFilterChange} />
 				<div className="flex gap-3">
-					<TorrentContextMenu
-						torrentHashes={selectedTorrentHashes}
-						torrents={torrents}
-						tags={Object.keys(tags)}
-					/>
+					<TorrentContextMenu torrentHashes={selectedTorrentHashes} torrents={torrents} tags={Object.keys(tags)} />
 					<ButtonGroup>
-						<TorrentStatusDropdown
-							statusFilter={statusFilter}
-							setStatusFilter={onStatusFilterChange}
-						/>
-						<TrackersDropdown
-							trackers={trackers}
-							trackerFilter={trackerFilter}
-							onTrackerFilterChange={onTrackerFilterChange}
-						/>
-						<TagsDropdown
-							tags={tags}
-							tagsFilter={tagFilter}
-							onTagsFilterChange={onTagFilterChange}
-						/>
+						<TorrentStatusDropdown statusFilter={statusFilter} setStatusFilter={onStatusFilterChange} />
+						<TrackersDropdown trackers={trackers} trackerFilter={trackerFilter} onTrackerFilterChange={onTrackerFilterChange} />
+						<TagsDropdown tags={tags} tagsFilter={tagFilter} onTagsFilterChange={onTagFilterChange} />
 						<CategoriesDropdown
 							categories={categories}
 							categoriesFilter={categoryFilter}
@@ -158,10 +133,7 @@ export function TorrentTableTop({
 					</ButtonGroup>
 					<AppAndServerSettingsButton />
 					<ButtonGroup>
-						<ShowBottomPanelButton
-							showBottomPanel={showBottomPanel}
-							onShowBottomPanelChange={onShowBottomPanelChange}
-						/>
+						<ShowBottomPanelButton showBottomPanel={showBottomPanel} onShowBottomPanelChange={onShowBottomPanelChange} />
 						<TorrentRefreshButtons
 							isRefreshing={isRefreshing}
 							autoRefreshEnabled={autoRefreshEnabled}

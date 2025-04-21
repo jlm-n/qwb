@@ -7,9 +7,7 @@ import prettyBytes from 'pretty-bytes'
 import { memo, useCallback, useEffect, useState } from 'react'
 import CountryFlag from 'react-emoji-flag'
 
-const CountryFlagCell = memo(({ countryCode }: { countryCode: string }) => (
-	<CountryFlag countryCode={countryCode} className="text-lg" />
-))
+const CountryFlagCell = memo(({ countryCode }: { countryCode: string }) => <CountryFlag countryCode={countryCode} className="text-lg" />)
 
 export function TorrentDetailsPeers({ torrentHash }: { torrentHash?: string }) {
 	const [getTorrentPeers] = useGetTorrentPeers()

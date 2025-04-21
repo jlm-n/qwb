@@ -4,7 +4,7 @@ import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownSection, Dropdown
 import { IconCaretDownFilled } from '@tabler/icons-react'
 import { memo } from 'react'
 import type { ReactNode } from 'react'
-import { QBittorrentStateIcon } from './icons/index.tsx'
+import { QBittorrentStateIcon } from './icons/QBittorrentStateIcon.tsx'
 
 interface StatusSectionDefinition {
 	label: string
@@ -86,7 +86,14 @@ export const TorrentStatusDropdown = memo(
 			<DropdownTrigger className="hidden sm:flex">
 				<Button endContent={<IconCaretDownFilled width={16} />}>Status</Button>
 			</DropdownTrigger>
-			<DropdownMenu disallowEmptySelection={true} aria-label="Torrent status filter" closeOnSelect={false} selectedKeys={statusFilter} selectionMode="single" onSelectionChange={setStatusFilter}>
+			<DropdownMenu
+				disallowEmptySelection={true}
+				aria-label="Torrent status filter"
+				closeOnSelect={false}
+				selectedKeys={statusFilter}
+				selectionMode="single"
+				onSelectionChange={setStatusFilter}
+			>
 				{items.map((section, index) => (
 					<DropdownSection
 						classNames={{

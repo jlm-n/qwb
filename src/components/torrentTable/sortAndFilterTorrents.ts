@@ -1,12 +1,9 @@
 import type { QBittorrentTorrent } from '@/types/QBittorrentTorrent'
 import type { Selection, SortDescriptor } from '@heroui/table'
 import type { Key } from 'react'
-import { normalizeForSearch } from './normalizeTorrentName'
+import { normalizeForSearch } from './normalizeTorrentName.ts'
 
-function torrentMatchesName(
-	torrent: QBittorrentTorrent,
-	nameFilter: string[] | null,
-) {
+function torrentMatchesName(torrent: QBittorrentTorrent, nameFilter: string[] | null) {
 	if (!nameFilter || nameFilter.length === 0) {
 		return true
 	}
@@ -18,30 +15,21 @@ function torrentMatchesName(
 	return true
 }
 
-function torrentMatchesTags(
-	torrent: QBittorrentTorrent,
-	tagFilter: Key[] | null,
-) {
+function torrentMatchesTags(torrent: QBittorrentTorrent, tagFilter: Key[] | null) {
 	if (!tagFilter || tagFilter.includes('all')) {
 		return true
 	}
-	return tagFilter.some(tag => torrent.normalized_tags.includes(tag as string))
+	return tagFilter.some((tag) => torrent.normalized_tags.includes(tag as string))
 }
 
-function torrentMatchesCategory(
-	torrent: QBittorrentTorrent,
-	categoryFilter: Key[] | null,
-) {
+function torrentMatchesCategory(torrent: QBittorrentTorrent, categoryFilter: Key[] | null) {
 	if (!categoryFilter || categoryFilter.includes('all')) {
 		return true
 	}
 	return categoryFilter.includes(torrent.category)
 }
 
-function torrentMatchesStatus(
-	torrent: QBittorrentTorrent,
-	statusFilter: Key[] | null,
-) {
+function torrentMatchesStatus(torrent: QBittorrentTorrent, statusFilter: Key[] | null) {
 	if (!statusFilter || statusFilter.includes('all')) {
 		return true
 	}
@@ -61,48 +49,34 @@ function torrentMatchesStatus(
 			'moving',
 		].includes(torrent.state)
 	}
-	return (statusFilter.includes(torrent.state))
+	return statusFilter.includes(torrent.state)
 }
 
-function torrentMatchesTracker(
-	torrent: QBittorrentTorrent,
-	trackerFilter: Key[] | null,
-) {
-	return (!trackerFilter || trackerFilter.some(tracker => torrent.tracker.includes(tracker as string)))
+function torrentMatchesTracker(torrent: QBittorrentTorrent, trackerFilter: Key[] | null) {
+	return !trackerFilter || trackerFilter.some((tracker) => torrent.tracker.includes(tracker as string))
 }
 
-function compareTorrents(
-	sortDescriptor: SortDescriptor,
-	a: QBittorrentTorrent,
-	b: QBittorrentTorrent,
-): number {
+function compareTorrents(sortDescriptor: SortDescriptor, a: QBittorrentTorrent, b: QBittorrentTorrent): number {
 	let cmp = 0
 
 	if (sortDescriptor.column === 'name') {
 		// when sorting by name, we sort secondary by tracker
 		if (!a.normalized_name || !b.normalized_name) {
 			cmp = 0
-		}
-		else {
+		} else {
 			cmp = a.normalized_name.localeCompare(b.normalized_name)
 		}
 
 		if (cmp === 0) {
 			if (!a.tracker || !b.tracker) {
 				cmp = 0
-			}
-			else {
+			} else {
 				cmp = a.tracker.localeCompare(b.tracker)
 			}
 		}
-	}
-	else {
-		const first = a[
-			sortDescriptor.column as keyof QBittorrentTorrent
-		] as number
-		const second = b[
-			sortDescriptor.column as keyof QBittorrentTorrent
-		] as number
+	} else {
+		const first = a[sortDescriptor.column as keyof QBittorrentTorrent] as number
+		const second = b[sortDescriptor.column as keyof QBittorrentTorrent] as number
 		cmp = first < second ? -1 : first > second ? 1 : 0
 	}
 
@@ -123,10 +97,12 @@ export function sortAndFilterTorrents(
 	categoryFilterValue: Selection,
 	sortDescriptor: SortDescriptor,
 	rowsPerPage: number,
-	page: number,
+	page: number
 ): FilteredTorrentsResult {
-	const output: Array<QBittorrentTorrent> = []
-	const searchFilter = normalizeForSearch(searchFilterValue).split('+').filter(v => !!v)
+	const output: QBittorrentTorrent[] = []
+	const searchFilter = normalizeForSearch(searchFilterValue)
+		.split('+')
+		.filter((v) => !!v)
 	const statusFilter = statusFilterValue === 'all' ? null : Array.from(statusFilterValue)
 	const trackerFilter = trackerFilterValue === 'all' ? null : Array.from(trackerFilterValue)
 	const tagFilter = tagFilterValue === 'all' ? null : Array.from(tagFilterValue)

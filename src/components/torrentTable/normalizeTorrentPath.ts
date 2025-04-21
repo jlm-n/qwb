@@ -2,18 +2,13 @@ import type { QBittorrentTorrentFile } from '@/types/QBittorrentTorrentFile'
 import { normalizeFileName } from './normalizeTorrentName'
 
 function machesTvEpisode(value: string): boolean {
-	const regex = [
-		/[.\s]+S\d+E\d+[.\s]+/gi,
-		/[.\s]+S\d+[.\s]+E\d+[.\s]+/gi,
-	]
-	return regex.some(r => r.test(value))
+	const regex = [/[.\s]+S\d+E\d+[.\s]+/gi, /[.\s]+S\d+[.\s]+E\d+[.\s]+/gi]
+	return regex.some((r) => r.test(value))
 }
 
 function machesTvSeason(value: string): boolean {
-	const regex = [
-		/[.\s]+S\d+[.\s]+/gi,
-	]
-	return regex.some(r => r.test(value))
+	const regex = [/[.\s]+S\d+[.\s]+/gi]
+	return regex.some((r) => r.test(value))
 }
 
 function trimFileExtension(fileName: string): string {
@@ -44,16 +39,14 @@ export function normalizeTorrentPath(torrentName: string, files: QBittorrentTorr
 			return `/tvshows/${tvShowName}/Specials`
 		}
 		return `/tvshows/${tvShowName}/Season.${Number.parseInt(seasonNumber).toString().padStart(2, '0')}`
-	}
-	else if (machesTvSeason(normalizedName)) {
+	} else if (machesTvSeason(normalizedName)) {
 		// eslint-disable-next-line regexp/no-super-linear-backtracking, regexp/no-misleading-capturing-group
 		const tvShowName = normalizedName.match(/(.+)[.\s]+S\d+/i)?.[1]
 		if (!tvShowName) {
 			throw new Error(`Could not get tv show name for torrent ${torrentName}`)
 		}
 		return `/tvshows/${tvShowName}`
-	}
-	else {
+	} else {
 		if (files && files[0] && files[0].name.includes('/')) {
 			// this is a file in a sub-folder, we save it at the root directory
 			return '/movies'

@@ -40,20 +40,12 @@ const PRIORITY_TO_STRING: Record<QBittorrentFilePriority, string> = {
 }
 
 const TorrentPriorityCell = memo(
-	({
-		torrentHash,
-		fileId,
-		priority,
-	}: { torrentHash?: string; fileId: string; priority: QBittorrentFilePriority }) => {
+	({ torrentHash, fileId, priority }: { torrentHash?: string; fileId: string; priority: QBittorrentFilePriority }) => {
 		const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set([priority]))
 		const [setFilePriority, isLoading] = useSetFilePriority()
 		const onPressCallback = useCallback(async () => {
 			if (torrentHash && selectedKeys !== 'all') {
-				await setFilePriority(
-					torrentHash,
-					[fileId],
-					selectedKeys.values().next().value as QBittorrentFilePriority
-				)
+				await setFilePriority(torrentHash, [fileId], selectedKeys.values().next().value as QBittorrentFilePriority)
 			}
 		}, [torrentHash, fileId, selectedKeys, setFilePriority])
 
@@ -108,11 +100,7 @@ const FileNameCell = memo(
 						<BreadcrumbItem
 							key={item}
 							onPress={(e) => {
-								onNamePressed(
-									e.target as HTMLElement,
-									array.slice(0, i + 1).join('/'),
-									fileName
-								)
+								onNamePressed(e.target as HTMLElement, array.slice(0, i + 1).join('/'), fileName)
 							}}
 						>
 							{item}
@@ -202,10 +190,7 @@ export function TorrentDetailsFiles({
 
 	useEffect(() => {
 		if (inputElement && popoverTarget) {
-			inputElement.style.width = `${Math.max(
-				popoverTarget.getBoundingClientRect().width + 10,
-				100
-			)}px`
+			inputElement.style.width = `${Math.max(popoverTarget.getBoundingClientRect().width + 10, 100)}px`
 			inputElement.select()
 		}
 	}, [inputElement, popoverTarget])
@@ -223,16 +208,7 @@ export function TorrentDetailsFiles({
 			await refreshTorrentFiles()
 			setIsRenamePopoverOpen(false)
 		}
-	}, [
-		torrentHash,
-		oldPath,
-		renameFile,
-		renameFolder,
-		refreshTorrentFiles,
-		setIsRenamePopoverOpen,
-		newName,
-		fullPath,
-	])
+	}, [torrentHash, oldPath, renameFile, renameFolder, refreshTorrentFiles, setIsRenamePopoverOpen, newName, fullPath])
 
 	const sortedFiles = useMemo(() => {
 		return files?.sort((a, b) => {
@@ -296,11 +272,7 @@ export function TorrentDetailsFiles({
 							</TableCell>
 							<TableCell>{availability.toFixed(2)}</TableCell>
 							<TableCell>
-								<TorrentPriorityCell
-									fileId={index.toString()}
-									torrentHash={torrentHash}
-									priority={priority}
-								/>
+								<TorrentPriorityCell fileId={index.toString()} torrentHash={torrentHash} priority={priority} />
 							</TableCell>
 						</TableRow>
 					)}

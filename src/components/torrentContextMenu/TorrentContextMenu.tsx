@@ -9,15 +9,7 @@ import { useSetTorrentBottomPrio } from '@/api/useSetTorrentBottomPrio'
 import { useSetTorrentTopPrio } from '@/api/useSetTorrentTopPrio'
 import { useStartTorrents } from '@/api/useStartTorrent'
 import { useStopTorrents } from '@/api/useStopTorrent'
-import {
-	Button,
-	Dropdown,
-	DropdownItem,
-	DropdownMenu,
-	DropdownSection,
-	DropdownTrigger,
-	Spinner,
-} from '@heroui/react'
+import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownSection, DropdownTrigger, Spinner } from '@heroui/react'
 import {
 	IconArrowBarToDown,
 	IconArrowBarToUp,
@@ -44,240 +36,228 @@ import { TorrentRenameModal } from './TorrentRenameModal'
 
 const DEFAULT_TORRENT_HASHES: string[] = []
 
-export const TorrentContextMenu = memo(({
-	torrentHashes = DEFAULT_TORRENT_HASHES,
-	torrents,
-	tags,
-	isOpen,
-	onClose,
-	position,
-	triggerRef,
-}: {
-	torrentHashes?: string[]
-	torrents?: Map<string, QBittorrentTorrent>
-	tags: string[]
-	isOpen?: boolean
-	onClose?: () => void
-	position?: { x: number, y: number }
-	triggerRef?: React.RefObject<HTMLElement>
-}) => {
-	const [startTorrent, isStartTorrentLoading] = useStartTorrents()
-	const [forceStartTorrent, isForceStartTorrentLoading] = useForceStartTorrents()
-	const [stopTorrent, isStopTorrentLoading] = useStopTorrents()
-	const [recheckTorrents, recheckTorrentsLoading] = useRecheckTorrents()
-	const [reannounceTorrents, reannounceTorrentsLoading] = useReannounceTorrents()
-	const [setTorrentTopPrio, isSetTorrentTopPrioLoading] = useSetTorrentTopPrio()
-	const [setTorrentBottomPrio, isSetTorrentBottomPrioLoading] = useSetTorrentBottomPrio()
-	const [increaseTorrentPrio, isIncreaseTorrentPrioLoading] = useIncreaseTorrentPrio()
-	const [decreaseTorrentPrio, isDecreaseTorrentPrioLoading] = useDecreaseTorrentPrio()
+export const TorrentContextMenu = memo(
+	({
+		torrentHashes = DEFAULT_TORRENT_HASHES,
+		torrents,
+		tags,
+		isOpen,
+		onClose,
+		position,
+		triggerRef,
+	}: {
+		torrentHashes?: string[]
+		torrents?: Map<string, QBittorrentTorrent>
+		tags: string[]
+		isOpen?: boolean
+		onClose?: () => void
+		position?: { x: number; y: number }
+		triggerRef?: React.RefObject<HTMLElement>
+	}) => {
+		const [startTorrent, isStartTorrentLoading] = useStartTorrents()
+		const [forceStartTorrent, isForceStartTorrentLoading] = useForceStartTorrents()
+		const [stopTorrent, isStopTorrentLoading] = useStopTorrents()
+		const [recheckTorrents, recheckTorrentsLoading] = useRecheckTorrents()
+		const [reannounceTorrents, reannounceTorrentsLoading] = useReannounceTorrents()
+		const [setTorrentTopPrio, isSetTorrentTopPrioLoading] = useSetTorrentTopPrio()
+		const [setTorrentBottomPrio, isSetTorrentBottomPrioLoading] = useSetTorrentBottomPrio()
+		const [increaseTorrentPrio, isIncreaseTorrentPrioLoading] = useIncreaseTorrentPrio()
+		const [decreaseTorrentPrio, isDecreaseTorrentPrioLoading] = useDecreaseTorrentPrio()
 
-	const [deleteTorrentModalIsOpen, setDeleteTorrentModalIsOpen] = useState(false)
-	const [deleteTorrentFilesModalIsOpen, setDeleteTorrentFilesModalIsOpen] = useState(false)
-	const [changeTorrentLocationModalIsOpen, setChangeTorrentLocationModalIsOpen] = useState(false)
-	const [renameTorrentModalIsOpen, setRenameTorrentModalIsOpen] = useState(false)
-	const [changeTagsModalIsOpen, setChangeTagsModalIsOpen] = useState(false)
+		const [deleteTorrentModalIsOpen, setDeleteTorrentModalIsOpen] = useState(false)
+		const [deleteTorrentFilesModalIsOpen, setDeleteTorrentFilesModalIsOpen] = useState(false)
+		const [changeTorrentLocationModalIsOpen, setChangeTorrentLocationModalIsOpen] = useState(false)
+		const [renameTorrentModalIsOpen, setRenameTorrentModalIsOpen] = useState(false)
+		const [changeTagsModalIsOpen, setChangeTagsModalIsOpen] = useState(false)
 
-	const selectedTorrents = useMemo(() => torrentHashes.map(hash => torrents?.get(hash)), [torrentHashes, torrents])
-	const selectedTorrent = useMemo(() => selectedTorrents.at(0), [selectedTorrents])
+		const selectedTorrents = useMemo(() => torrentHashes.map((hash) => torrents?.get(hash)), [torrentHashes, torrents])
+		const selectedTorrent = useMemo(() => selectedTorrents.at(0), [selectedTorrents])
 
-	return (
-		<>
-			<Dropdown
-				isOpen={isOpen}
-				closeOnSelect={false}
-				onClose={onClose}
-				style={{
-					zIndex: '21',
-					translate: (position?.x || 0) - ((triggerRef?.current?.getBoundingClientRect().width || 0) / 2),
-				}}
-				triggerRef={triggerRef}
-			>
-				<DropdownTrigger>
-					{onClose
-						? <></>
-						: <Button isDisabled={!torrentHashes || torrentHashes.length < 1} isIconOnly><IconDotsVertical /></Button>}
-				</DropdownTrigger>
-				<DropdownMenu disabledKeys={torrentHashes && torrentHashes.length > 1 ? ['export', 'rename'] : undefined}>
-					<DropdownSection showDivider>
-						<DropdownItem
-							key="start"
-							endContent={
-								isStartTorrentLoading ? <Spinner size="sm" /> : undefined
-							}
-							startContent={<IconPlayerPlay width={16} />}
-							onPress={async () => await startTorrent(torrentHashes)}
-						>
-							Start
-						</DropdownItem>
-						<DropdownItem
-							key="force-start"
-							endContent={
-								isForceStartTorrentLoading ? <Spinner size="sm" /> : undefined
-							}
-							startContent={<IconPlayerPlayFilled width={16} />}
-							onPress={async () => await forceStartTorrent(torrentHashes)}
-						>
-							Force start
-						</DropdownItem>
-						<DropdownItem
-							key="stop"
-							endContent={
-								isStopTorrentLoading ? <Spinner size="sm" /> : undefined
-							}
-							startContent={<IconPlayerStop width={16} />}
-							onPress={async () => await stopTorrent(torrentHashes)}
-						>
-							Stop
-						</DropdownItem>
-					</DropdownSection>
-					<DropdownSection showDivider>
-						<DropdownItem
-							key="remove"
-							color="danger"
-							startContent={<IconTrash width={16} />}
-							onPress={() => setDeleteTorrentModalIsOpen(true)}
-						>
-							Remove
-						</DropdownItem>
+		return (
+			<>
+				<Dropdown
+					isOpen={isOpen}
+					closeOnSelect={false}
+					onClose={onClose}
+					style={{
+						zIndex: '21',
+						translate: (position?.x || 0) - (triggerRef?.current?.getBoundingClientRect().width || 0) / 2,
+					}}
+					triggerRef={triggerRef}
+				>
+					<DropdownTrigger>
+						{onClose ? (
+							<></>
+						) : (
+							<Button isDisabled={!torrentHashes || torrentHashes.length < 1} isIconOnly>
+								<IconDotsVertical />
+							</Button>
+						)}
+					</DropdownTrigger>
+					<DropdownMenu disabledKeys={torrentHashes && torrentHashes.length > 1 ? ['export', 'rename'] : undefined}>
+						<DropdownSection showDivider>
+							<DropdownItem
+								key="start"
+								endContent={isStartTorrentLoading ? <Spinner size="sm" /> : undefined}
+								startContent={<IconPlayerPlay width={16} />}
+								onPress={async () => await startTorrent(torrentHashes)}
+							>
+								Start
+							</DropdownItem>
+							<DropdownItem
+								key="force-start"
+								endContent={isForceStartTorrentLoading ? <Spinner size="sm" /> : undefined}
+								startContent={<IconPlayerPlayFilled width={16} />}
+								onPress={async () => await forceStartTorrent(torrentHashes)}
+							>
+								Force start
+							</DropdownItem>
+							<DropdownItem
+								key="stop"
+								endContent={isStopTorrentLoading ? <Spinner size="sm" /> : undefined}
+								startContent={<IconPlayerStop width={16} />}
+								onPress={async () => await stopTorrent(torrentHashes)}
+							>
+								Stop
+							</DropdownItem>
+						</DropdownSection>
+						<DropdownSection showDivider>
+							<DropdownItem
+								key="remove"
+								color="danger"
+								startContent={<IconTrash width={16} />}
+								onPress={() => setDeleteTorrentModalIsOpen(true)}
+							>
+								Remove
+							</DropdownItem>
 
+							<DropdownItem
+								key="remove-files"
+								color="danger"
+								startContent={<IconTrashX width={16} />}
+								onPress={() => setDeleteTorrentFilesModalIsOpen(true)}
+							>
+								Remove w. Files
+							</DropdownItem>
+						</DropdownSection>
+						<DropdownSection showDivider>
+							<DropdownItem
+								key="change-location"
+								color="primary"
+								startContent={<IconTruckDelivery width={16} />}
+								onPress={() => setChangeTorrentLocationModalIsOpen(true)}
+							>
+								Set location
+							</DropdownItem>
+							<DropdownItem
+								key="rename"
+								startContent={<IconPencil width={16} />}
+								onPress={() => setRenameTorrentModalIsOpen(true)}
+							>
+								Rename
+							</DropdownItem>
+							<DropdownItem
+								key="set-tags"
+								startContent={<IconTags width={16} />}
+								onPress={() => setChangeTagsModalIsOpen(true)}
+							>
+								Set tags
+							</DropdownItem>
+						</DropdownSection>
+						<DropdownSection showDivider>
+							<DropdownItem
+								key="move-to-top"
+								startContent={<IconArrowBarToUp width={16} />}
+								endContent={isSetTorrentTopPrioLoading ? <Spinner size="sm" /> : undefined}
+								onPress={async () => await setTorrentTopPrio(torrentHashes)}
+							>
+								Move to top
+							</DropdownItem>
+							<DropdownItem
+								key="move-up"
+								startContent={<IconArrowUp width={16} />}
+								endContent={isIncreaseTorrentPrioLoading ? <Spinner size="sm" /> : undefined}
+								onPress={async () => await increaseTorrentPrio(torrentHashes)}
+							>
+								Move up
+							</DropdownItem>
+							<DropdownItem
+								key="move-down"
+								startContent={<IconArrowDown width={16} />}
+								endContent={isDecreaseTorrentPrioLoading ? <Spinner size="sm" /> : undefined}
+								onPress={async () => await decreaseTorrentPrio(torrentHashes)}
+							>
+								Move down
+							</DropdownItem>
+							<DropdownItem
+								key="move-to-bottom"
+								startContent={<IconArrowBarToDown width={16} />}
+								endContent={isSetTorrentBottomPrioLoading ? <Spinner size="sm" /> : undefined}
+								onPress={async () => await setTorrentBottomPrio(torrentHashes)}
+							>
+								Move to bottom
+							</DropdownItem>
+						</DropdownSection>
+						<DropdownSection showDivider>
+							<DropdownItem
+								key="recheck"
+								endContent={recheckTorrentsLoading ? <Spinner size="sm" /> : undefined}
+								startContent={<IconRecycle width={16} />}
+								onPress={async () => await recheckTorrents(torrentHashes)}
+							>
+								Re-check
+							</DropdownItem>
+							<DropdownItem
+								key="reannounce"
+								endContent={reannounceTorrentsLoading ? <Spinner size="sm" /> : undefined}
+								startContent={<IconSpeakerphone width={16} />}
+								onPress={async () => await reannounceTorrents(torrentHashes)}
+							>
+								Re-announce
+							</DropdownItem>
+						</DropdownSection>
 						<DropdownItem
-							key="remove-files"
-							color="danger"
-							startContent={<IconTrashX width={16} />}
-							onPress={() => setDeleteTorrentFilesModalIsOpen(true)}
+							key="export"
+							download={`${selectedTorrent?.name}.torrent`}
+							href={`/api/v2/torrents/export?hash=${torrentHashes[0]}`}
+							startContent={<IconFileDownload width={16} />}
 						>
-							Remove w. Files
+							Export
 						</DropdownItem>
-					</DropdownSection>
-					<DropdownSection showDivider>
-						<DropdownItem
-							key="change-location"
-							color="primary"
-							startContent={<IconTruckDelivery width={16} />}
-							onPress={() => setChangeTorrentLocationModalIsOpen(true)}
-						>
-							Set location
-						</DropdownItem>
-						<DropdownItem
-							key="rename"
-							startContent={<IconPencil width={16} />}
-							onPress={() => setRenameTorrentModalIsOpen(true)}
-						>
-							Rename
-						</DropdownItem>
-						<DropdownItem
-							key="set-tags"
-							startContent={<IconTags width={16} />}
-							onPress={() => setChangeTagsModalIsOpen(true)}
-						>
-							Set tags
-						</DropdownItem>
-					</DropdownSection>
-					<DropdownSection showDivider>
-						<DropdownItem
-							key="move-to-top"
-							startContent={<IconArrowBarToUp width={16} />}
-							endContent={
-								isSetTorrentTopPrioLoading ? <Spinner size="sm" /> : undefined
-							}
-							onPress={async () => await setTorrentTopPrio(torrentHashes)}
-						>
-							Move to top
-						</DropdownItem>
-						<DropdownItem
-							key="move-up"
-							startContent={<IconArrowUp width={16} />}
-							endContent={
-								isIncreaseTorrentPrioLoading ? <Spinner size="sm" /> : undefined
-							}
-							onPress={async () => await increaseTorrentPrio(torrentHashes)}
-						>
-							Move up
-						</DropdownItem>
-						<DropdownItem
-							key="move-down"
-							startContent={<IconArrowDown width={16} />}
-							endContent={
-								isDecreaseTorrentPrioLoading ? <Spinner size="sm" /> : undefined
-							}
-							onPress={async () => await decreaseTorrentPrio(torrentHashes)}
-						>
-							Move down
-						</DropdownItem>
-						<DropdownItem
-							key="move-to-bottom"
-							startContent={<IconArrowBarToDown width={16} />}
-							endContent={
-								isSetTorrentBottomPrioLoading ? <Spinner size="sm" /> : undefined
-							}
-							onPress={async () => await setTorrentBottomPrio(torrentHashes)}
-						>
-							Move to bottom
-						</DropdownItem>
-					</DropdownSection>
-					<DropdownSection showDivider>
-						<DropdownItem
-							key="recheck"
-							endContent={
-								recheckTorrentsLoading ? <Spinner size="sm" /> : undefined
-							}
-							startContent={<IconRecycle width={16} />}
-							onPress={async () => await recheckTorrents(torrentHashes)}
-						>
-							Re-check
-						</DropdownItem>
-						<DropdownItem
-							key="reannounce"
-							endContent={
-								reannounceTorrentsLoading ? <Spinner size="sm" /> : undefined
-							}
-							startContent={<IconSpeakerphone width={16} />}
-							onPress={async () => await reannounceTorrents(torrentHashes)}
-						>
-							Re-announce
-						</DropdownItem>
-					</DropdownSection>
-					<DropdownItem
-						key="export"
-						download={`${selectedTorrent?.name}.torrent`}
-						href={`/api/v2/torrents/export?hash=${torrentHashes[0]}`}
-						startContent={<IconFileDownload width={16} />}
-					>
-						Export
-					</DropdownItem>
-				</DropdownMenu>
-			</Dropdown>
-			<TorrentRemoveConfirmationModal
-				isOpen={deleteTorrentModalIsOpen}
-				torrentHashes={torrentHashes}
-				onClose={() => setDeleteTorrentModalIsOpen(false)}
-			/>
-			<TorrentRemoveConfirmationModal
-				withFiles
-				isOpen={deleteTorrentFilesModalIsOpen}
-				torrentHashes={torrentHashes}
-				onClose={() => setDeleteTorrentFilesModalIsOpen(false)}
-			/>
-			<TorrentChangeLocationModal
-				currentLocation={selectedTorrent?.save_path ?? ''}
-				currentName={selectedTorrent?.name ?? ''}
-				isOpen={changeTorrentLocationModalIsOpen}
-				torrentHashes={torrentHashes}
-				onClose={() => setChangeTorrentLocationModalIsOpen(false)}
-			/>
-			<TorrentRenameModal
-				currentName={selectedTorrent?.name ?? ''}
-				isOpen={renameTorrentModalIsOpen}
-				torrentHash={torrentHashes[0]}
-				onClose={() => setRenameTorrentModalIsOpen(false)}
-			/>
-			<TorrentChangeTagsModal
-				tags={tags}
-				currentTags={selectedTorrent?.tags}
-				isOpen={changeTagsModalIsOpen}
-				torrentHashes={torrentHashes}
-				onClose={() => setChangeTagsModalIsOpen(false)}
-			/>
-		</>
-	)
-})
+					</DropdownMenu>
+				</Dropdown>
+				<TorrentRemoveConfirmationModal
+					isOpen={deleteTorrentModalIsOpen}
+					torrentHashes={torrentHashes}
+					onClose={() => setDeleteTorrentModalIsOpen(false)}
+				/>
+				<TorrentRemoveConfirmationModal
+					withFiles
+					isOpen={deleteTorrentFilesModalIsOpen}
+					torrentHashes={torrentHashes}
+					onClose={() => setDeleteTorrentFilesModalIsOpen(false)}
+				/>
+				<TorrentChangeLocationModal
+					currentLocation={selectedTorrent?.save_path ?? ''}
+					currentName={selectedTorrent?.name ?? ''}
+					isOpen={changeTorrentLocationModalIsOpen}
+					torrentHashes={torrentHashes}
+					onClose={() => setChangeTorrentLocationModalIsOpen(false)}
+				/>
+				<TorrentRenameModal
+					currentName={selectedTorrent?.name ?? ''}
+					isOpen={renameTorrentModalIsOpen}
+					torrentHash={torrentHashes[0]}
+					onClose={() => setRenameTorrentModalIsOpen(false)}
+				/>
+				<TorrentChangeTagsModal
+					tags={tags}
+					currentTags={selectedTorrent?.tags}
+					isOpen={changeTagsModalIsOpen}
+					torrentHashes={torrentHashes}
+					onClose={() => setChangeTagsModalIsOpen(false)}
+				/>
+			</>
+		)
+	}
+)

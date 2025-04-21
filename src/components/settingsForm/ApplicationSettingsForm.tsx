@@ -76,12 +76,8 @@ export function ApplicationSettingsForm() {
 					<div className="flex flex-wrap gap-2">
 						{items
 							.sort((a, b) => {
-								const indexA = TORRENT_TABLE_COLUMNS.findIndex(
-									(col) => col.uid === a.data?.uid
-								)
-								const indexB = TORRENT_TABLE_COLUMNS.findIndex(
-									(col) => col.uid === b.data?.uid
-								)
+								const indexA = TORRENT_TABLE_COLUMNS.findIndex((col) => col.uid === a.data?.uid)
+								const indexB = TORRENT_TABLE_COLUMNS.findIndex((col) => col.uid === b.data?.uid)
 								return indexA - indexB
 							})
 							.map((item) => (
@@ -105,9 +101,7 @@ export function ApplicationSettingsForm() {
 				type="number"
 				min={200}
 				value={torrentListRefreshRate.toString()}
-				onChange={(e: ChangeEvent<HTMLInputElement>) =>
-					setTorrentListRefreshRate(+e.target.value)
-				}
+				onChange={(e: ChangeEvent<HTMLInputElement>) => setTorrentListRefreshRate(+e.target.value)}
 				endContent={<p className="text-nowrap">milliseconds</p>}
 			/>
 			<Input
@@ -115,9 +109,7 @@ export function ApplicationSettingsForm() {
 				type="number"
 				min={200}
 				value={torrentPropertiesRefreshRate.toString()}
-				onChange={(e: ChangeEvent<HTMLInputElement>) =>
-					setTorrentPropertiesRefreshRate(+e.target.value)
-				}
+				onChange={(e: ChangeEvent<HTMLInputElement>) => setTorrentPropertiesRefreshRate(+e.target.value)}
 				endContent={<p className="text-nowrap">milliseconds</p>}
 			/>
 			<Input
@@ -125,9 +117,7 @@ export function ApplicationSettingsForm() {
 				type="number"
 				min={200}
 				value={torrentPiecesRefreshRate.toString()}
-				onChange={(e: ChangeEvent<HTMLInputElement>) =>
-					setTorrentPiecesRefreshRate(+e.target.value)
-				}
+				onChange={(e: ChangeEvent<HTMLInputElement>) => setTorrentPiecesRefreshRate(+e.target.value)}
 				endContent={<p className="text-nowrap">milliseconds</p>}
 			/>
 			<Input
@@ -135,9 +125,7 @@ export function ApplicationSettingsForm() {
 				type="number"
 				min={200}
 				value={torrentTrackersRefreshRate.toString()}
-				onChange={(e: ChangeEvent<HTMLInputElement>) =>
-					setTorrentTrackersRefreshRate(+e.target.value)
-				}
+				onChange={(e: ChangeEvent<HTMLInputElement>) => setTorrentTrackersRefreshRate(+e.target.value)}
 				endContent={<p className="text-nowrap">milliseconds</p>}
 			/>
 			<Input
@@ -145,9 +133,7 @@ export function ApplicationSettingsForm() {
 				type="number"
 				min={200}
 				value={torrentPeersRefreshRate.toString()}
-				onChange={(e: ChangeEvent<HTMLInputElement>) =>
-					setTorrentPeersRefreshRate(+e.target.value)
-				}
+				onChange={(e: ChangeEvent<HTMLInputElement>) => setTorrentPeersRefreshRate(+e.target.value)}
 				endContent={<p className="text-nowrap">milliseconds</p>}
 			/>
 			<Input
@@ -155,9 +141,7 @@ export function ApplicationSettingsForm() {
 				type="number"
 				min={200}
 				value={torrentFilesRefreshRate.toString()}
-				onChange={(e: ChangeEvent<HTMLInputElement>) =>
-					setTorrentFilesRefreshRate(+e.target.value)
-				}
+				onChange={(e: ChangeEvent<HTMLInputElement>) => setTorrentFilesRefreshRate(+e.target.value)}
 				endContent={<p className="text-nowrap">milliseconds</p>}
 			/>
 		</>

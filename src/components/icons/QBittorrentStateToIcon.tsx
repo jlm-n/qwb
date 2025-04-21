@@ -16,10 +16,7 @@ import {
 	IconTag,
 } from '@tabler/icons-react'
 
-export const QBITTORRENT_STATE_TO_ICON: Record<
-	QBittorrentTorrentState,
-	React.ReactNode
-> = {
+export const QBITTORRENT_STATE_TO_ICON: Record<QBittorrentTorrentState, React.ReactNode> = {
 	allocating: <IconRun className="text-gray-500" />,
 	checkingDL: <IconCircleDashed className="text-green-500" />,
 	checkingResumeData: <IconCircleDashed className="text-gray-500" />,
